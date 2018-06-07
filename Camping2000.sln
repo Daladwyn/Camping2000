@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camping2000", "Camping2000\Camping2000.csproj", "{8D0A2461-B865-4BAF-AAE9-B1E03C7AEF6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camping2000.Tests", "Camping2000.Tests\Camping2000.Tests.csproj", "{03B38CBA-FB2B-4BE4-B553-2F7656D64298}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D0A2461-B865-4BAF-AAE9-B1E03C7AEF6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D0A2461-B865-4BAF-AAE9-B1E03C7AEF6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D0A2461-B865-4BAF-AAE9-B1E03C7AEF6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D0A2461-B865-4BAF-AAE9-B1E03C7AEF6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03B38CBA-FB2B-4BE4-B553-2F7656D64298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03B38CBA-FB2B-4BE4-B553-2F7656D64298}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03B38CBA-FB2B-4BE4-B553-2F7656D64298}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03B38CBA-FB2B-4BE4-B553-2F7656D64298}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5985CCA8-B525-4C1C-B314-8F092F991B7D}
+	EndGlobalSection
+EndGlobal
