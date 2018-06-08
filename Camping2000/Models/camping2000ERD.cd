@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Camping2000.ItemsToRent">
+    <Position X="1.75" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAgAAAQAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ItemsToRent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camping2000.Camping">
+    <Position X="1.25" Y="3.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAIAAAAQA=</HashCode>
+      <FileName>Models\Camping.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camping2000.Booking">
+    <Position X="4.5" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAIAAAAgAAAAAgAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Models\Booking.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camping2000.User">
+    <Position X="7" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAgAgAQAAAAAABIAAAAAAAQQA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camping2000.SmallCabin">
+    <Position X="3.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Models\SmallCabin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camping2000.LargeCabin">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Models\LargeCabin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camping2000.Adress">
+    <Position X="9.25" Y="1.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAgASAAIAAQBAAIAAAAAsAA=</HashCode>
+      <FileName>Models\Adress.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
