@@ -13,18 +13,35 @@ namespace Camping2000.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult SpaceForTent()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Renting space for tent.";
 
-            return View();
+            return PartialView("_SpaceForTent");
         }
 
-        public ActionResult Contact()
+        public ActionResult SpaceForCaravan()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Renting space for caravan.";
 
-            return View();
+            return PartialView("_SpaceForCaravan");
+        }
+        public ActionResult ConfirmSpaceForTent()
+        {
+            return PartialView("_ConfirmSpaceForTent");
+        }
+        public ActionResult ConfirmSpaceForCaravan()
+        {
+            return PartialView("_ConfirmSpaceForCaravan");
+                    
+        }
+        public ActionResult RentSpaceForTent()
+        {
+            return PartialView("_ReservedConfirmation");
+        }
+        public ActionResult RentSpaceForCaravan()
+        {
+            return PartialView("_ReservedConfirmation");
         }
     }
 }

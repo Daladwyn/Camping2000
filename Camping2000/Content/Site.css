@@ -16,6 +16,16 @@
     white-space: normal;
 }
 
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: red;
+    color: black;
+    text-align: center;
+}
+
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,

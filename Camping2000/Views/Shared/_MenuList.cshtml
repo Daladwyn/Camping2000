@@ -1,0 +1,23 @@
+﻿@using Microsoft.AspNet.Identity
+
+<ul class="nav nav-pills nav-stacked">
+    <li>@Html.ActionLink("Bolmens Camping", "Index", "Home" @*, new { area = "" }, new { @class = "navbar-brand" }*@)</li>
+    <li>
+        @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+    </li>
+    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+    <li>
+        @Ajax.ActionLink("Space For Tents","SpaceForTent", new AjaxOptions
+{
+   UpdateTargetId = "ContentBody",
+   InsertionMode = InsertionMode.Replace
+})
+    </li>
+    <li>
+        @Ajax.ActionLink("Space For caravan/trailer", "SpaceForCaravan", new AjaxOptions
+    {
+    UpdateTargetId = "ContentBody",
+    InsertionMode = InsertionMode.Replace
+    })
+    </li>
+</ul>
