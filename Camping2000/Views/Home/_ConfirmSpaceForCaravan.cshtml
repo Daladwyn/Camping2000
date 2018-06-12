@@ -10,9 +10,21 @@
 <p>You do not need electricity.</p>
 
 <p>Your estimated price is: 480 kr.</p>
-<div class="form-group">
+@Ajax.ActionLink("Make Adjustments","SpaceForCaravan","Home",
+    ajaxOptions: new AjaxOptions
+    {
+        UpdateTargetId= "ContentBody",
+        InsertionMode=InsertionMode.Replace
+    })
+@Ajax.ActionLink("Accept reservation", "ConfirmSpaceForCaravan", "Home",
+    ajaxOptions:new AjaxOptions
+    {
+        UpdateTargetId= "ContentBody",
+        InsertionMode=InsertionMode.Replace
+    })
+@*<div class="form-group">
     <input type="submit" value="Confirm Reservation" class="btn btn-default" />
 </div>
 <div class="form-group">
     <input type="submit" value="Cancel Reservation" class="btn btn-default" />
-</div>
+</div>*@

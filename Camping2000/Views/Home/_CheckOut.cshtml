@@ -1,0 +1,56 @@
+﻿@* model Camping2000.Models.     *@
+
+<h2>Checking Out.</h2>
+
+<p>The following guests are eligible to check out:</p>
+@* foreach (var item in GuestToCheckout)
+    {
+
+    }*@
+
+<div class="row">
+    <div class="col-md-3">
+        Firstname
+    </div>
+    <div class="col-md-3">
+        Lastname
+    </div>
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-3">
+
+    </div>
+</div>
+@for (int i = 0; i < 6; i++)
+{
+    Html.RenderAction("ShowGuestDepartures");
+}
+<div class="row">
+    <div class="col-md-3">
+        Lars
+    </div>
+    <div class="col-md-3">
+        Svensson
+    </div>
+    <div class="col-md-3">
+        @Ajax.ActionLink("Check Out", "CheckOutConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
+    </div>
+    <div class="col-md-3">
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        Eva
+    </div>
+    <div class="col-md-3">
+        Nilsson
+    </div>
+    <div class="col-md-3">
+        @Ajax.ActionLink("Check Out", "CheckOutConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
+    </div>
+    <div class="col-md-3">
+
+    </div>
+</div>

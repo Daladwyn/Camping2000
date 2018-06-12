@@ -3,9 +3,15 @@
 
 <div>
     <p>
-        Your booking with bookingnumber: 34 have been recived. 
+        Your booking with bookingnumber: 34 have been recived.
         A mail will shortly be sent to you with details of your reservation.
         This mail can be used when you check in.
     </p>
-    @Html.ActionLink("Print out your reservation", "Home")
+    @*Html.ActionLink("Print out your reservation", "PrintReservation", "Home")*@
+    @Ajax.ActionLink("Print out your reservation", "PrintReservation", "Home",
+    ajaxOptions: new AjaxOptions
+    {
+        UpdateTargetId= "ContentBody",
+        InsertionMode=InsertionMode.Replace
+    })
 </div>

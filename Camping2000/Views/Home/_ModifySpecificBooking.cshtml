@@ -1,0 +1,66 @@
+﻿
+
+<h2>GuestFirstName GuestLastNames Booking Details:</h2>
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Arrival date:")
+    </div>
+    <div class="col-md-2">
+        2018-07-10
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Change to:")
+    </div>
+    <div class="col-md-6">
+        @Html.Editor("BookingStartDate")
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Departure date:")
+        </div>
+        <div class="col-md-2">
+            2018-07-17
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Change to:")
+        </div>
+        <div class="col-md-6">
+            @Html.Editor("BookingEndDate")
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Camping spot:")
+        </div>
+        <div class="col-md-2">
+            nr: 7
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Change to:")
+        </div>
+        <div class="col-md-6">
+            @Html.Editor("ItemName")
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Present Cost:")
+        </div>
+        <div class="col-md-2">
+            650 kr.
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Future Cost:")
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>
+    @Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
+    @Ajax.ActionLink("Accept Changes", "UpdatedBooking", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
+
+</div>

@@ -24,9 +24,6 @@
             <div class="container body-content" id="ContentBody">
                 @RenderBody()
                 <hr />
-                <footer>
-                    <p>&copy; @DateTime.Now.Year - Christian Levin</p>
-                </footer>
             </div>
 
         </div>
@@ -54,9 +51,11 @@
 
 
     </div>
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Christian Levin</p>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

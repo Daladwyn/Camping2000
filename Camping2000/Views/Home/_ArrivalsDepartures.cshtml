@@ -1,0 +1,25 @@
+﻿@*model Camping2000.Models.User *@
+
+<h2>Arrivals @DateTime.Now.Day - @DateTime.Now.Month - @DateTime.Now.Year</h2>
+
+@*foreach (var guest in model)
+    {
+    @Html.Partial("_ShowGuestarrivals","ShowGuestArrivals")
+
+    }*@
+
+@for (int i = 0; i < 4; i++)
+{
+    Html.RenderAction("ShowGuestArrivals");
+}
+
+<h2>Departures @DateTime.Now.Day - @DateTime.Now.Month - @DateTime.Now.Year</h2>
+
+@for (int i = 0; i <6; i++)
+{
+    Html.RenderAction("ShowGuestDepartures");
+}
+
+@*Html.Partial("_ShowGuestDepartures", "ShowGuestDepartures")
+
+@Html.Partial()*@

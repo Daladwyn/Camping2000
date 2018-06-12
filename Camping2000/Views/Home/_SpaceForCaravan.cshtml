@@ -12,23 +12,82 @@
 {
     <div class="form-group">
         @*Html.LabelFor *@
-        @Html.Label("Arrival date: ")@Html.Editor("BookingStartDate")
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Label("Arrival date: ")
+            </div>
+            <div class="col-md-3">
+                @Html.Editor("BookingStartDate")
+
+            </div>
+            <div class="col-md-7">
+
+            </div>
+        </div>
 
     </div>
     <div class="form-group">
-        @*Html.LabelFor *@
-        @Html.Label("Departure date: ")@Html.Editor("BookingEndDate")
+        <div class="row">
+            <div class="col-md-2">
+                @*Html.LabelFor *@
+                @Html.Label("Departure date: ")
+            </div>
+            <div class="col-md-3">
+                @Html.Editor("BookingEndDate")
+
+            </div>
+            <div class="col-md-7">
+
+            </div>
+        </div>
 
     </div>
     <div class="form-group">
-        @Html.Label("Number of guests: ") @Html.Editor("NumberOfGuests")
-    </div>
-    <div class="form-group">
-        @Html.Label("Do you need electricity: ")@Html.RadioButton("ElectricityYes", "yes") @Html.RadioButton("ElectricityNo", "no")
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Label("Number of guests: ")
+            </div>
+            <div class="col-md-3">
+                @Html.Editor("NumberOfGuests")
+            </div>
+            <div class="col-md-7">
+
+            </div>
+        </div>
 
     </div>
     <div class="form-group">
-        @Html.Label("Estimated price: ")
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Label("Do you need electricity: ")
+            </div>
+            <div class="col-md-3">
+                @*Html.RadioButton("Yes", "yes")
+
+        @Html.RadioButton("No", "no")*@
+                <input type="radio" name="Electricity" value="Yes" checked required>Yes
+                <input type="radio" name="Electricity" value="No" required> No
+            </div>
+            <div class="col-md-7">
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Label("Estimated price: ")
+            </div>
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-7">
+
+            </div>
+        </div>
+
     </div>
     <div class="form-group">
         <input type="submit" value="Reserve" class="btn btn-default" />

@@ -289,6 +289,20 @@
     <Content Include="Views\Home\_ReservedConfirmation.cshtml" />
     <Content Include="Views\Home\_ConfirmSpaceForTent.cshtml" />
     <Content Include="Views\Home\_ConfirmSpaceForCaravan.cshtml" />
+    <Content Include="Views\Home\_CheckIn.cshtml" />
+    <Content Include="Views\Home\_CheckOut.cshtml" />
+    <Content Include="Views\Home\_ArrivalsDepartures.cshtml" />
+    <Content Include="Views\Home\_CheckInConfirmation.cshtml" />
+    <Content Include="Views\Home\_CheckOutConfirmation.cshtml" />
+    <Content Include="Views\Home\_ShowGuestArrivals.cshtml" />
+    <Content Include="Views\Home\_ShowGuestDepartures.cshtml" />
+    <Content Include="Views\Home\_ModifyBooking.cshtml" />
+    <Content Include="Views\Home\_ModifyGuestDetails.cshtml" />
+    <Content Include="Views\Home\_PresentBooking.cshtml" />
+    <Content Include="Views\Home\_ModifySpecificBooking.cshtml" />
+    <Content Include="Views\Home\_UpdatedBooking.cshtml" />
+    <Content Include="Views\Home\_ShowFoundGuests.cshtml" />
+    <Content Include="Views\Home\_GuestDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,52 @@
+﻿
+
+<h2>Checking In.</h2>
+
+<p>The following guests are eligible to check in:</p>
+
+<div class="row">
+    <div class="col-md-3">
+        Firstname
+    </div>
+    <div class="col-md-3">
+        Lastname
+    </div>
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-3">
+
+    </div>
+</div>
+@for (int i = 0; i < 4; i++)
+{
+    Html.RenderAction("ShowGuestArrivals");
+}
+<div class="row">
+    <div class="col-md-3">
+        Patrik
+    </div>
+    <div class="col-md-3">
+        Johansson
+    </div>
+    <div class="col-md-3">
+        @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
+    </div>
+    <div class="col-md-3">
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        Emma
+    </div>
+    <div class="col-md-3">
+        Karlsson
+    </div>
+    <div class="col-md-3">
+        @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
+    </div>
+    <div class="col-md-3">
+
+    </div>
+</div>

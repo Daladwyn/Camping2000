@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 
 <ul class="nav nav-pills nav-stacked">
-    <li>@Html.ActionLink("Bolmens Camping", "Index", "Home" @*, new { area = "" }, new { @class = "navbar-brand" }*@)</li>
+    <li>@Html.ActionLink("Bolmens Camping", "Index", "Home"@*, new { area = "" }, new { @class = "navbar-brand" }*@)</li>
     <li>
         @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
     </li>
@@ -19,5 +19,41 @@
     UpdateTargetId = "ContentBody",
     InsertionMode = InsertionMode.Replace
     })
+    </li>
+    @* Add if statement that if userloged in is a admin or receptionist the following should show*@
+    <li>
+        @Ajax.ActionLink("Checking in", "CheckIn", new AjaxOptions
+         {
+         UpdateTargetId = "ContentBody",
+         InsertionMode = InsertionMode.Replace
+         })
+    </li>
+    <li>
+        @Ajax.ActionLink("Checking out", "CheckOut", new AjaxOptions
+         {
+         UpdateTargetId = "ContentBody",
+         InsertionMode = InsertionMode.Replace
+         })
+    </li>
+    <li>
+        @Ajax.ActionLink("Daily Arrivals/Departures", "ArrivalsDepartures", new AjaxOptions
+         {
+         UpdateTargetId = "ContentBody",
+         InsertionMode = InsertionMode.Replace
+         })
+    </li>
+    <li>
+        @Ajax.ActionLink("Modify a Booking", "ModifyBooking", new AjaxOptions
+         {
+         UpdateTargetId = "ContentBody",
+         InsertionMode = InsertionMode.Replace
+         })
+    </li>
+    <li>
+        @Ajax.ActionLink("Modify a Guests Details", "ModifyGuestDetails", new AjaxOptions
+         {
+         UpdateTargetId = "ContentBody",
+         InsertionMode = InsertionMode.Replace
+         })
     </li>
 </ul>

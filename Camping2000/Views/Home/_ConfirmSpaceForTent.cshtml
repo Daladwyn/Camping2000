@@ -1,6 +1,6 @@
 ﻿
-<h2>Confirm your reservation.</h2>
-
+<h2>Please confirm your reservation.</h2>
+<hr />
 <p>You arrive on:2018-07-10</p>
 
 <p>You depart on:2018-07-17</p>
@@ -10,9 +10,21 @@
 <p>You do not need electricity.</p>
 
 <p>Your estimated price is: 480 kr.</p>
-<div class="form-group">
-    <input type="submit" value="Confirm Reservation" class="btn btn-default" />
-</div>
-<div class="form-group">
-    <input type="submit" value="Cancel Reservation" class="btn btn-default" />
-</div>
+@Ajax.ActionLink("Make Adjustments","SpaceForTent","Home",
+    ajaxOptions: new AjaxOptions
+    {
+        UpdateTargetId= "ContentBody",
+        InsertionMode=InsertionMode.Replace
+    })
+@Ajax.ActionLink("Accept reservation", "ConfirmSpaceForTent", "Home",
+    ajaxOptions:new AjaxOptions
+    {
+        UpdateTargetId= "ContentBody",
+        InsertionMode=InsertionMode.Replace
+    })
+@*<div class="form-group">
+        <input type="submit" value="Confirm Reservation" class="btn btn-default" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Cancel Reservation" class="btn btn-default" />
+    </div>*@
