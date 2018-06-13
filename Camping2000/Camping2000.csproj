@@ -303,6 +303,8 @@
     <Content Include="Views\Home\_UpdatedBooking.cshtml" />
     <Content Include="Views\Home\_ShowFoundGuests.cshtml" />
     <Content Include="Views\Home\_GuestDetails.cshtml" />
+    <Content Include="Views\Home\_UpdatedGuestDetails.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

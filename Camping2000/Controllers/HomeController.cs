@@ -103,5 +103,9 @@ namespace Camping2000.Controllers
         {
             return PartialView("_GuestDetails");
         }
+        public ActionResult UpdatedGuestDetails()
+        {
+            return PartialView("_UpdatedGuestDetails");
+        }
     }
 }
