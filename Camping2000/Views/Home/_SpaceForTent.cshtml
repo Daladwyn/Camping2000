@@ -16,8 +16,8 @@
                 @Html.Label("Arrival date: ")
             </div>
             <div class="col-md-3">
-                @Html.Editor("BookingStartDate")
-
+                <input type="date" name="ArrivalDate" min="2018-06-15" />
+                @*<input type="date"  min="@(DateTime.Now.Year-DateTime.Now.Month-DateTime.Now.Day)" />*@
             </div>
             <div class="col-md-7">
 
@@ -26,15 +26,14 @@
 
     </div>
     <div class="form-group">
-        @*Html.LabelFor *@
         <div class="row">
             <div class="col-md-2">
                 @*Html.LabelFor *@
                 @Html.Label("Departure date: ")
             </div>
             <div class="col-md-3">
-                @Html.Editor("BookingEndDate")
-
+                <input type="date" name="DepartureDate" min="2018-06-16" />
+                @*<input type="date" min="@DateTime.Now.Year-@DateTime.Now.Month-@DateTime.Now.Day" />*@
             </div>
             <div class="col-md-7">
 
@@ -48,7 +47,7 @@
                 @Html.Label("Number of guests: ")
             </div>
             <div class="col-md-3">
-                @Html.Editor("NumberOfGuests")
+                <input type="number" name="NumberOfGuests" min="1" max="10">
             </div>
             <div class="col-md-7">
 
@@ -63,9 +62,9 @@
             <div class="col-md-3">
                 @*Html.RadioButton("Yes", "yes")
 
-                @Html.RadioButton("No", "no")*@
-                <input type="radio" name="Electricity" value="Yes" checked required>Yes 
-                <input type="radio" name="Electricity" value="No" required> No
+                    @Html.RadioButton("No", "no")*@
+                <input type="radio" name="Electricity" value="Yes" required>Yes
+                <input type="radio" name="Electricity" value="No" checked required> No
             </div>
             <div class="col-md-7">
 

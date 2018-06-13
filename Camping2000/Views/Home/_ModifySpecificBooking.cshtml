@@ -13,54 +13,63 @@
         @Html.Label("Change to:")
     </div>
     <div class="col-md-6">
-        @Html.Editor("BookingStartDate")
+        <input type="date" name="ArrivalDate" min="2018-06-15" />
     </div>
-
-    <div class="row">
-        <div class="col-md-2">
-            @Html.Label("Departure date:")
-        </div>
-        <div class="col-md-2">
-            2018-07-17
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Change to:")
-        </div>
-        <div class="col-md-6">
-            @Html.Editor("BookingEndDate")
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-2">
-            @Html.Label("Camping spot:")
-        </div>
-        <div class="col-md-2">
-            nr: 7
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Change to:")
-        </div>
-        <div class="col-md-6">
-            @Html.Editor("ItemName")
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-2">
-            @Html.Label("Present Cost:")
-        </div>
-        <div class="col-md-2">
-            650 kr.
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Future Cost:")
-        </div>
-        <div class="col-md-6">
-
-        </div>
-    </div>
-    @Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
-    @Ajax.ActionLink("Accept Changes", "UpdatedBooking", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
-
 </div>
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Departure date:")
+    </div>
+    <div class="col-md-2">
+        2018-07-17
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Change to:")
+    </div>
+    <div class="col-md-6">
+        <input type="date" name="DepartureDate" min="2018-06-16" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Camping spot:")
+    </div>
+    <div class="col-md-2">
+        nr: 7
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Change to:")
+    </div>
+    <div class="col-md-6">
+        <select name="ItemName">
+            @for (int i = 1; i < 31; i++)
+            {
+                <option>
+                    Spot nr:@i - Vacant
+                </option>
+            }
+        </select>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Present Cost:")
+    </div>
+    <div class="col-md-2">
+        650 kr.
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Future Cost:")
+    </div>
+    <div class="col-md-6">
+
+    </div>
+</div>
+@Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
+@Ajax.ActionLink("Accept Changes", "UpdatedBooking", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
+
+

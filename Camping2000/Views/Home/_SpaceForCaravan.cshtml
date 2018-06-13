@@ -1,6 +1,5 @@
 ﻿
 
-
 <h2>Renting space for a caravan/trailer.</h2>
 
 @using (Ajax.BeginForm("RentSpaceForCaravan", "Home",
@@ -17,7 +16,7 @@
                 @Html.Label("Arrival date: ")
             </div>
             <div class="col-md-3">
-                @Html.Editor("BookingStartDate")
+                <input type="date" name="ArrivalDate" min="2018-06-15" />
 
             </div>
             <div class="col-md-7">
@@ -33,8 +32,8 @@
                 @Html.Label("Departure date: ")
             </div>
             <div class="col-md-3">
-                @Html.Editor("BookingEndDate")
-
+                <input type="date" name="DepartureDate" min="2018-06-16" />
+                @*Html.Editor("BookingEndDate")*@
             </div>
             <div class="col-md-7">
 
@@ -48,13 +47,12 @@
                 @Html.Label("Number of guests: ")
             </div>
             <div class="col-md-3">
-                @Html.Editor("NumberOfGuests")
+                <input type="number" name="NumberOfGuests" min="1" max="10">
             </div>
             <div class="col-md-7">
 
             </div>
         </div>
-
     </div>
     <div class="form-group">
         <div class="row">
@@ -64,7 +62,7 @@
             <div class="col-md-3">
                 @*Html.RadioButton("Yes", "yes")
 
-        @Html.RadioButton("No", "no")*@
+                    @Html.RadioButton("No", "no")*@
                 <input type="radio" name="Electricity" value="Yes" checked required>Yes
                 <input type="radio" name="Electricity" value="No" required> No
             </div>
@@ -72,7 +70,6 @@
 
             </div>
         </div>
-
 
     </div>
     <div class="form-group">
@@ -87,7 +84,6 @@
 
             </div>
         </div>
-
     </div>
     <div class="form-group">
         <input type="submit" value="Reserve" class="btn btn-default" />
