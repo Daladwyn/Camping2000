@@ -13,6 +13,14 @@ namespace Camping2000
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute("SpaceForCaravan",
+              "Home/{action}/{id}",
+              new { controller = "Home", action = "SpaceForCaravan", id = UrlParameter.Optional });
+
+            routes.MapRoute("Account/SpaceForTent",
+               "Home/{action}/{id}",
+               new { controller = "Home", action = "SpaceForTent", id = UrlParameter.Optional });
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

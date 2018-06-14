@@ -1,5 +1,6 @@
 namespace Camping2000.Migrations
 {
+    using Microsoft.AspNet.Identity;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -18,6 +19,10 @@ namespace Camping2000.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
+            //RoleManager.AddOrUpdate();
+
+
         }
+
     }
 }

@@ -62,6 +62,22 @@ namespace Camping2000.Controllers
         }
 
         //
+        // GET: /Account/SpaceForTent
+        [AllowAnonymous]
+        public ActionResult SpaceForTent()
+        {
+            return RedirectToAction("SpaceForTent", "Home");
+        }
+
+        //
+        // GET: /Account/SpaceForCaravan
+        [AllowAnonymous]
+        public ActionResult SpaceForCaravan()
+        {
+            return RedirectToAction("SpaceForCaravan", "Home");
+        }
+
+        //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]

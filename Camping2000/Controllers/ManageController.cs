@@ -51,6 +51,58 @@ namespace Camping2000.Controllers
         }
 
         //
+        // GET: /Account/SpaceForTent
+        [AllowAnonymous]
+        public ActionResult SpaceForTent()
+        {
+            return RedirectToAction("SpaceForTent", "Home");
+        }
+
+        //
+        // GET: /Account/SpaceForCaravan
+        [AllowAnonymous]
+        public ActionResult SpaceForCaravan()
+        {
+            return RedirectToAction("SpaceForCaravan", "Home");
+        }
+        //
+        // GET: /Account/Checkin
+        [AllowAnonymous]
+        public ActionResult Checkin()
+        {
+            return RedirectToAction("Checkin", "Home");
+        }
+        //
+        // GET: /Account/CheckOut
+        [AllowAnonymous]
+        public ActionResult CheckOut()
+        {
+            return RedirectToAction("CheckOut", "Home");
+        }
+        //
+        // GET: /Account/ArrivalsDepartures
+        [AllowAnonymous]
+        public ActionResult ArrivalsDepartures()
+        {
+            return RedirectToAction("ArrivalsDepartures", "Home");
+        }
+        //
+        // GET: /Account/ModifyBooking
+        [AllowAnonymous]
+        public ActionResult ModifyBooking()
+        {
+            return RedirectToAction("ModifyBooking", "Home");
+        }
+        //
+        // GET: /Account/ModifyGuestDetails
+        [AllowAnonymous]
+        public ActionResult ModifyGuestDetails()
+        {
+            return RedirectToAction("ModifyGuestDetails", "Home");
+        }
+
+
+        //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {

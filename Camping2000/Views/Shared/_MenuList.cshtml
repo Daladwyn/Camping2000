@@ -5,7 +5,13 @@
     <li>
         @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
     </li>
-    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+    <li>
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+        {
+            @Html.AntiForgeryToken()
+        <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+        }
+    </li>
     <li>
         @Ajax.ActionLink("Space For Tents","SpaceForTent", new AjaxOptions
 {
@@ -20,7 +26,7 @@
     InsertionMode = InsertionMode.Replace
     })
     </li>
-    @* Add if statement that if userloged in is a admin or receptionist the following should show*@
+    @* Add if statement that if userloged in is an admin or receptionist the following should show*@
     <li>
         @Ajax.ActionLink("Checking in", "CheckIn", new AjaxOptions
          {
