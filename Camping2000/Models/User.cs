@@ -3,11 +3,13 @@ using System.Web;
 using System.Web.Services;
 using System.Web.Services.Protocols;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Camping2000
 {
     public class User
     {
+        [Key]
         public int UserId
         {
             get => default(int);
@@ -15,47 +17,47 @@ namespace Camping2000
             {
             }
         }
-
-        public int UserFirstName
+        [Required]
+        public string UserFirstName
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
-
-        public int UserNationality
+        [Required]
+        public string UserNationality
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
-
-        public int UserMailAdress
+        [Required]
+        public string UserMailAdress
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
-
-        public int UserHasReserved
+        [Required]
+        public bool UserHasReserved
         {
-            get => default(int);
+            get => default(bool);
             set
             {
             }
         }
-
-        public int UserHasCheckedIn
+        [Required]
+        public bool UserHasCheckedIn
         {
-            get => default(int);
+            get => default(bool);
             set
             {
             }
         }
-
+       
         public int UserHasToPay
         {
             get => default(int);
@@ -71,13 +73,15 @@ namespace Camping2000
             {
             }
         }
-
-        public int UserLastName
+        [Required]
+        public string UserLastName
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
+        public int UserTelephoneNr { get; set; }
+        public int UserMobileNr { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Services;
 using System.Web.Services.Protocols;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Camping2000
 {
@@ -15,31 +16,31 @@ namespace Camping2000
             {
             }
         }
-
-        public int LivingAdressStreet1
+        [MaxLength(100)]
+        public string LivingAdressStreet1
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
-
-        public int LivingAdressStreet2
+        [MaxLength(100)]
+        public string LivingAdressStreet2
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
-
-        public int LivingAdressStreet3
+        [MaxLength(100)]
+        public string LivingAdressStreet3
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
-
+        [Range(0, 99999)]
         public int LivingAdressZipCode
         {
             get => default(int);
@@ -47,39 +48,39 @@ namespace Camping2000
             {
             }
         }
-
-        public int LivingAdressCity
+        [MaxLength(100)]
+        public string LivingAdressCity
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
-
-        public int PostAdressStreet1
+        [MaxLength(100)]
+        public string PostAdressStreet1
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
-
-        public int PostAdressStreet2
+        [MaxLength(100)]
+        public string PostAdressStreet2
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
-
-        public int PostAdressStreet3
+        [MaxLength(100)]
+        public string PostAdressStreet3
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
-
+        [Range(0,99999)]
         public int PostAdressZipCode
         {
             get => default(int);
@@ -87,10 +88,10 @@ namespace Camping2000
             {
             }
         }
-
-        public int PostAdressCity
+        [MaxLength(100)]
+        public string PostAdressCity
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }

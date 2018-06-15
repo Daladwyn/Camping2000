@@ -3,27 +3,29 @@ using System.Web;
 using System.Web.Services;
 using System.Web.Services.Protocols;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Camping2000
 {
-    public class Camping
+    public class Camping : ItemToRent
     {
-        public int CampingSpot
+        [Required]
+        public string CampingSpot
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
         }
-
-        public int CampingElectricity
+        [Required]
+        public bool CampingElectricity
         {
-            get => default(int);
+            get => default(bool);
             set
             {
             }
         }
-
+        [Required]
         public int CampingPrice
         {
             get => default(int);

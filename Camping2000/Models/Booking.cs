@@ -3,11 +3,13 @@ using System.Web;
 using System.Web.Services;
 using System.Web.Services.Protocols;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Camping2000
 {
     public class Booking
     {
+        [Required]
         public int ItemId
         {
             get => default(int);
@@ -15,7 +17,7 @@ namespace Camping2000
             {
             }
         }
-
+        [Required]
         public int UserId
         {
             get => default(int);
@@ -23,7 +25,7 @@ namespace Camping2000
             {
             }
         }
-
+        [Key]
         public int BookingId
         {
             get => default(int);
@@ -31,18 +33,18 @@ namespace Camping2000
             {
             }
         }
-
-        public int BookingStartDate
+        [Required]
+        public DateTime BookingStartDate
         {
-            get => default(int);
+            get => default(DateTime);
             set
             {
             }
         }
-
-        public int BookingEndDate
+        [Required]
+        public DateTime BookingEndDate
         {
-            get => default(int);
+            get => default(DateTime);
             set
             {
             }

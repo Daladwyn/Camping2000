@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Camping2000
 {
-    public class LargeCabin
+    public class LargeCabin : ItemToRent
     {
         public int NumberOfBeds
         {
