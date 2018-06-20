@@ -1,0 +1,12 @@
+
+Camping objects use:
+Enable-Migrations -ContextTypeName Camping2000.Models.Camping2000Db -MigrationsDirectory Migrations\Camping2000Db
+
+User objects use:
+Enable-Migrations -ContextTypeName Camping2000.Models.ApplicationDbContext -MigrationsDirectory Migrations\ApplicationDbContext -Force
+
+// For Updating the camping database
+Update-Database -ConfigurationTypeName Camping2000.Migrations.Camping200Db.Configuration
+
+//For Updating the Application Users
+Update-Database -ConfigurationTypeName Camping2000.Migrations.ApplicationDbContext.Configuration
