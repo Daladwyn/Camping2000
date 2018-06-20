@@ -7,10 +7,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Camping2000
 {
-    public class User
+    public class Guest
     {
         [Key]
-        public int UserId
+        public int GuestId
         {
             get => default(int);
             set
@@ -18,7 +18,7 @@ namespace Camping2000
             }
         }
         [Required]
-        public string UserFirstName
+        public string GuestFirstName
         {
             get => default(string);
             set
@@ -26,23 +26,23 @@ namespace Camping2000
             }
         }
         [Required]
-        public string UserNationality
+        public string GuestNationality
         {
             get => default(string);
             set
             {
             }
         }
+        //[Required] Is located in AccountViewModels as Email
+        //public string GuestMailAdress
+        //{
+        //    get => default(string);
+        //    set
+        //    {
+        //    }
+        //}
         [Required]
-        public string UserMailAdress
-        {
-            get => default(string);
-            set
-            {
-            }
-        }
-        [Required]
-        public bool UserHasReserved
+        public bool GuestHasReserved
         {
             get => default(bool);
             set
@@ -50,7 +50,7 @@ namespace Camping2000
             }
         }
         [Required]
-        public bool UserHasCheckedIn
+        public bool GuestHasCheckedIn
         {
             get => default(bool);
             set
@@ -58,7 +58,7 @@ namespace Camping2000
             }
         }
        
-        public int UserHasToPay
+        public decimal GuestHasToPay //this property is used for gathering the amount the guest have to pay.
         {
             get => default(int);
             set
@@ -66,7 +66,7 @@ namespace Camping2000
             }
         }
 
-        public int UserHasPaid
+        public decimal GuestHasPaid // This property is used as a checker if the guest have paid.
         {
             get => default(int);
             set
@@ -74,14 +74,14 @@ namespace Camping2000
             }
         }
         [Required]
-        public string UserLastName
+        public string GuestLastName
         {
             get => default(string);
             set
             {
             }
         }
-        public int UserTelephoneNr { get; set; }
-        public int UserMobileNr { get; set; }
+        // public int UserTelephoneNr { get; set; } Is located in ManageViewModel as PhoneNumber
+        public int GuestMobileNr { get; set; }
     }
 }

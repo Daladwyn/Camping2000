@@ -8,11 +8,15 @@
         <div class="col-md-3">
             GuestLastname
         </div>
-        <div class="col-md-3">
-            @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
+        
+        <div class="col-md-1">
+            Guest BookingId
+        </div>
+        <div class="col-md-2">@*Ajax.BeginForm("*@
+        <input type="number" name="NumberOfPersonsToCheckIn" />
         </div>
         <div class="col-md-3">
-
+            @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
         </div>
     </div>
 </div>

@@ -18,7 +18,7 @@ namespace Camping2000
             }
         }
         [Required]
-        public int UserId
+        public int GuestId
         {
             get => default(int);
             set
@@ -49,5 +49,7 @@ namespace Camping2000
             {
             }
         }
+        public int NumberOfGuests { get; set; }
+        public decimal BookingPrice { get; set; }
     }
 }

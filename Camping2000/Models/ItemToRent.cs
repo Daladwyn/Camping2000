@@ -10,27 +10,12 @@ namespace Camping2000
     public class ItemToRent
     {
         [Key]
-        public int ItemId
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
+        public int ItemId { get; set; }
         [Required]
         [MaxLength(40)]
-        public string ItemName
-        { get; set; }
-
-
-        [Range(1, 10)]
-        public int ItemNumberOfPersons
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
+        public string ItemName { get; set; }
+        [Range(1, 11)]
+        public int ItemNumberOfPersons { get; set; }
         [Required]
         public bool ItemIsBooked { get; set; }
     }

@@ -9,7 +9,11 @@ namespace Camping2000
 {
     public class Adress
     {
-        public int UserId
+        [Key]
+        public int AdressId { get; set; }
+
+        [Required]
+        public int GuestId
         {
             get => default(int);
             set

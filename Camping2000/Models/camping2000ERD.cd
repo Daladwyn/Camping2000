@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Camping2000.ItemsToRent">
+  <Class Name="Camping2000.ItemToRent">
     <Position X="1.75" Y="1" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAEAAAAAAAAAAAAgAAAQAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\ItemsToRent.cs</FileName>
+      <FileName>Models\ItemToRent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Camping2000.Camping">
@@ -19,13 +19,6 @@
     <TypeIdentifier>
       <HashCode>AAAAAEAAAAAIAAAAgAAAAAgAAAAAAAAABAAAAAAAAAA=</HashCode>
       <FileName>Models\Booking.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Camping2000.User">
-    <Position X="7" Y="0.75" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAIAAAAAgAgAQAAAAAABIAAAAAAAQQA=</HashCode>
-      <FileName>Models\User.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Camping2000.SmallCabin">
@@ -47,6 +40,13 @@
     <TypeIdentifier>
       <HashCode>AAEAAAAAAAAAAAAAAAAAAAgASAAIAAQBAAIAAAAAsAA=</HashCode>
       <FileName>Models\Adress.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camping2000.Guest">
+    <Position X="7" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAgAEACIgAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Guest.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

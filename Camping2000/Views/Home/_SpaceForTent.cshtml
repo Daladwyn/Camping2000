@@ -16,7 +16,7 @@
                 @Html.Label("Arrival date: ")
             </div>
             <div class="col-md-3">
-                <input type="date" name="ArrivalDate" min="2018-06-15" />
+                <input type="date" name="BookingStartDate" min="2018-06-15" />
                 @*<input type="date"  min="@(DateTime.Now.Year-DateTime.Now.Month-DateTime.Now.Day)" />*@
             </div>
             <div class="col-md-7">
@@ -32,7 +32,7 @@
                 @Html.Label("Departure date: ")
             </div>
             <div class="col-md-3">
-                <input type="date" name="DepartureDate" min="2018-06-16" />
+                <input type="date" name="BookingEndDate" min="2018-06-16" />
                 @*<input type="date" min="@DateTime.Now.Year-@DateTime.Now.Month-@DateTime.Now.Day" />*@
             </div>
             <div class="col-md-7">
@@ -78,7 +78,7 @@
                 @Html.Label("Estimated price: ")
             </div>
             <div class="col-md-3">
-
+                @* The modelFieldname is: BookingPrice *@
             </div>
             <div class="col-md-7">
 

@@ -11,8 +11,11 @@
     <div class="col-md-3">
         Lastname
     </div>
-    <div class="col-md-3">
-
+    <div class="col-md-1">
+        BookingId
+    </div>
+    <div class="col-md-2">
+        Number Of Guests
     </div>
     <div class="col-md-3">
 
@@ -29,11 +32,14 @@
     <div class="col-md-3">
         Johansson
     </div>
-    <div class="col-md-3">
-        @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
+    <div class="col-md-1">
+        23
+    </div>
+    <div class="col-md-2">
+        <input type="number" name="NumberOfPersonsToCheckIn" />
     </div>
     <div class="col-md-3">
-
+        @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
     </div>
 </div>
 <div class="row">
@@ -43,10 +49,14 @@
     <div class="col-md-3">
         Karlsson
     </div>
+    <div class="col-md-1">
+        24
+    </div>
+    <div class="col-md-2">
+        <input type="number" name="NumberOfPersonsToCheckIn" />
+    </div>
     <div class="col-md-3">
         @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
     </div>
-    <div class="col-md-3">
-
-    </div>
+   
 </div>

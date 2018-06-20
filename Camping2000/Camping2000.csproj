@@ -192,7 +192,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\ApplicationDbContext\Configuration.cs" />
+    <Compile Include="Migrations\Camping2000Db\Configuration.cs" />
     <Compile Include="Models\Adress.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Camping2000Db.cs" />
     <Compile Include="Models\ItemToRent.cs" />
     <Compile Include="Models\LargeCabin.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -215,7 +217,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\SmallCabin.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Guest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker.css" />
@@ -400,6 +402,7 @@
     <Content Include="Views\Home\_GuestDetails.cshtml" />
     <Content Include="Views\Home\_UpdatedGuestDetails.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\Home\_ShowVacantFullsign.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

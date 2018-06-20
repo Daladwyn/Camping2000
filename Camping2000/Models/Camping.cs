@@ -10,28 +10,10 @@ namespace Camping2000
     public class Camping : ItemToRent
     {
         [Required]
-        public string CampingSpot
-        {
-            get => default(string);
-            set
-            {
-            }
-        }
+        public string CampingSpot { get; set; }
         [Required]
-        public bool CampingElectricity
-        {
-            get => default(bool);
-            set
-            {
-            }
-        }
+        public bool CampingElectricity { get; set; }
         [Required]
-        public int CampingPrice
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
+        public decimal CampingPrice { get; set; }
     }
 }

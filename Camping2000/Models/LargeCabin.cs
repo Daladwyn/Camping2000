@@ -16,17 +16,17 @@ namespace Camping2000
             }
         }
 
-        public int PriceFor2
+        public decimal PriceFor2
         {
-            get => default(int);
+            get => default(decimal);
             set
             {
             }
         }
 
-        public int PriceFor6
+        public decimal PriceFor6
         {
-            get => default(int);
+            get => default(decimal);
             set
             {
             }

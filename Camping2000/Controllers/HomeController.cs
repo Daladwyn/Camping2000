@@ -12,7 +12,6 @@ namespace Camping2000.Controllers
         {
             return View();
         }
-
         public ActionResult SpaceForTent()
         {
             ViewBag.Message = "Renting space for tent.";
@@ -43,22 +42,27 @@ namespace Camping2000.Controllers
         {
             return PartialView("Index");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult CheckIn()
         {
             return PartialView("_CheckIn");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult CheckOut()
         {
             return PartialView("_CheckOut");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult ArrivalsDepartures()
         {
             return PartialView("_ArrivalsDepartures");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult CheckInConfirmation()
         {
             return PartialView("_CheckInConfirmation");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult CheckOutConfirmation()
         {
             return PartialView("_CheckOutConfirmation");
@@ -67,45 +71,59 @@ namespace Camping2000.Controllers
         {
             return PartialView("Index");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult ShowGuestArrivals()
         {
             return PartialView("_ShowGuestArrivals");
         }
-        public ActionResult ShowGuestDepartures() 
-            {
+        [Authorize(Roles = "Admin")]
+        public ActionResult ShowGuestDepartures()
+        {
             return PartialView("_ShowGuestDepartures");
-            }
+        }
+        [Authorize(Roles = "Admin")]
         public ActionResult ModifyBooking()
         {
             return PartialView("_ModifyBooking");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult ModifyGuestDetails()
         {
             return PartialView("_ModifyGuestDetails");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult ListPresentBookings()
         {
             return PartialView("_PresentBooking");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult ModifySpecificBooking()
         {
             return PartialView("_ModifySpecificBooking");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult UpdatedBooking()
         {
             return PartialView("_UpdatedBooking");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult SearchForGuest()
         {
             return PartialView("_ShowFoundGuests");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult ModifySpecificGuestDetails()
         {
             return PartialView("_GuestDetails");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult UpdatedGuestDetails()
         {
             return PartialView("_UpdatedGuestDetails");
+        }
+        public ActionResult ShowVacantFullsign()
+        {
+            return PartialView("ShowVacantFullSign");
         }
     }
 }

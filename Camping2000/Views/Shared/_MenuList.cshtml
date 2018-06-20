@@ -9,7 +9,7 @@
         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
         {
             @Html.AntiForgeryToken()
-        <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+            <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
         }
     </li>
     <li>
@@ -18,6 +18,7 @@
    UpdateTargetId = "ContentBody",
    InsertionMode = InsertionMode.Replace
 })
+        @*Html.RenderAction("ShowVacantFullSign");*@
     </li>
     <li>
         @Ajax.ActionLink("Space For caravan/trailer", "SpaceForCaravan", new AjaxOptions
@@ -26,40 +27,43 @@
     InsertionMode = InsertionMode.Replace
     })
     </li>
-    @* Add if statement that if userloged in is an admin or receptionist the following should show*@
-    <li>
-        @Ajax.ActionLink("Checking in", "CheckIn", new AjaxOptions
-         {
-         UpdateTargetId = "ContentBody",
-         InsertionMode = InsertionMode.Replace
-         })
-    </li>
-    <li>
-        @Ajax.ActionLink("Checking out", "CheckOut", new AjaxOptions
-         {
-         UpdateTargetId = "ContentBody",
-         InsertionMode = InsertionMode.Replace
-         })
-    </li>
-    <li>
-        @Ajax.ActionLink("Daily Arrivals/Departures", "ArrivalsDepartures", new AjaxOptions
-         {
-         UpdateTargetId = "ContentBody",
-         InsertionMode = InsertionMode.Replace
-         })
-    </li>
-    <li>
-        @Ajax.ActionLink("Modify a Booking", "ModifyBooking", new AjaxOptions
-         {
-         UpdateTargetId = "ContentBody",
-         InsertionMode = InsertionMode.Replace
-         })
-    </li>
-    <li>
-        @Ajax.ActionLink("Modify a Guests Details", "ModifyGuestDetails", new AjaxOptions
-         {
-         UpdateTargetId = "ContentBody",
-         InsertionMode = InsertionMode.Replace
-         })
-    </li>
+    @if (User.IsInRole("Admin"))
+    {
+
+        <li>
+            @Ajax.ActionLink("Checking in", "CheckIn", new AjaxOptions
+             {
+             UpdateTargetId = "ContentBody",
+             InsertionMode = InsertionMode.Replace
+             })
+        </li>
+        <li>
+            @Ajax.ActionLink("Checking out", "CheckOut", new AjaxOptions
+             {
+             UpdateTargetId = "ContentBody",
+             InsertionMode = InsertionMode.Replace
+             })
+        </li>
+        <li>
+            @Ajax.ActionLink("Daily Arrivals/Departures", "ArrivalsDepartures", new AjaxOptions
+             {
+             UpdateTargetId = "ContentBody",
+             InsertionMode = InsertionMode.Replace
+             })
+        </li>
+        <li>
+            @Ajax.ActionLink("Modify a Booking", "ModifyBooking", new AjaxOptions
+             {
+             UpdateTargetId = "ContentBody",
+             InsertionMode = InsertionMode.Replace
+             })
+        </li>
+        <li>
+            @Ajax.ActionLink("Modify a Guests Details", "ModifyGuestDetails", new AjaxOptions
+             {
+             UpdateTargetId = "ContentBody",
+             InsertionMode = InsertionMode.Replace
+             })
+        </li>
+    }
 </ul>
