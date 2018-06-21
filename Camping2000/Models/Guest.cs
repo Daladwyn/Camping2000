@@ -4,12 +4,14 @@ using System.Web.Services;
 using System.Web.Services.Protocols;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Camping2000
 {
     public class Guest
     {
         [Key]
+        
         public int GuestId
         {
             get => default(int);

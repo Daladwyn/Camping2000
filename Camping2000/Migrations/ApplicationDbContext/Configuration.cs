@@ -1,6 +1,8 @@
 namespace Camping2000.Migrations.ApplicationDbContext
 {
+    using Camping2000.Models;
     using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -20,13 +22,29 @@ namespace Camping2000.Migrations.ApplicationDbContext
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
-            context.Roles.AddOrUpdate(r => r.Name,
-                new Microsoft.AspNet.Identity.EntityFramework.IdentityRole("User"),
-                new Microsoft.AspNet.Identity.EntityFramework.IdentityRole("Admin"));
+            var db = new ApplicationDbContext();
+            var store = new RoleStore<IdentityRole>(db);
+            var roleManager = new RoleManager<IdentityRole>(store);
+
+            roleManager.Create(new IdentityRole("Administrators"));
+            roleManager.Create(new IdentityRole("Guests"));
+            //roleManager.Create(new IdentityRole("Receptionist"));
+            db.SaveChanges();
+
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
+            userManager.Create(user: new ApplicationUser() {
+                UserName = "Admin",
+                Email = "admin@camping.com",
+                             
+            }, password:"Test!0");
             context.SaveChanges();
 
-            //context.Users.AddOrUpdate(u => u.UserName,
-            //    new Microsoft.AspNet.Identity.EntityFramework.IdentityUser() { UserName="admin", C ="Admin",  "admin@camp.com" });
-        }
+            var user = userManager.FindByName("Admin");
+            userManager.AddToRole(user.Id, "Administrators");
+
+            context.SaveChanges();
+                               }
     }
 }

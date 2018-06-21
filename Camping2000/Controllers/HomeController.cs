@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Camping2000.Models;
+using System.Data.SqlClient;
 
 namespace Camping2000.Controllers
 {
@@ -42,27 +44,33 @@ namespace Camping2000.Controllers
         {
             return PartialView("Index");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult CheckIn()
         {
-            return PartialView("_CheckIn");
+            List<Booking> presentBookings = new List<Booking>();
+            using(var context = new context())
+            {
+
+
+            };
+            return PartialView("_CheckIn",presentBookings);
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult CheckOut()
         {
             return PartialView("_CheckOut");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult ArrivalsDepartures()
         {
             return PartialView("_ArrivalsDepartures");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult CheckInConfirmation()
         {
             return PartialView("_CheckInConfirmation");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult CheckOutConfirmation()
         {
             return PartialView("_CheckOutConfirmation");
@@ -71,52 +79,52 @@ namespace Camping2000.Controllers
         {
             return PartialView("Index");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult ShowGuestArrivals()
         {
             return PartialView("_ShowGuestArrivals");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult ShowGuestDepartures()
         {
             return PartialView("_ShowGuestDepartures");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult ModifyBooking()
         {
             return PartialView("_ModifyBooking");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult ModifyGuestDetails()
         {
             return PartialView("_ModifyGuestDetails");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult ListPresentBookings()
         {
             return PartialView("_PresentBooking");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult ModifySpecificBooking()
         {
             return PartialView("_ModifySpecificBooking");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult UpdatedBooking()
         {
             return PartialView("_UpdatedBooking");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult SearchForGuest()
         {
             return PartialView("_ShowFoundGuests");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult ModifySpecificGuestDetails()
         {
             return PartialView("_GuestDetails");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrators")]
         public ActionResult UpdatedGuestDetails()
         {
             return PartialView("_UpdatedGuestDetails");
