@@ -24,8 +24,9 @@ namespace Camping2000.Controllers
             ViewBag.Message = "Renting space for caravan.";
             return PartialView("_SpaceForCaravan");
         }
-        public ActionResult RentSpaceForTent()
+        public ActionResult RentSpaceForTent([Bind(Include ="BookingStartDate,BookingEndDate,NumberOfGuests")] Booking newBooking, string Electricity)
         {
+
             return PartialView("_ConfirmSpaceForTent");
         }
         public ActionResult RentSpaceForCaravan()
@@ -48,17 +49,34 @@ namespace Camping2000.Controllers
         public ActionResult CheckIn()
         {
             List<Booking> presentBookings = new List<Booking>();
-            using(var context = new context())
+            using (var context = new Camping2000Db())
             {
-
-
+                foreach (var booking in context.Bookings)
+                {
+                    if (booking.BookingStartDate == DateTime.Now.Date)//is this correct Dateformat?
+                    {
+                        presentBookings.Add(booking);
+                    }
+                }
             };
-            return PartialView("_CheckIn",presentBookings);
+            //context.Dispose()
+            return PartialView("_CheckIn", presentBookings);
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult CheckOut()
         {
-            return PartialView("_CheckOut");
+            List<Booking> presentBookings = new List<Booking>();
+            using (var context = new Camping2000Db())
+            {
+                foreach (var booking in context.Bookings)
+                {
+                    if (booking.BookingEndDate == DateTime.Now.Date)//is this correct Dateformat?
+                    {
+                        presentBookings.Add(booking);
+                    }
+                }
+            };
+            return PartialView("_CheckOut", presentBookings);
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult ArrivalsDepartures()
@@ -80,9 +98,13 @@ namespace Camping2000.Controllers
             return PartialView("Index");
         }
         [Authorize(Roles = "Administrators")]
-        public ActionResult ShowGuestArrivals()
+        public ActionResult ShowGuestArrivals(Booking Abooking)
         {
-            return PartialView("_ShowGuestArrivals");
+            //using (var context = new Camping2000Db())
+            //{
+
+            //}
+            return PartialView("_ShowGuestArrivals", Abooking);
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult ShowGuestDepartures()

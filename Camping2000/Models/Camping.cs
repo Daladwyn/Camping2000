@@ -5,7 +5,7 @@ using System.Web.Services.Protocols;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Camping2000
+namespace Camping2000.Models
 {
     public class Camping : ItemToRent
     {

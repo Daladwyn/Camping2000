@@ -35,13 +35,13 @@ namespace Camping2000.Migrations.ApplicationDbContext
             var userManager = new UserManager<ApplicationUser>(userStore);
 
             userManager.Create(user: new ApplicationUser() {
-                UserName = "Admin",
+                UserName = "Admin@camping.com",
                 Email = "admin@camping.com",
                              
             }, password:"Test!0");
             context.SaveChanges();
 
-            var user = userManager.FindByName("Admin");
+            var user = userManager.FindByName("Admin@camping.com");
             userManager.AddToRole(user.Id, "Administrators");
 
             context.SaveChanges();
