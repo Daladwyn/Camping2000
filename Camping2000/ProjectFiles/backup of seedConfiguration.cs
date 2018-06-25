@@ -21,16 +21,16 @@ namespace Camping2000.Migrations.Camping2000Db
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
             context.Camping.AddOrUpdate(i => i.ItemId,
-               new Camping { ItemName = "Camping Spot1", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "1", CampingPrice = 50, CampingElectricity = false },
-               new Camping { ItemName = "Camping Spot2", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "2", CampingPrice = 50, CampingElectricity = false },
-               new Camping { ItemName = "Camping Spot3", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "3", CampingPrice = 50, CampingElectricity = false },
-               new Camping { ItemName = "Camping Spot4", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "4", CampingPrice = 50, CampingElectricity = false },
-               new Camping { ItemName = "Camping Spot5", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "5", CampingPrice = 50, CampingElectricity = false },
-               new Camping { ItemName = "Camping Spot6", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "6", CampingPrice = 50, CampingElectricity = false },
-               new Camping { ItemName = "Camping Spot7", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "7", CampingPrice = 50, CampingElectricity = false },
-               new Camping { ItemName = "Camping Spot8", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "8", CampingPrice = 50, CampingElectricity = false },
-               new Camping { ItemName = "Camping Spot9", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "9", CampingPrice = 50, CampingElectricity = false },
-               new Camping { ItemName = "Camping Spot10", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "10", CampingPrice = 50, CampingElectricity = false });
+                new Camping { ItemName = "Camping Spot1", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "1", CampingPrice = 50, CampingElectricity = false },
+                new Camping { ItemName = "Camping Spot2", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "2", CampingPrice = 50, CampingElectricity = false },
+                new Camping { ItemName = "Camping Spot3", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "3", CampingPrice = 50, CampingElectricity = false },
+                new Camping { ItemName = "Camping Spot4", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "4", CampingPrice = 50, CampingElectricity = false },
+                new Camping { ItemName = "Camping Spot5", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "5", CampingPrice = 50, CampingElectricity = false },
+                new Camping { ItemName = "Camping Spot6", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "6", CampingPrice = 50, CampingElectricity = false },
+                new Camping { ItemName = "Camping Spot7", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "7", CampingPrice = 50, CampingElectricity = false },
+                new Camping { ItemName = "Camping Spot8", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "8", CampingPrice = 50, CampingElectricity = false },
+                new Camping { ItemName = "Camping Spot9", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "9", CampingPrice = 50, CampingElectricity = false },
+                new Camping { ItemName = "Camping Spot10", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "10", CampingPrice = 50, CampingElectricity = false });
             context.SaveChanges();
 
             context.Camping.AddOrUpdate(i => i.ItemId,
@@ -40,6 +40,7 @@ namespace Camping2000.Migrations.Camping2000Db
                  new Camping { ItemName = "Trailer Spot4", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "14", CampingPrice = 100, CampingElectricity = true },
                  new Camping { ItemName = "Trailer Spot5", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "15", CampingPrice = 100, CampingElectricity = true });
             context.SaveChanges();
+
         }
     }
 }

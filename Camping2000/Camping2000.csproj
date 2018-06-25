@@ -404,6 +404,7 @@
     <Content Include="Views\Home\_UpdatedGuestDetails.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\Home\_ShowVacantFullsign.cshtml" />
+    <Content Include="Views\Home\_NoVacantSpot.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

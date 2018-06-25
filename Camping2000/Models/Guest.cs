@@ -12,9 +12,9 @@ namespace Camping2000.Models
     {
         [Key]
         
-        public int GuestId
+        public string GuestId //needs to be changed to string to match identitys format for userId
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }

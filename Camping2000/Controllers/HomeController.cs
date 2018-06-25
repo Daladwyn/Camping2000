@@ -24,17 +24,33 @@ namespace Camping2000.Controllers
             ViewBag.Message = "Renting space for caravan.";
             return PartialView("_SpaceForCaravan");
         }
-        public ActionResult RentSpaceForTent([Bind(Include ="BookingStartDate,BookingEndDate,NumberOfGuests")] Booking newBooking, string Electricity)
+        public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests")] Booking newBooking, string Electricity)
         {
+            Camping vacantSpot = new Camping();
+            using (var context = new Camping2000Db())
+            {
+                //vacantSpot = context.Camping.FirstOrDefault(f => f.ItemIsBooked == false);
+                            }
+            if (vacantSpot == null)
+            {
+                // print out that no vacant spots exits.
+                return PartialView("_NoVacantSpot");
+            }
+            newBooking.ItemId = vacantSpot.ItemId;
+            if (Electricity=="yes")
+            {
 
-            return PartialView("_ConfirmSpaceForTent");
+            }
+
+            return PartialView("_ConfirmSpaceForTent", newBooking);
         }
         public ActionResult RentSpaceForCaravan()
         {
             return PartialView("_ConfirmSpaceForCaravan");
         }
-        public ActionResult ConfirmSpaceForTent()
+        public ActionResult ConfirmSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,GuestId")] Booking newBooking, string Electricity)
         {
+
             return PartialView("_ReservedConfirmation");
         }
         public ActionResult ConfirmSpaceForCaravan()

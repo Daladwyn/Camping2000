@@ -18,9 +18,9 @@ namespace Camping2000.Models
             }
         }
         [Required]
-        public int GuestId
+        public string GuestId
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
