@@ -1,4 +1,4 @@
-﻿
+﻿@model Camping2000.Models.Camping
 
 <h2>Renting space for a tent.</h2>
 
@@ -74,14 +74,17 @@
     </div>
     <div class="form-group">
         <div class="row">
+            <div class="col-md-3">
+                @Html.Label("Price per night per person: ")
+            </div>
+            <div class="col-md-3">
+                @Model.CampingPrice
+            </div>
             <div class="col-md-2">
                 @Html.Label("Estimated price: ")
             </div>
             <div class="col-md-3">
                 @* The modelFieldname is: BookingPrice *@
-            </div>
-            <div class="col-md-7">
-
             </div>
         </div>
     </div>
