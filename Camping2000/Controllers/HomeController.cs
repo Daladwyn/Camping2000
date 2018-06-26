@@ -20,16 +20,21 @@ namespace Camping2000.Controllers
 
             using (var context = new Camping2000Db())
             {
-                campingSpot = context.Camping.First();
-
+                campingSpot = context.Camping.FirstOrDefault(i => i.ItemName == "Camping Spot1");
             }
             ViewBag.Message = "Renting space for tent.";
             return PartialView("_SpaceForTent", campingSpot);
         }
         public ActionResult SpaceForCaravan()
         {
+            Camping campingSpot = new Camping();
+
+            using (var context = new Camping2000Db())
+            {
+                campingSpot = context.Camping.FirstOrDefault(i => i.ItemName == "Trailer Spot1");
+            }
             ViewBag.Message = "Renting space for caravan.";
-            return PartialView("_SpaceForCaravan");
+            return PartialView("_SpaceForCaravan", campingSpot);
         }
         public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests")] Booking newBooking, string Electricity)// , decimal CampingPrice
         {
@@ -109,9 +114,9 @@ namespace Camping2000.Controllers
             }
             eligibleSpots.Sort();
 
-           
 
-           
+
+
 
             if (eligibleSpots == null)
             {
@@ -146,17 +151,23 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult CheckIn()
         {
+            List<Booking> AllBookings = new List<Booking>();
             List<Booking> presentBookings = new List<Booking>();
             using (var context = new Camping2000Db())
             {
                 foreach (var booking in context.Bookings)
                 {
+                    AllBookings.Add(booking);
+                }
+            };
+            foreach (var booking in AllBookings)
+            {
                     if (booking.BookingStartDate == DateTime.Now.Date)//is this correct Dateformat?
                     {
                         presentBookings.Add(booking);
                     }
-                }
-            };
+
+            }
             //context.Dispose()
             return PartialView("_CheckIn", presentBookings);
         }
