@@ -1,75 +1,75 @@
-﻿
+﻿@model Camping2000.Models.Booking
 
 <h2>GuestFirstName GuestLastNames Booking Details:</h2>
+@*<h2>@Model.GuestFirstName @Model.GuestLastName Booking Details:</h2> *@
 
 <div class="row">
     <div class="col-md-2">
         @Html.Label("Arrival date:")
     </div>
     <div class="col-md-2">
-        2018-07-10
+        @Model.BookingStartDate
     </div>
     <div class="col-md-2">
         @Html.Label("Change to:")
     </div>
-    <div class="col-md-6">
-        <input type="date" name="ArrivalDate" min="2018-06-15" />
+    <div class="form-group">
+        <div class="col-md-6">
+            <input type="date" name="BookingStartDate" min="2018-06-15" />
+        </div>
     </div>
 </div>
-
 <div class="row">
     <div class="col-md-2">
         @Html.Label("Departure date:")
     </div>
     <div class="col-md-2">
-        2018-07-17
+        @Model.BookingEndDate
     </div>
     <div class="col-md-2">
         @Html.Label("Change to:")
     </div>
-    <div class="col-md-6">
-        <input type="date" name="DepartureDate" min="2018-06-16" />
+    <div class="form-group">
+        <div class="col-md-6">
+            <input type="date" name="BookingEndDate" min="2018-06-16" />
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Camping spot:")
-    </div>
-    <div class="col-md-2">
-        nr: 7
-    </div>
-    <div class="col-md-2">
-        @Html.Label("Change to:")
-    </div>
-    <div class="col-md-6">
-        <select name="ItemName">
-            @for (int i = 1; i < 31; i++)
-            {
-                <option>
-                    Spot nr:@i - Vacant
-                </option>
-            }
-        </select>
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Camping spot:")
+        </div>
+        <div class="col-md-2">
+            nr: @Model.ItemId
+            @*nr: @Model.ItemName*@
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Change to:")
+        </div>
+        <div class="form-group">
+            <div class="col-md-6">
+                @Html.RenderAction("ShowVacantSpots")
 
-    </div>
-</div>
+            </div>
+        </div>
 
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Present Cost:")
-    </div>
-    <div class="col-md-2">
-        650 kr.
-    </div>
-    <div class="col-md-2">
-        @Html.Label("Future Cost:")
-    </div>
-    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Label("Present Cost:")
+            </div>
+            <div class="col-md-2">
+                650 kr.
+                @*@Model.Booking*@
+                @Model.BookingPrice
+            </div>
+            <div class="col-md-2">
+                @Html.Label("Future Cost:")
+            </div>
+            <div class="col-md-6">
 
-    </div>
-</div>
-@Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
-@Ajax.ActionLink("Accept Changes", "UpdatedBooking", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
+            </div>
+        </div>
+        @Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
+        @Ajax.ActionLink("Accept Changes", "UpdatedBooking", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
 
 

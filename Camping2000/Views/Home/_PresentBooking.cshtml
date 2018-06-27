@@ -1,11 +1,11 @@
-﻿
+﻿@model Camping2000.Models.Guest
 
 <div class="row">
     <div class="col-md-3">
-        GuestFirstname
+        @Model.GuestFirstName
     </div>
     <div class="col-md-3">
-        GuestLastname
+        @Model.GuestLastName
     </div>
     <div class="col-md-6">
         @Ajax.ActionLink("Modify Booking Details", "ModifySpecificBooking", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })

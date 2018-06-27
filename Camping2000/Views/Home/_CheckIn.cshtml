@@ -6,16 +6,16 @@
 
 <div class="row">
     <div class="col-md-3">
-        Firstname
+        @Html.Label("Firstname")
     </div>
     <div class="col-md-3">
-        Lastname
+        @Html.Label("Lastname")
     </div>
     <div class="col-md-1">
-        BookingId
+        @Html.Label("BookingId")
     </div>
     <div class="col-md-2">
-        Number Of Guests
+        @Html.Label("Number Of Guests")
     </div>
     <div class="col-md-3">
 
@@ -27,7 +27,7 @@
 }
 
 
-@*<div class="row">
+<div class="row">
             <div class="col-md-3">
                 Patrik
             </div>
@@ -61,4 +61,4 @@
                 @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
             </div>
 
-    </div>*@
+    </div>

@@ -1,30 +1,56 @@
-﻿
+﻿@model Camping2000.Models.Booking
+@using Microsoft.AspNet.Identity
+
 <h2>Confirm your reservation.</h2>
 
-<p>You arrive on:2018-07-10</p>
+<p>You arrive on:@Model.BookingStartDate</p>
 
-<p>You depart on:2018-07-17</p>
+<p>You depart on:@Model.BookingEndDate</p>
 
-<p>You are 6 people.</p>
+<p>You are @Model.NumberOfGuests people.</p>
 
-<p>You do not need electricity.</p>
+@if (Model.BookingNeedsElectricity == true)
+{
+    <p>You need an electric outlet.</p>
+}
+else
+{
+    <p>You do not need electricity.</p>
+}
 
 <p>Your estimated price is: 480 kr.</p>
-@Ajax.ActionLink("Make Adjustments","SpaceForCaravan","Home",
+
+@if (Request.IsAuthenticated)
+{
+    @Ajax.ActionLink("Make Adjustments","SpaceForCaravan","Home",
     ajaxOptions: new AjaxOptions
     {
         UpdateTargetId= "ContentBody",
         InsertionMode=InsertionMode.Replace
     })
-@Ajax.ActionLink("Accept reservation", "ConfirmSpaceForCaravan", "Home",
-    ajaxOptions:new AjaxOptions
-    {
-        UpdateTargetId= "ContentBody",
-        InsertionMode=InsertionMode.Replace
-    })
+    @Ajax.ActionLink("Accept reservation", "ConfirmSpaceForCaravan", "Home",
+        ajaxOptions:new AjaxOptions
+        {
+            UpdateTargetId= "ContentBody",
+            InsertionMode=InsertionMode.Replace
+        })
+}
+else
+{
+    <div>You need to login before you can reserve the spot.</div>
+    <div>
+        @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+    </div>
+    <div>
+        @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+    </div>
+}
+
+
+
 @*<div class="form-group">
-    <input type="submit" value="Confirm Reservation" class="btn btn-default" />
-</div>
-<div class="form-group">
-    <input type="submit" value="Cancel Reservation" class="btn btn-default" />
-</div>*@
+        <input type="submit" value="Confirm Reservation" class="btn btn-default" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Cancel Reservation" class="btn btn-default" />
+    </div>*@

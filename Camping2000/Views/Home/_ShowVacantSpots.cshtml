@@ -1,0 +1,10 @@
+﻿@model List<Camping2000.Models.Camping>
+
+<select name="ItemName">
+    @foreach (var spot in Model)
+    {
+        <option>
+            Spot nr:@spot.ItemName
+        </option>
+    }
+</select>

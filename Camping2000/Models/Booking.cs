@@ -51,5 +51,6 @@ namespace Camping2000.Models
         }
         public int NumberOfGuests { get; set; }
         public decimal BookingPrice { get; set; }
+        public bool BookingNeedsElectricity { get; set; }
     }
 }

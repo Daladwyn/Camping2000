@@ -162,10 +162,10 @@ namespace Camping2000.Controllers
             };
             foreach (var booking in AllBookings)
             {
-                    if (booking.BookingStartDate == DateTime.Now.Date)//is this correct Dateformat?
-                    {
-                        presentBookings.Add(booking);
-                    }
+                if (booking.BookingStartDate == DateTime.Now.Date)//is this correct Dateformat?
+                {
+                    presentBookings.Add(booking);
+                }
 
             }
             //context.Dispose()
@@ -207,13 +207,23 @@ namespace Camping2000.Controllers
             return PartialView("Index");
         }
         [Authorize(Roles = "Administrators")]
-        public ActionResult ShowGuestArrivals(Booking Abooking)
+        public ActionResult ShowGuestArrivals()
         {
-            //using (var context = new Camping2000Db())
-            //{
-
-            //}
-            return PartialView("_ShowGuestArrivals", Abooking);
+            Booking arrivals = new Booking();
+            List<Booking> presentBookings = new List<Booking>();
+            using (var context = new Camping2000Db())
+            {
+                foreach (var booking in context.Bookings)
+                {
+                    if (booking.BookingStartDate == DateTime.Now)
+                    {
+                        //arrivals = booking.
+                        //presentBookings.Add(arrivals);
+                        presentBookings.Add(booking);
+                    }
+                }
+            }
+            return PartialView("_ShowGuestArrivals", presentBookings);
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult ShowGuestDepartures()
@@ -263,6 +273,26 @@ namespace Camping2000.Controllers
         public ActionResult ShowVacantFullsign()
         {
             return PartialView("ShowVacantFullSign");
+        }
+        [Authorize(Roles = "Administrators")]
+        public ActionResult ShowVacantSpots()
+        {
+            List<Camping> vacantSpots = new List<Camping>();
+            using (var context = new Camping2000Db())
+            {
+                foreach (var spot in context.Camping)
+                {
+                    if (spot.ItemIsBooked == false)
+                    {
+                        vacantSpots.Add(spot);
+                    }
+                }
+            }
+            if (vacantSpots == null)
+            {
+                return PartialView("_NoAvailableSpotToChangeTo");
+            }
+            return PartialView("_ShowVacantSpots", vacantSpots);
         }
     }
 }

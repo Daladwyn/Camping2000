@@ -9,7 +9,14 @@
 
 <p>You are @Model.NumberOfGuests people.</p>
 
-<p>You do not need electricity.</p>
+@if (Model.BookingNeedsElectricity == true)
+{
+    <p>You need an electric outlet.</p>
+}
+else
+{
+    <p>You do not need electricity.</p>
+}
 
 <p>Your estimated price is: 480 kr.</p>
 @if (Request.IsAuthenticated)
@@ -20,26 +27,26 @@
                 UpdateTargetId = "ContentBody",
                 InsertionMode = InsertionMode.Replace
             })
-    @Ajax.ActionLink("Accept reservation", "ConfirmSpaceForTent", "Home", new { GuestId = User.Identity.GetUserId() }, 
+    @Ajax.ActionLink("Accept reservation", "ConfirmSpaceForTent", "Home", new { GuestId = User.Identity.GetUserId() },
                     ajaxOptions: new AjaxOptions
                     {
                         UpdateTargetId = "ContentBody",
                         InsertionMode = InsertionMode.Replace
                     })
-        }
-        else
-        {
-            <div>You need to login before you can reserve the spot.</div>
-            <div>
-                @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
-            </div>
-            <div>
-                @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-            </div>
-        }
-        @*<div class="form-group">
-                <input type="submit" value="Confirm Reservation" class="btn btn-default" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Cancel Reservation" class="btn btn-default" />
-            </div>*@
+}
+else
+{
+    <div>You need to login before you can reserve the spot.</div>
+    <div>
+        @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+    </div>
+    <div>
+        @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+    </div>
+}
+@*<div class="form-group">
+        <input type="submit" value="Confirm Reservation" class="btn btn-default" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Cancel Reservation" class="btn btn-default" />
+    </div>*@

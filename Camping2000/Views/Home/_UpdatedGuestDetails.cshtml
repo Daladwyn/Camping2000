@@ -1,4 +1,4 @@
-﻿
+﻿@model Camping2000.Models.Guest
 
 <h2>Guest details is updated.</h2>
 
@@ -8,7 +8,7 @@
         @Html.Label("FirstName:")
     </div>
     <div class="col-md-2">
-        GuestFirstName
+        @Model.GuestFirstName
     </div>
     <div class="col-md-2">
 
@@ -26,7 +26,7 @@
         @Html.Label("LastName:")
     </div>
     <div class="col-md-2">
-        GuestLastName
+        @Model.GuestLastName
     </div>
     <div class="col-md-2">
 
@@ -44,7 +44,7 @@
         @Html.Label("Nationality:")
     </div>
     <div class="col-md-2">
-        Guest Nationality
+        @Model.GuestNationality
     </div>
     <div class="col-md-2">
 
@@ -62,7 +62,7 @@
         @Html.Label("Emailadress:")
     </div>
     <div class="col-md-2">
-        Guest@mail.com
+        Guest@mail.com@*Model.GuestEmailAdress*@
     </div>
     <div class="col-md-2">
 
@@ -80,7 +80,7 @@
         @Html.Label("LivingAdressStreet1:")
     </div>
     <div class="col-md-2">
-        GuestLivingAdress
+        @*Model.GuestLivingadressStreet1*@
     </div>
 
     <div class="col-md-2">

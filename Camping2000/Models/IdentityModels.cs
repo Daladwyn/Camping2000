@@ -29,5 +29,7 @@ namespace Camping2000.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<Camping2000.Models.Camping> Campings { get; set; }
     }
 }

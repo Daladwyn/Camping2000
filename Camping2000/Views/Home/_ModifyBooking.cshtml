@@ -1,8 +1,9 @@
-﻿
+﻿@model List<Camping2000.Models.Booking>
 
 <h2>Which booking needs to be modified:</h2>
 
-@for (int i = 0; i < 10; i++)
+@foreach (var booking in Model)
 {
     Html.RenderAction("ListPresentBookings");
+
 }

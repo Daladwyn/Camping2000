@@ -1,19 +1,24 @@
 ﻿@model Camping2000.Models.Booking
 
+@*Ajax.BeginForm("*@
+
+
 <div>
     <div class="row">
         <div class="col-md-3">
-            @Model.
+            @*Model.GuestFirstName *@
+            GuestFirstname
         </div>
         <div class="col-md-3">
+            @*Model.GuestLastName *@
             GuestLastname
         </div>
-        
+
         <div class="col-md-1">
             @Model.BookingId
         </div>
-        <div class="col-md-2">@*Ajax.BeginForm("*@
-        <input type="number" name="NumberOfPersonsToCheckIn" />
+        <div class="col-md-2">
+            <input type="number" name="NumberOfGuests" />
         </div>
         <div class="col-md-3">
             @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })

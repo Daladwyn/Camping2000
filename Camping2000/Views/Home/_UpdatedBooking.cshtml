@@ -1,14 +1,14 @@
-﻿
+﻿@model Camping2000.Models.Booking
 <h2>Booking Details.</h2>
 
-<p>GuestFirstname GuestLastnames booking with bookingnumber: 56 have been modified to the following:</p>
+<p>GuestFirstname GuestLastnames booking with bookingnumber: @Model.BookingId have been modified to the following:</p>
 <div>
     <div class="row">
         <div class="col-md-2">
             StartDate:
         </div>
         <div class="col-md-3">
-            2018-08-15
+            @Model.BookingStartDate
         </div>
     </div>
 </div>
@@ -18,7 +18,7 @@
             End Date
         </div>
         <div class="col-md-3">
-            2018-08-22
+            @Model.BookingEndDate
         </div>
     </div>
 </div>
@@ -28,7 +28,7 @@
             Camping spot:
         </div>
         <div class="col-md-3">
-            nr: 15
+            nr: @Model.ItemId
         </div>
     </div>
 </div>

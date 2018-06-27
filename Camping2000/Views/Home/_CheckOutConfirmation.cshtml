@@ -1,9 +1,9 @@
-﻿
+﻿@model Camping2000.Models.Guest
 
 <h2> Check Out Confirmation</h2>
 
 <p>The guest have now been checked Out.</p>
-<p>The guest have to be charged: 650 kr.</p>
+<p>The guest have to be charged: @Model.GuestHasToPay kr.</p>
 <p>Wish the guest a good travel home and welcome again. </p>
 
 @Ajax.ActionLink("Back to Start", "GoToStart", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })

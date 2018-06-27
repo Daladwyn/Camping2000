@@ -405,6 +405,8 @@
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\Home\_ShowVacantFullsign.cshtml" />
     <Content Include="Views\Home\_NoVacantSpot.cshtml" />
+    <Content Include="Views\Home\_ShowVacantSpots.cshtml" />
+    <Content Include="Views\Home\_NoAvailableSpotToChangeTo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

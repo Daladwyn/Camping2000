@@ -1,16 +1,17 @@
-﻿
+﻿@model Camping2000.Models.Guest
+
 <div class="row">
     <div class="col-md-2">
         @Html.Label("First Name")
     </div>
     <div class="col-md-2">
-        GuestFirstName
+        @Model.GuestFirstName
     </div>
     <div class="col-md-2">
         @Html.Label("Last Name")
     </div>
     <div class="col-md-2">
-        GuestLastName
+        @Model.GuestLastName
     </div>
     <div class="col-md-4">
         @Ajax.ActionLink("Modify Guests Details", "ModifySpecificGuestDetails", ajaxOptions: new AjaxOptions { UpdateTargetId="ContentBody",InsertionMode=InsertionMode.Replace})

@@ -1,44 +1,45 @@
 ﻿
 <h2>Which guest have outdated info:</h2>
 
-@*using (Ajax.BeginForm("SearchForGuest", "Home",
+@using (Ajax.BeginForm("SearchForGuest", "Home",
         ajaxOptions: new AjaxOptions
         {
             UpdateTargetId = "EndOfFoundGuests",
             InsertionMode = InsertionMode.InsertBefore,
         }))
-    {*@
-<div class="row">
-    <div class="form-group">
-        <div class="col-md-2">
-            @Html.Label("Guests first name:")
+{
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-2">
+                @Html.Label("Guests first name:")
 
-        </div>
-        <div class="col-md-2">
-            @Html.Editor("UserFirstName")
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Guests last name:")
-        </div>
-        <div class="col-md-2">
-            @Html.Editor("UserLastName")
-        </div>
-        @*<div class="form-group">
+            </div>
+            <div class="col-md-2">
+                @Html.Editor("GuestFirstName")
+            </div>
+            <div class="form-group">
+                <div class="col-md-2">
+                    @Html.Label("Guests last name:")
+                </div>
+                <div class="col-md-2">
+                    @Html.Editor("GuestLastName")
+                </div>
+                <div class="form-group">
                 <div class="col-md-4">
                     <input type="button" value="Search" class="btn btn-default"/>
 
                 </div>
-            </div>*@
-    </div>
-        <div class="col-md-4">
+            </div>
+            </div>
+            @*<div class="col-md-4">
             @Ajax.ActionLink("Search", "SearchForGuest", ajaxOptions: new AjaxOptions { UpdateTargetId = "EndOfFoundGuests", InsertionMode = InsertionMode.InsertBefore })
+        </div>*@
+            <div id="EndOfFoundGuests"></div>
         </div>
-    <div id="EndOfFoundGuests"></div>
-</div>
 
 
 
+    </div>
 
-
-@*  }*@
+}
 
