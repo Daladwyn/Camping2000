@@ -9,46 +9,18 @@ namespace Camping2000.Models
 {
     public class Booking
     {
-        [Required]
-        public int ItemId
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
-        [Required]
-        public string GuestId
-        {
-            get => default(string);
-            set
-            {
-            }
-        }
         [Key]
-        public int BookingId
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
+        public int BookingId { get; set; }
+        public int ItemId { get; set; }
+        public string GuestId { get; set; }
         [Required]
-        public DateTime BookingStartDate
-        {
-            get => default(DateTime);
-            set
-            {
-            }
-        }
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime BookingStartDate { get; set; }
         [Required]
-        public DateTime BookingEndDate
-        {
-            get => default(DateTime);
-            set
-            {
-            }
-        }
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime BookingEndDate { get; set; }
         public int NumberOfGuests { get; set; }
         public decimal BookingPrice { get; set; }
         public bool BookingNeedsElectricity { get; set; }

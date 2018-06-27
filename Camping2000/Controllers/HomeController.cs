@@ -16,14 +16,18 @@ namespace Camping2000.Controllers
         }
         public ActionResult SpaceForTent()
         {
-            Camping campingSpot = new Camping();
 
+            Camping campingSpot = new Camping();
+            Booking newBooking = new Booking();
             using (var context = new Camping2000Db())
             {
                 campingSpot = context.Camping.FirstOrDefault(i => i.ItemName == "Camping Spot1");
             }
+            newBooking.BookingStartDate = DateTime.Now;
+            newBooking.BookingEndDate = DateTime.Now.AddDays(1);
+            newBooking.BookingPrice = campingSpot.CampingPrice;
             ViewBag.Message = "Renting space for tent.";
-            return PartialView("_SpaceForTent", campingSpot);
+            return PartialView("_SpaceForTent", newBooking);
         }
         public ActionResult SpaceForCaravan()
         {
@@ -36,100 +40,120 @@ namespace Camping2000.Controllers
             ViewBag.Message = "Renting space for caravan.";
             return PartialView("_SpaceForCaravan", campingSpot);
         }
-        public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests")] Booking newBooking, string Electricity)// , decimal CampingPrice
+        public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,BookingNeedsElectricity")] Booking newBooking)//missing data ItemId, GuestId, Price, Bookingid
         {
-            List<Booking> currentBookings = new List<Booking>();
-            List<int> eligibleSpots = new List<int>();
-            List<int> notEligibleSpots = new List<int>();
-            List<Camping> ListOfSpots = new List<Camping>();
-            using (var context = new Camping2000Db())
+            if (ModelState.IsValid)
             {
-                foreach (var booking in context.Bookings)
+                int numberOfDays = 0;
+                decimal estimatedPrice = 0;
+                List<Booking> currentBookings = new List<Booking>();
+                List<int> eligibleSpots = new List<int>();
+                List<int> notEligibleSpots = new List<int>();
+                List<Camping> ListOfSpots = new List<Camping>();
+
+                using (var context = new Camping2000Db()) //Gather all present bookings in a list.
                 {
-                    currentBookings.Add(booking);
+                    foreach (var booking in context.Bookings)
+                    {
+                        currentBookings.Add(booking);
+                    }
                 }
-            }
-            foreach (var booking in currentBookings)
-            {
-                if ((booking.BookingStartDate > newBooking.BookingEndDate) || (booking.BookingEndDate < newBooking.BookingStartDate))//if the new bookings startdate is between the booked spots start and end date
+                if (newBooking.BookingNeedsElectricity == true) //Gather spots based on if electricity is needed as price differs
                 {
-                    eligibleSpots.Add(booking.ItemId);
+                    using (var context = new Camping2000Db())
+                    {
+                        foreach (var spot in context.Camping)
+                        {
+                            if (spot.CampingElectricity == true)
+                            {
+                                ListOfSpots.Add(spot);
+                            }
+                        }
+                    }
+                    newBooking.BookingPrice = ListOfSpots[0].CampingPrice;
+                }
+                else if (newBooking.BookingNeedsElectricity == false)
+                {
+                    using (var context = new Camping2000Db())
+                    {
+                        foreach (var spot in context.Camping)
+                        {
+                            if (spot.CampingElectricity == false)
+                            {
+                                ListOfSpots.Add(spot);
+                            }
+                        }
+                    }
+                    newBooking.BookingPrice = ListOfSpots[0].CampingPrice;
+                }
+
+                if (currentBookings.Capacity != 0) //check if any bookings is present
+                {
+                    foreach (var booking in currentBookings)
+                    {
+                        if ((booking.BookingStartDate > newBooking.BookingEndDate) || (booking.BookingEndDate < newBooking.BookingStartDate))//if the new bookings startdate is between the booked spots start and end date
+                        {
+                            eligibleSpots.Add(booking.ItemId);
+                        }
+                        else
+                        {
+                            notEligibleSpots.Add(booking.ItemId);
+                        }
+                    }
+                    newBooking.ItemId = eligibleSpots[0];
                 }
                 else
                 {
-                    notEligibleSpots.Add(booking.ItemId);
+                    newBooking.ItemId = ListOfSpots[0].ItemId;
                 }
-            }
-            eligibleSpots.Sort();
-            notEligibleSpots.Sort();
 
-            if (Electricity == "Yes")
-            {
-                using (var context = new Camping2000Db())
+                //eligibleSpots.Sort();
+                //notEligibleSpots.Sort();
+
+                //Calculate the price for the guest
+                numberOfDays = newBooking.BookingEndDate.DayOfYear - newBooking.BookingStartDate.DayOfYear;
+                estimatedPrice = newBooking.BookingPrice * numberOfDays * newBooking.NumberOfGuests;
+                newBooking.BookingPrice = estimatedPrice;
+
+
+
+
+
+                //for (int i = 0; i < ListOfSpots.Capacity; i++)
+                //{
+                //    for (int y = 0; y < notEligibleSpots.Capacity; y++)
+                //    {
+                //        if (ListOfSpots[i].ItemId < notEligibleSpots[y])
+                //        {
+                //            eligibleSpots.Add(ListOfSpots[i].ItemId);
+                //            i++;
+                //            y--;
+                //        }
+                //        else if (ListOfSpots[i].ItemId == notEligibleSpots[y])
+                //        {
+                //            i++;
+                //        }
+                //        else if (ListOfSpots[i].ItemId > notEligibleSpots[y])
+                //        {
+
+                //        }
+                //    }
+                //    //eligibleSpots.Add(ListOfSpots[i].ItemId);
+                //}
+                //eligibleSpots.Sort();
+
+                if (eligibleSpots == null)
                 {
-                    foreach (var spot in context.Camping)
-                    {
-                        if (spot.CampingElectricity == true)
-                        {
-                            ListOfSpots.Add(spot);
-                        }
-                    }
+                    // print out that no vacant spots exits.
+                    return PartialView("_NoVacantSpot");
                 }
+
+                return PartialView("_ConfirmSpaceForTent", newBooking);
             }
-            else if (Electricity == "No")
+            else
             {
-                using (var context = new Camping2000Db())
-                {
-                    foreach (var spot in context.Camping)
-                    {
-                        if (spot.CampingElectricity == false)
-                        {
-                            ListOfSpots.Add(spot);
-                        }
-                    }
-                }
+                return PartialView("_SpaceForTent", newBooking);
             }
-
-
-            for (int i = 0; i < ListOfSpots.Capacity; i++)
-            {
-                for (int y = 0; y < notEligibleSpots.Capacity; y++)
-                {
-                    if (ListOfSpots[i].ItemId < notEligibleSpots[y])
-                    {
-                        eligibleSpots.Add(ListOfSpots[i].ItemId);
-                        i++;
-                        y--;
-                    }
-                    else if (ListOfSpots[i].ItemId == notEligibleSpots[y])
-                    {
-                        i++;
-                    }
-                    else if (ListOfSpots[i].ItemId > notEligibleSpots[y])
-                    {
-
-                    }
-                }
-                eligibleSpots.Add(ListOfSpots[i].ItemId);
-            }
-            eligibleSpots.Sort();
-
-
-
-
-
-            if (eligibleSpots == null)
-            {
-                // print out that no vacant spots exits.
-                return PartialView("_NoVacantSpot");
-            }
-
-
-
-
-
-
-            return PartialView("_ConfirmSpaceForTent", newBooking);
         }
         public ActionResult RentSpaceForCaravan()
         {

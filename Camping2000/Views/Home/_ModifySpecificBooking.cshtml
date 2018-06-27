@@ -34,42 +34,42 @@
             <input type="date" name="BookingEndDate" min="2018-06-16" />
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Camping spot:")
+    </div>
+    <div class="col-md-2">
+        nr: @Model.ItemId
+        @*nr: @Model.ItemName*@
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Change to:")
+    </div>
+    <div class="form-group">
+        <div class="col-md-6">
+            @*Html.RenderAction("ShowVacantSpots")*@
 
-    <div class="row">
-        <div class="col-md-2">
-            @Html.Label("Camping spot:")
         </div>
-        <div class="col-md-2">
-            nr: @Model.ItemId
-            @*nr: @Model.ItemName*@
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Change to:")
-        </div>
-        <div class="form-group">
-            <div class="col-md-6">
-                @Html.RenderAction("ShowVacantSpots")
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Present Cost:")
+    </div>
+    <div class="col-md-2">
+        650 kr.
+        @*@Model.Booking*@
+        @Model.BookingPrice
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Future Cost:")
+    </div>
+    <div class="col-md-6">
 
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("Present Cost:")
-            </div>
-            <div class="col-md-2">
-                650 kr.
-                @*@Model.Booking*@
-                @Model.BookingPrice
-            </div>
-            <div class="col-md-2">
-                @Html.Label("Future Cost:")
-            </div>
-            <div class="col-md-6">
-
-            </div>
-        </div>
-        @Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
-        @Ajax.ActionLink("Accept Changes", "UpdatedBooking", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
+    </div>
+</div>
+@Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
+@Ajax.ActionLink("Accept Changes", "UpdatedBooking", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
 
 
