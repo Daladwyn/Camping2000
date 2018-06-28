@@ -1,7 +1,7 @@
 ﻿@model Camping2000.Models.Booking
 
 <h2>Renting space for a tent.</h2>
-
+@ViewBag.Errormessage
 @using (Ajax.BeginForm("RentSpaceForTent", "Home",
             ajaxOptions: new AjaxOptions
             {
@@ -17,8 +17,6 @@
             </div>
             <div class="col-md-3">
                 <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" />
-                @*<input type="date"  min="@(DateTime.Now.Year"-"DateTime.Now.Month"-"DateTime.Now.Day)" />*@
-                @*Html.EditorFor(model => model.BookingStartDate)*@
             </div>
             <div class="col-md-7">
             </div>
@@ -56,31 +54,25 @@
                 @Html.Label("Do you need electricity: ")
             </div>
             <div class="col-md-3">
-                @*Html.RadioButton("Yes", "yes")
-
-                    @Html.RadioButton("No", "no")*@
                 <input type="radio" name="BookingNeedsElectricity" value="true" required>Yes
                 <input type="radio" name="BookingNeedsElectricity" value="false" checked required> No
             </div>
             <div class="col-md-7">
-
             </div>
         </div>
-
     </div>
     <div class="form-group">
         <div class="row">
             <div class="col-md-3">
                 @Html.Label("Price per night per person: ")
             </div>
-            <div class="col-md-3">
+            <div class="col-md-1">
                 @Model.BookingPrice
             </div>
             <div class="col-md-2">
                 @Html.Label("Estimated price: ")
             </div>
-            <div class="col-md-3">
-                @* The modelFieldname is: BookingPrice *@
+            <div class="col-md-6">
             </div>
         </div>
     </div>

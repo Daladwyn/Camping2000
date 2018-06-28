@@ -16,7 +16,6 @@ namespace Camping2000.Controllers
         }
         public ActionResult SpaceForTent()
         {
-
             Camping campingSpot = new Camping();
             Booking newBooking = new Booking();
             using (var context = new Camping2000Db())
@@ -32,13 +31,16 @@ namespace Camping2000.Controllers
         public ActionResult SpaceForCaravan()
         {
             Camping campingSpot = new Camping();
-
+            Booking newBooking = new Booking();
             using (var context = new Camping2000Db())
             {
-                campingSpot = context.Camping.FirstOrDefault(i => i.ItemName == "Trailer Spot1");
+                campingSpot = context.Camping.FirstOrDefault(i => i.ItemName == "Camping Spot1");
             }
+            newBooking.BookingStartDate = DateTime.Now;
+            newBooking.BookingEndDate = DateTime.Now.AddDays(1);
+            newBooking.BookingPrice = campingSpot.CampingPrice;
             ViewBag.Message = "Renting space for caravan.";
-            return PartialView("_SpaceForCaravan", campingSpot);
+            return PartialView("_SpaceForCaravan", newBooking);
         }
         public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,BookingNeedsElectricity")] Booking newBooking)//missing data ItemId, GuestId, Price, Bookingid
         {
@@ -51,6 +53,7 @@ namespace Camping2000.Controllers
                 List<int> notEligibleSpots = new List<int>();
                 List<Camping> ListOfSpots = new List<Camping>();
 
+                ViewBag.Errormessage = "";
                 using (var context = new Camping2000Db()) //Gather all present bookings in a list.
                 {
                     foreach (var booking in context.Bookings)
@@ -91,7 +94,7 @@ namespace Camping2000.Controllers
                 {
                     foreach (var booking in currentBookings)
                     {
-                        if ((booking.BookingStartDate > newBooking.BookingEndDate) || (booking.BookingEndDate < newBooking.BookingStartDate))//if the new bookings startdate is between the booked spots start and end date
+                        if ((booking.BookingStartDate > newBooking.BookingEndDate) && (booking.BookingEndDate < newBooking.BookingStartDate))//if the new bookings startdate is between the booked spots start and end date
                         {
                             eligibleSpots.Add(booking.ItemId);
                         }
@@ -100,21 +103,44 @@ namespace Camping2000.Controllers
                             notEligibleSpots.Add(booking.ItemId);
                         }
                     }
-                    newBooking.ItemId = eligibleSpots[0];
                 }
                 else
                 {
                     newBooking.ItemId = ListOfSpots[0].ItemId;
                 }
-
-                //eligibleSpots.Sort();
-                //notEligibleSpots.Sort();
+                eligibleSpots.Sort();
+                notEligibleSpots.Sort();
+                for (int i = 0; i < ListOfSpots.Capacity; i++)
+                {
+                    for (int y = 0; y < notEligibleSpots.Capacity; y++)
+                    {
+                        if (ListOfSpots[i].ItemId == notEligibleSpots[y])
+                        {
+                            ListOfSpots.Remove(ListOfSpots[i]);
+                        }
+                    }
+                }
+                if (ListOfSpots.Capacity == 0)
+                {
+                    //if no spots remains send a message to user that camping is full
+                    ViewBag.Errormessage = "There is no available space for you. Please choose";
+                }
+                // newBooking.ItemId = eligibleSpots[0];
 
                 //Calculate the price for the guest
                 numberOfDays = newBooking.BookingEndDate.DayOfYear - newBooking.BookingStartDate.DayOfYear;
                 estimatedPrice = newBooking.BookingPrice * numberOfDays * newBooking.NumberOfGuests;
                 newBooking.BookingPrice = estimatedPrice;
-
+                using (var context = new Camping2000Db())
+                {
+                    context.Bookings.Add(newBooking);
+                    int checkDbSave = context.SaveChanges();
+                    if (checkDbSave < 1)
+                    {
+                        ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
+                        return PartialView("_SpaceForTent", newBooking);
+                    }
+                }
 
 
 
@@ -142,11 +168,11 @@ namespace Camping2000.Controllers
                 //}
                 //eligibleSpots.Sort();
 
-                if (eligibleSpots == null)
-                {
-                    // print out that no vacant spots exits.
-                    return PartialView("_NoVacantSpot");
-                }
+                //if (eligibleSpots == null)
+                //{
+                //    // print out that no vacant spots exits.
+                //    return PartialView("_NoVacantSpot");
+                //}
 
                 return PartialView("_ConfirmSpaceForTent", newBooking);
             }
@@ -159,10 +185,24 @@ namespace Camping2000.Controllers
         {
             return PartialView("_ConfirmSpaceForCaravan");
         }
-        public ActionResult ConfirmSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,GuestId")] Booking newBooking, string Electricity)
+        public ActionResult ConfirmSpaceForTent([Bind(Include = "BookingId,GuestId")] Booking newBooking)
         {
-
-            return PartialView("_ReservedConfirmation");
+            Booking inCompleteBooking = new Booking();
+            ViewBag.Errormessage = "";
+            using (var context = new Camping2000Db())
+            {
+                inCompleteBooking = context.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
+                inCompleteBooking.GuestId = newBooking.GuestId;
+                //newBooking = inCompleteBooking;
+                //context.Bookings.Add(newBooking);
+                int checkDbSave = context.SaveChanges();
+                if (checkDbSave < 1)
+                {
+                    ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
+                    return PartialView("_ConfirmSpaceForTent", newBooking);
+                }
+            }
+            return PartialView("_ReservedConfirmation", newBooking);
         }
         public ActionResult ConfirmSpaceForCaravan()
         {

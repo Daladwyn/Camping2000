@@ -1,7 +1,7 @@
-﻿@model Camping2000.Models.Camping
+﻿@model Camping2000.Models.Booking
 
 <h2>Renting space for a caravan/trailer.</h2>
-
+@ViewBag.Errormessage
 @using (Ajax.BeginForm("RentSpaceForCaravan", "Home",
             ajaxOptions: new AjaxOptions
             {
@@ -16,30 +16,23 @@
                 @Html.Label("Arrival date: ")
             </div>
             <div class="col-md-3">
-                <input type="date" name="BookingStartDate" min="2018-06-15" />
-
+                <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" />
             </div>
             <div class="col-md-7">
-
             </div>
         </div>
-
     </div>
     <div class="form-group">
         <div class="row">
             <div class="col-md-2">
-                @*Html.LabelFor *@
                 @Html.Label("Departure date: ")
             </div>
             <div class="col-md-3">
-                <input type="date" name="BookingEndDate" min="2018-06-16" />
-                @*Html.Editor("BookingEndDate")*@
+                <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" />
             </div>
             <div class="col-md-7">
-
             </div>
         </div>
-
     </div>
     <div class="form-group">
         <div class="row">
@@ -63,8 +56,8 @@
                 @*Html.RadioButton("Yes", "yes")
 
                     @Html.RadioButton("No", "no")*@
-                <input type="radio" name="Electricity" value="Yes" checked required>Yes
-                <input type="radio" name="Electricity" value="No" required> No
+                <input type="radio" name="BookingNeedsElectricity" value="true" required>Yes
+                <input type="radio" name="BookingNeedsElectricity" value="false" checked required> No
             </div>
             <div class="col-md-7">
 
@@ -78,7 +71,7 @@
                 @Html.Label("Price per night per person: ")
             </div>
             <div class="col-md-3">
-                @Model.CampingPrice
+                @Model.BookingPrice
             </div>
             <div class="col-md-2">
                 @Html.Label("Estimated price: ")
@@ -92,4 +85,3 @@
         <input type="submit" value="Reserve" class="btn btn-default" />
     </div>
 }
-
