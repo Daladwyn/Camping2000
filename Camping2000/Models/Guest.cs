@@ -11,30 +11,14 @@ namespace Camping2000.Models
     public class Guest
     {
         [Key]
-        
-        public string GuestId //needs to be changed to string to match identitys format for userId
-        {
-            get => default(string);
-            set
-            {
-            }
-        }
+        public string GuestId { get; set; } //needs to be string to match identitys format for userId
+
         [Required]
-        public string GuestFirstName
-        {
-            get => default(string);
-            set
-            {
-            }
-        }
+        public string GuestFirstName { get; set; }
+
         [Required]
-        public string GuestNationality
-        {
-            get => default(string);
-            set
-            {
-            }
-        }
+        public string GuestNationality { get; set; }
+
         //[Required] Is located in AccountViewModels as Email
         //public string GuestMailAdress
         //{
@@ -44,46 +28,18 @@ namespace Camping2000.Models
         //    }
         //}
         [Required]
-        public bool GuestHasReserved
-        {
-            get => default(bool);
-            set
-            {
-            }
-        }
-        [Required]
-        public bool GuestHasCheckedIn
-        {
-            get => default(bool);
-            set
-            {
-            }
-        }
-       
-        public decimal GuestHasToPay //this property is used for gathering the amount the guest have to pay.
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
+        public bool GuestHasReserved { get; set; }
 
-        public decimal GuestHasPaid // This property is used as a checker if the guest have paid.
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
         [Required]
-        public string GuestLastName
-        {
-            get => default(string);
-            set
-            {
-            }
-        }
-        // public int UserTelephoneNr { get; set; } Is located in ManageViewModel as PhoneNumber
-        public int GuestMobileNr { get; set; }
+        public bool GuestHasCheckedIn { get; set; }
+                
+        public decimal GuestHasToPay { get; set; } //this property is used for gathering the amount the guest have to pay.
+        
+        public decimal GuestHasPaid { get; set; }// This property is used as a checker if the guest have paid.
+
+        [Required]
+        public string GuestLastName { get; set; }
+                
+        public int GuestMobileNr { get; set; }// public int UserTelephoneNr { get; set; } Is located in ManageViewModel as PhoneNumber
     }
 }

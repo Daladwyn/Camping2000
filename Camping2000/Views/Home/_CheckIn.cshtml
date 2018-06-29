@@ -1,64 +1,30 @@
-﻿@model List<Camping2000.Models.Booking>
+﻿@model List<Camping2000.Models.BookingGuestViewModel>
 
 <h2>Checking In.</h2>
 
 <p>The following guests are eligible to check in:</p>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-2">
         @Html.Label("Firstname")
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         @Html.Label("Lastname")
     </div>
     <div class="col-md-1">
         @Html.Label("BookingId")
     </div>
-    <div class="col-md-2">
-        @Html.Label("Number Of Guests")
+    <div class="col-md-1">
+        @Html.Label("Res. PartySize")
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
+        @Html.Label("Checkin PartySize")
+    </div>
+    <div class="col-md-4">
 
     </div>
 </div>
-@foreach (var booking in Model)
+@foreach (var reservation in Model)
 {
-    Html.RenderAction("ShowGuestArrivals");
+    Html.RenderAction("ShowGuestArrivals",reservation);
 }
-
-
-<div class="row">
-            <div class="col-md-3">
-                Patrik
-            </div>
-            <div class="col-md-3">
-                Johansson
-            </div>
-            <div class="col-md-1">
-                23
-            </div>
-            <div class="col-md-2">
-                <input type="number" name="NumberOfPersonsToCheckIn" />
-            </div>
-            <div class="col-md-3">
-                @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                Emma
-            </div>
-            <div class="col-md-3">
-                Karlsson
-            </div>
-            <div class="col-md-1">
-                24
-            </div>
-            <div class="col-md-2">
-                <input type="number" name="NumberOfPersonsToCheckIn" />
-            </div>
-            <div class="col-md-3">
-                @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
-            </div>
-
-    </div>

@@ -1,9 +1,9 @@
-﻿@model Camping2000.Models.Booking
+﻿@model Camping2000.Models.BookingGuestViewModel
 
 <h2> Check in Confirmation</h2>
 
 <p>The guest have now been checked in.</p>
-<p>The guest have been assigned spot: @Model.ItemId</p>
+<p>The guest have been assigned spot: @Model.ItemName</p>
 <p>Wish the guest a good stay and inform about the possibility to rent canoes or boats. </p>
 
 @Ajax.ActionLink("Back to Start", "GoToStart", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })

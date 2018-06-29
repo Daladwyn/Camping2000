@@ -1,28 +1,38 @@
-﻿@model Camping2000.Models.Booking
+﻿@model Camping2000.Models.BookingGuestViewModel
 
-@*Ajax.BeginForm("*@
-
-
-<div>
-    <div class="row">
-        <div class="col-md-3">
-            @*Model.GuestFirstName *@
-            GuestFirstname
-        </div>
-        <div class="col-md-3">
-            @*Model.GuestLastName *@
-            GuestLastname
-        </div>
-
-        <div class="col-md-1">
-            @Model.BookingId
-        </div>
-        <div class="col-md-2">
-            <input type="number" name="NumberOfGuests" />
-        </div>
-        <div class="col-md-3">
-            @Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
+@using (Ajax.BeginForm("CheckInConfirmation", "Home",
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
+{
+    <div>
+        <div class="row">
+            <div class="col-md-2">
+                @Model.GuestFirstName
+            </div>
+            <div class="col-md-2">
+                @Model.GuestLastName
+            </div>
+            <div class="col-md-1">
+                @Model.BookingId
+            </div>
+            <div class="col-md-1">
+                @Model.NumberOfGuests
+            </div>
+            <div class="col-md-2">
+                <input type="number" name="NumberOfCheckInGuests" placeholder="Number of Guests" />
+            </div>
+            <div class="col-md-4">
+                <input type="submit" name="CheckIn" value="Check In" />
+                @*@Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })*@
+            </div>
         </div>
     </div>
-</div>
+    <div class="form-group">
+    @Html.Hidden("BookingId",Model.BookingId)
+
+    </div>
+}
 

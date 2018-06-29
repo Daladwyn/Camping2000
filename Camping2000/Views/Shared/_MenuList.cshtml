@@ -27,6 +27,30 @@
     InsertionMode = InsertionMode.Replace
     })
     </li>
+    @if (User.IsInRole("Receptionist"))
+        {
+        <li>
+            @Ajax.ActionLink("Checking in", "CheckIn", new AjaxOptions
+             {
+             UpdateTargetId = "ContentBody",
+             InsertionMode = InsertionMode.Replace
+             })
+        </li>
+        <li>
+            @Ajax.ActionLink("Checking out", "CheckOut", new AjaxOptions
+             {
+             UpdateTargetId = "ContentBody",
+             InsertionMode = InsertionMode.Replace
+             })
+        </li>
+        <li>
+            @Ajax.ActionLink("Daily Arrivals/Departures", "ArrivalsDepartures", new AjaxOptions
+             {
+             UpdateTargetId = "ContentBody",
+             InsertionMode = InsertionMode.Replace
+             })
+        </li>
+        }
     @if (User.IsInRole("Administrators"))
     {
 

@@ -75,7 +75,7 @@ namespace Camping2000.Controllers
                     }
                     newBooking.BookingPrice = ListOfSpots[0].CampingPrice;
                 }
-                else if (newBooking.BookingNeedsElectricity == false)
+                else if (newBooking.BookingNeedsElectricity == false)//Gather spots based on if electricity is  not needed as price differs
                 {
                     using (var context = new Camping2000Db())
                     {
@@ -94,7 +94,7 @@ namespace Camping2000.Controllers
                 {
                     foreach (var booking in currentBookings)
                     {
-                        if ((booking.BookingStartDate > newBooking.BookingEndDate) && (booking.BookingEndDate < newBooking.BookingStartDate))//if the new bookings startdate is between the booked spots start and end date
+                        if ((newBooking.BookingStartDate >= booking.BookingEndDate) || (newBooking.BookingEndDate <= booking.BookingStartDate))//if the new bookings startdate is between the booked spots start and end date
                         {
                             eligibleSpots.Add(booking.ItemId);
                         }
@@ -104,34 +104,51 @@ namespace Camping2000.Controllers
                         }
                     }
                 }
-                else
+                else //if no bookings is present choose the first spot 
                 {
                     newBooking.ItemId = ListOfSpots[0].ItemId;
                 }
                 eligibleSpots.Sort();
                 notEligibleSpots.Sort();
-                for (int i = 0; i < ListOfSpots.Capacity; i++)
+
+                if (ListOfSpots.Capacity < notEligibleSpots.Capacity)//Performance wise complete iterate on spots not acceptable first 
                 {
-                    for (int y = 0; y < notEligibleSpots.Capacity; y++)
+                    for (int i = ListOfSpots.Count - 1; i >= 0; i--)
                     {
-                        if (ListOfSpots[i].ItemId == notEligibleSpots[y])
+                        for (int y = notEligibleSpots.Count - 1; y >= 0; y--)
                         {
-                            ListOfSpots.Remove(ListOfSpots[i]);
+                            if (ListOfSpots[i].ItemId == notEligibleSpots[y])
+                            {
+                                ListOfSpots.Remove(ListOfSpots[i]);
+                            }
                         }
                     }
                 }
-                if (ListOfSpots.Capacity == 0)
+                else //Performance wise complete iterate on spots acceptable first 
                 {
-                    //if no spots remains send a message to user that camping is full
-                    ViewBag.Errormessage = "There is no available space for you. Please choose";
+                    for (int i = notEligibleSpots.Count - 1; i >= 0; i--)
+                    {
+                        for (int y = ListOfSpots.Count - 1; y >= 0; y--)
+                        {
+                            if (ListOfSpots[y].ItemId == notEligibleSpots[i])
+                            {
+                                ListOfSpots.Remove(ListOfSpots[y]);
+                            }
+                        }
+                    }
                 }
-                // newBooking.ItemId = eligibleSpots[0];
+                if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
+                {
+                    ViewBag.Errormessage = "There is no available space for you. Please choose another arrivaldate and departuredate.";
+                    return PartialView("_SpaceForTent", newBooking);
+                }
+                newBooking.ItemId = ListOfSpots[0].ItemId;
 
                 //Calculate the price for the guest
                 numberOfDays = newBooking.BookingEndDate.DayOfYear - newBooking.BookingStartDate.DayOfYear;
                 estimatedPrice = newBooking.BookingPrice * numberOfDays * newBooking.NumberOfGuests;
                 newBooking.BookingPrice = estimatedPrice;
-                using (var context = new Camping2000Db())
+                using (var context = new Camping2000Db()) //Save to database current info
                 {
                     context.Bookings.Add(newBooking);
                     int checkDbSave = context.SaveChanges();
@@ -141,39 +158,6 @@ namespace Camping2000.Controllers
                         return PartialView("_SpaceForTent", newBooking);
                     }
                 }
-
-
-
-
-                //for (int i = 0; i < ListOfSpots.Capacity; i++)
-                //{
-                //    for (int y = 0; y < notEligibleSpots.Capacity; y++)
-                //    {
-                //        if (ListOfSpots[i].ItemId < notEligibleSpots[y])
-                //        {
-                //            eligibleSpots.Add(ListOfSpots[i].ItemId);
-                //            i++;
-                //            y--;
-                //        }
-                //        else if (ListOfSpots[i].ItemId == notEligibleSpots[y])
-                //        {
-                //            i++;
-                //        }
-                //        else if (ListOfSpots[i].ItemId > notEligibleSpots[y])
-                //        {
-
-                //        }
-                //    }
-                //    //eligibleSpots.Add(ListOfSpots[i].ItemId);
-                //}
-                //eligibleSpots.Sort();
-
-                //if (eligibleSpots == null)
-                //{
-                //    // print out that no vacant spots exits.
-                //    return PartialView("_NoVacantSpot");
-                //}
-
                 return PartialView("_ConfirmSpaceForTent", newBooking);
             }
             else
@@ -191,10 +175,12 @@ namespace Camping2000.Controllers
             ViewBag.Errormessage = "";
             using (var context = new Camping2000Db())
             {
+                Guest presentGuest = new Guest();
                 inCompleteBooking = context.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
                 inCompleteBooking.GuestId = newBooking.GuestId;
-                //newBooking = inCompleteBooking;
-                //context.Bookings.Add(newBooking);
+                presentGuest = context.Guests.SingleOrDefault(i => i.GuestId == newBooking.GuestId);
+                presentGuest.GuestHasToPay = presentGuest.GuestHasToPay + inCompleteBooking.BookingPrice;
+                presentGuest.GuestHasReserved = true;
                 int checkDbSave = context.SaveChanges();
                 if (checkDbSave < 1)
                 {
@@ -212,30 +198,55 @@ namespace Camping2000.Controllers
         {
             return PartialView("Index");
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators,Receptionist")]
         public ActionResult CheckIn()
         {
-            List<Booking> AllBookings = new List<Booking>();
-            List<Booking> presentBookings = new List<Booking>();
-            using (var context = new Camping2000Db())
-            {
-                foreach (var booking in context.Bookings)
-                {
-                    AllBookings.Add(booking);
-                }
-            };
-            foreach (var booking in AllBookings)
+            Camping2000Db Db = new Camping2000Db();
+            List<Booking> allBookings = Db.Bookings.ToList();
+            List<Booking> presentDayArrivals = new List<Booking>();
+            List<Guest> presentDayGuest = new List<Guest>();
+            List<Camping> presentDaySpot = new List<Camping>();
+            List<BookingGuestViewModel> presentDayBookings = new List<BookingGuestViewModel>();
+            foreach (var booking in allBookings)
             {
                 if (booking.BookingStartDate == DateTime.Now.Date)//is this correct Dateformat?
                 {
-                    presentBookings.Add(booking);
+                    presentDayArrivals.Add(booking);
                 }
-
             }
-            //context.Dispose()
-            return PartialView("_CheckIn", presentBookings);
+            foreach (var booking in presentDayArrivals)
+            {
+                presentDayGuest.Add(Db.Guests.Find(booking.GuestId));
+                presentDaySpot.Add(Db.Camping.Find(booking.ItemId));
+            }
+            for (int i = 0; i < presentDayArrivals.Count; i++)
+            {
+                presentDayBookings.Add(new BookingGuestViewModel
+                {
+                    BookingId = presentDayArrivals[i].BookingId,
+                    BookingPrice = presentDayArrivals[i].BookingPrice,
+                    //ItemId = presentDayArrivals[i].ItemId,
+                    ItemName = presentDaySpot[i].ItemName,
+                    NumberOfGuests = presentDayArrivals[i].NumberOfGuests,
+                    GuestFirstName = presentDayGuest[i].GuestFirstName,
+                    GuestLastName = presentDayGuest[i].GuestLastName
+
+                });
+
+
+
+                //presentDayBookings[i].BookingId = presentDayArrivals[i].BookingId;
+                //presentDayBookings[i].BookingPrice = presentDayArrivals[i].BookingPrice;
+                //presentDayBookings[i].ItemId = presentDayArrivals[i].ItemId;
+                //presentDayBookings[i].NumberOfGuests = presentDayArrivals[i].NumberOfGuests;
+                //presentDayBookings[i].GuestFirstName = presentDayGuest[i].GuestFirstName;
+                //presentDayBookings[i].GuestLastName = presentDayGuest[i].GuestLastName;
+            }
+
+
+            return PartialView("_CheckIn", presentDayBookings);
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionist")]
         public ActionResult CheckOut()
         {
             List<Booking> presentBookings = new List<Booking>();
@@ -257,9 +268,25 @@ namespace Camping2000.Controllers
             return PartialView("_ArrivalsDepartures");
         }
         [Authorize(Roles = "Administrators")]
-        public ActionResult CheckInConfirmation()
+        public ActionResult CheckInConfirmation(BookingGuestViewModel checkInBooking, int NumberOfCheckInGuests)
         {
-            return PartialView("_CheckInConfirmation");
+            Camping2000Db Db = new Camping2000Db();
+            Booking booking = Db.Bookings.SingleOrDefault(i => i.BookingId == checkInBooking.BookingId);
+            int newAmountOfGuests = 0;
+            if (booking.NumberOfGuests < NumberOfCheckInGuests) //Check if number of guests differ from reservation
+            {
+                newAmountOfGuests = NumberOfCheckInGuests - booking.NumberOfGuests;
+            }
+            else if (booking.NumberOfGuests > NumberOfCheckInGuests)
+            {
+                newAmountOfGuests = booking.NumberOfGuests - NumberOfCheckInGuests;
+            }
+            else
+            {
+
+            }
+
+                return PartialView("_CheckInConfirmation",booking);
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult CheckOutConfirmation()
@@ -271,23 +298,10 @@ namespace Camping2000.Controllers
             return PartialView("Index");
         }
         [Authorize(Roles = "Administrators")]
-        public ActionResult ShowGuestArrivals()
+        public ActionResult ShowGuestArrivals(BookingGuestViewModel arrivals)
         {
-            Booking arrivals = new Booking();
-            List<Booking> presentBookings = new List<Booking>();
-            using (var context = new Camping2000Db())
-            {
-                foreach (var booking in context.Bookings)
-                {
-                    if (booking.BookingStartDate == DateTime.Now)
-                    {
-                        //arrivals = booking.
-                        //presentBookings.Add(arrivals);
-                        presentBookings.Add(booking);
-                    }
-                }
-            }
-            return PartialView("_ShowGuestArrivals", presentBookings);
+           
+            return PartialView("_ShowGuestArrivals", arrivals);
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult ShowGuestDepartures()
