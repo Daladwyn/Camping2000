@@ -1,11 +1,11 @@
-﻿@model List<Camping2000.Models.Booking>
+﻿@model List<Camping2000.Models.BookingGuestViewModel >
 
 <h2>Arrivals @DateTime.Now.Day - @DateTime.Now.Month - @DateTime.Now.Year</h2>
 
-@foreach (var guest in Model)
+@foreach (var guestBooking in Model)
     {
     @*Html.Partial("_ShowGuestarrivals","ShowGuestArrivals")*@
-    Html.RenderAction("ShowGuestArrivals");
+    Html.RenderAction("ShowGuestArrivals",guestBooking);
 
     }
 

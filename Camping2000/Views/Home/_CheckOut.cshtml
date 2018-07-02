@@ -1,54 +1,30 @@
-﻿@model List<Camping2000.Models.Booking>
+﻿@model List<Camping2000.Models.BookingGuestViewModel>
 
 <h2>Checking Out.</h2>
 
 <p>The following guests are eligible to check out:</p>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-2">
         @Html.Label("Firstname")
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         @Html.Label("Lastname")
     </div>
-    <div class="col-md-3">
+    <div class="col-md-1">
         @Html.Label("Booking Id")
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
+        @Html.Label("Spot Name")
+    </div>
+    <div class="col-md-5">
 
     </div>
 </div>
-
-@foreach (var item in Model)
+<div>
+    @ViewBag.Errormessage
+</div>
+@foreach (var booking in Model)
 {
-    Html.RenderAction("ShowGuestDepartures");
-
+    Html.RenderAction("ShowGuestDepartures", booking);
 }
-<div class="row">
-    <div class="col-md-3">
-        Lars
-    </div>
-    <div class="col-md-3">
-        Svensson
-    </div>
-    <div class="col-md-3">
-        @Ajax.ActionLink("Check Out", "CheckOutConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
-    </div>
-    <div class="col-md-3">
-
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-3">
-        Eva
-    </div>
-    <div class="col-md-3">
-        Nilsson
-    </div>
-    <div class="col-md-3">
-        @Ajax.ActionLink("Check Out", "CheckOutConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
-    </div>
-    <div class="col-md-3">
-
-    </div>
-</div>

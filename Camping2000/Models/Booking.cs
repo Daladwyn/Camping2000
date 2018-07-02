@@ -24,5 +24,9 @@ namespace Camping2000.Models
         public int NumberOfGuests { get; set; }
         public decimal BookingPrice { get; set; }
         public bool BookingNeedsElectricity { get; set; }
+        [Required]
+        public bool GuestHasReserved { get; set; }
+        [Required]
+        public bool GuestHasCheckedIn { get; set; }
     }
 }

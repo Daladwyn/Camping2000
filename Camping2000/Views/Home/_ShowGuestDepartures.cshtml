@@ -1,21 +1,44 @@
-﻿@model Camping2000.Models.Booking
+﻿@model Camping2000.Models.BookingGuestViewModel
 
-<div>
-    <div class="row">
-        <div class="col-md-3">
-            GuestFirstname
-            @*Model.GuestFirstName*@
-        </div>
-        <div class="col-md-3">
-            GuestLastname
-            @*Model.GuestLastName*@
-        </div>
-        <div class="col-md-3">
-            @Model.BookingId
-        </div>
-        <div class="col-md-3">
-            @Ajax.ActionLink("Check Out", "CheckOutConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
-        </div>
+@using (Ajax.BeginForm("CheckOutConfirmation", "Home",
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
+{
+    <div>
+        <div class="row">
+            <div class="col-md-2">
+                @Model.GuestFirstName
+            </div>
+            <div class="col-md-2">
+                @Model.GuestLastName
+            </div>
+            <div class="col-md-1">
+                @Model.BookingId
+            </div>
+            <div class="col-md-2">
+                @Model.ItemName
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <input type="submit" name="CheckOut" value="Check Out" />
+                </div>
+                @*Ajax.ActionLink("Check Out", "CheckOutConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })*@
+            </div>
 
+        </div>
     </div>
-</div>
+    <div class="form-group">
+        @Html.Hidden("BookingId", Model.BookingId)
+        @Html.Hidden("GuestId", Model.GuestId)
+        @Html.Hidden("ItemId", Model.ItemId)
+        @Html.Hidden("GuestFirstName", Model.GuestFirstName)
+        @Html.Hidden("GuestLastName", Model.GuestLastName)
+        @Html.Hidden("ItemName", Model.ItemName)
+        @Html.Hidden("BookingPrice", Model.BookingPrice)
+        @Html.Hidden("NumberOfGuests", Model.NumberOfGuests)
+    </div>
+}
+@ViewBag.Errormessage

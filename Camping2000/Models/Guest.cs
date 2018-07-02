@@ -12,11 +12,11 @@ namespace Camping2000.Models
     {
         [Key]
         public string GuestId { get; set; } //needs to be string to match identitys format for userId
-
         [Required]
+        [MaxLength(80)]
         public string GuestFirstName { get; set; }
-
         [Required]
+        [MaxLength(40)]
         public string GuestNationality { get; set; }
 
         //[Required] Is located in AccountViewModels as Email
@@ -29,17 +29,13 @@ namespace Camping2000.Models
         //}
         [Required]
         public bool GuestHasReserved { get; set; }
-
         [Required]
         public bool GuestHasCheckedIn { get; set; }
-                
         public decimal GuestHasToPay { get; set; } //this property is used for gathering the amount the guest have to pay.
-        
         public decimal GuestHasPaid { get; set; }// This property is used as a checker if the guest have paid.
-
         [Required]
+        [MaxLength(80)]
         public string GuestLastName { get; set; }
-                
         public int GuestMobileNr { get; set; }// public int UserTelephoneNr { get; set; } Is located in ManageViewModel as PhoneNumber
     }
 }

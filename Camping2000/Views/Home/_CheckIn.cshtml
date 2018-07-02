@@ -15,7 +15,7 @@
         @Html.Label("BookingId")
     </div>
     <div class="col-md-1">
-        @Html.Label("Res. PartySize")
+        @Html.Label("PartySize")
     </div>
     <div class="col-md-2">
         @Html.Label("PartySize at Checkin")
@@ -24,8 +24,10 @@
 
     </div>
 </div>
-@ViewBag.Errormessage
+<div>
+    @ViewBag.Errormessage
+</div>
 @foreach (var reservation in Model)
 {
-    Html.RenderAction("ShowGuestArrivals",reservation);
+    Html.RenderAction("ShowGuestArrivals", reservation);
 }
