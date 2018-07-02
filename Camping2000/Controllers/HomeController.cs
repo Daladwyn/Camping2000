@@ -207,19 +207,20 @@ namespace Camping2000.Controllers
             List<Guest> presentDayGuest = new List<Guest>();
             List<Camping> presentDaySpot = new List<Camping>();
             List<BookingGuestViewModel> presentDayBookings = new List<BookingGuestViewModel>();
-            foreach (var booking in allBookings)
+            ViewBag.Errormessage = "";
+            foreach (var booking in allBookings)//check for arrivals on present day
             {
                 if (booking.BookingStartDate == DateTime.Now.Date)//is this correct Dateformat?
                 {
                     presentDayArrivals.Add(booking);
                 }
             }
-            foreach (var booking in presentDayArrivals)
+            foreach (var booking in presentDayArrivals) //gather guestdata and spotdata from database in separate lists
             {
                 presentDayGuest.Add(Db.Guests.Find(booking.GuestId));
                 presentDaySpot.Add(Db.Camping.Find(booking.ItemId));
             }
-            for (int i = 0; i < presentDayArrivals.Count; i++)
+            for (int i = 0; i < presentDayArrivals.Count; i++) //join the data into a data viewmodel
             {
                 presentDayBookings.Add(new BookingGuestViewModel
                 {
@@ -234,13 +235,16 @@ namespace Camping2000.Controllers
                 });
 
 
-
                 //presentDayBookings[i].BookingId = presentDayArrivals[i].BookingId;
                 //presentDayBookings[i].BookingPrice = presentDayArrivals[i].BookingPrice;
                 //presentDayBookings[i].ItemId = presentDayArrivals[i].ItemId;
                 //presentDayBookings[i].NumberOfGuests = presentDayArrivals[i].NumberOfGuests;
                 //presentDayBookings[i].GuestFirstName = presentDayGuest[i].GuestFirstName;
                 //presentDayBookings[i].GuestLastName = presentDayGuest[i].GuestLastName;
+            }
+            if (presentDayBookings.Count < 1) //if no arrivals is coming present day creata a message to user
+            {
+                ViewBag.Errormessage = "No arrivals today!";
             }
 
 
@@ -286,7 +290,7 @@ namespace Camping2000.Controllers
 
             }
 
-                return PartialView("_CheckInConfirmation",booking);
+            return PartialView("_CheckInConfirmation", booking);
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult CheckOutConfirmation()
@@ -300,7 +304,7 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult ShowGuestArrivals(BookingGuestViewModel arrivals)
         {
-           
+
             return PartialView("_ShowGuestArrivals", arrivals);
         }
         [Authorize(Roles = "Administrators")]

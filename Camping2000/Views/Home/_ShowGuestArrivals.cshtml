@@ -22,7 +22,9 @@
                 @Model.NumberOfGuests
             </div>
             <div class="col-md-2">
-                <input type="number" name="NumberOfCheckInGuests" placeholder="Number of Guests" />
+                <div class="form-group">
+                    <input type="number" name="NumberOfCheckInGuests" placeholder="Number of Guests" />
+                </div>
             </div>
             <div class="col-md-4">
                 <input type="submit" name="CheckIn" value="Check In" />
@@ -31,7 +33,7 @@
         </div>
     </div>
     <div class="form-group">
-    @Html.Hidden("BookingId",Model.BookingId)
+        @Html.Hidden("BookingId", Model.BookingId)
 
     </div>
 }

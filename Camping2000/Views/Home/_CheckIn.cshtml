@@ -18,12 +18,13 @@
         @Html.Label("Res. PartySize")
     </div>
     <div class="col-md-2">
-        @Html.Label("Checkin PartySize")
+        @Html.Label("PartySize at Checkin")
     </div>
     <div class="col-md-4">
 
     </div>
 </div>
+@ViewBag.Errormessage
 @foreach (var reservation in Model)
 {
     Html.RenderAction("ShowGuestArrivals",reservation);
