@@ -10,7 +10,6 @@
             }))
 {
     <div class="form-group">
-        @*Html.LabelFor *@
         <div class="row">
             <div class="col-md-2">
                 @Html.Label("Arrival date: ")
@@ -43,7 +42,6 @@
                 <input type="number" name="NumberOfGuests" min="1" max="10">
             </div>
             <div class="col-md-7">
-
             </div>
         </div>
     </div>
@@ -53,31 +51,25 @@
                 @Html.Label("Do you need electricity: ")
             </div>
             <div class="col-md-3">
-                @*Html.RadioButton("Yes", "yes")
-
-                    @Html.RadioButton("No", "no")*@
-                <input type="radio" name="BookingNeedsElectricity" value="true" required>Yes
-                <input type="radio" name="BookingNeedsElectricity" value="false" checked required> No
+                <input type="radio" name="BookingNeedsElectricity" value="true" checked required>Yes
+                <input type="radio" name="BookingNeedsElectricity" value="false" required> No
             </div>
             <div class="col-md-7">
-
             </div>
         </div>
-
     </div>
     <div class="form-group">
         <div class="row">
             <div class="col-md-3">
                 @Html.Label("Price per night per person: ")
             </div>
-            <div class="col-md-3">
+            <div class="col-md-1">
                 @Model.BookingPrice
             </div>
             <div class="col-md-2">
                 @Html.Label("Estimated price: ")
             </div>
-            <div class="col-md-3">
-                @* The modelFieldname is: BookingPrice *@
+            <div class="col-md-6">
             </div>
         </div>
     </div>
