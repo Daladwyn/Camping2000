@@ -16,26 +16,18 @@ namespace Camping2000.Models
         [MaxLength(80)]
         public string GuestFirstName { get; set; }
         [Required]
+        [MaxLength(80)]
+        public string GuestLastName { get; set; }
+        [Required]
         [MaxLength(40)]
         public string GuestNationality { get; set; }
-
-        //[Required] Is located in AccountViewModels as Email
-        //public string GuestMailAdress
-        //{
-        //    get => default(string);
-        //    set
-        //    {
-        //    }
-        //}
         [Required]
         public bool GuestHasReserved { get; set; }
         [Required]
         public bool GuestHasCheckedIn { get; set; }
         public decimal GuestHasToPay { get; set; } //this property is used for gathering the amount the guest have to pay.
         public decimal GuestHasPaid { get; set; }// This property is used as a checker if the guest have paid.
-        [Required]
-        [MaxLength(80)]
-        public string GuestLastName { get; set; }
-        public int GuestMobileNr { get; set; }// public int UserTelephoneNr { get; set; } Is located in ManageViewModel as PhoneNumber
+        public string GuestPhoneNumber { get; set; }
+        public string GuestMobileNumber { get; set; }// public int UserTelephoneNr { get; set; } Is located in ManageViewModel as PhoneNumber
     }
 }

@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Camping2000.Models;
 using System.Data.SqlClient;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 
 namespace Camping2000.Controllers
 {
@@ -561,6 +563,91 @@ namespace Camping2000.Controllers
                 return PartialView("_NoAvailableSpotToChangeTo");
             }
             return PartialView("_ShowVacantSpots", vacantSpots);
+        }
+        [AllowAnonymous]
+        public ActionResult GuestData()
+        {
+            Camping2000Db CampingDb = new Camping2000Db();
+            ApplicationDbContext Db = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(Db);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
+            List<string> listOfAppGuests = new List<string>();
+            List<string> listOfCampingGuests = new List<string>();
+            GuestDataViewModel newGuest = new GuestDataViewModel();
+            foreach (var guest in Db.Users)
+            {
+                if (guest.Email != "admin@camping.com")
+                {
+                    listOfAppGuests.Add(guest.Id);
+                }
+            }
+            foreach (var guest in CampingDb.Guests)
+            {
+                listOfCampingGuests.Add(guest.GuestId);
+            }
+            listOfAppGuests.Sort();
+            listOfCampingGuests.Sort();
+            if ((listOfCampingGuests.Count < 1) && (listOfAppGuests.Count == listOfCampingGuests.Count + 1))
+            {
+                newGuest.GuestId = listOfAppGuests[0];
+                return PartialView("_GuestData", newGuest);
+
+            }
+            for (int i = 0; i < listOfAppGuests.Count; i++)
+            {
+                if (listOfAppGuests[i] != listOfCampingGuests[i])
+                {
+                    newGuest.GuestId = listOfAppGuests[i];
+                }
+            }
+            return PartialView("_GuestData", newGuest);
+        }
+        public ActionResult SaveGuestData([Bind(Include = "GuestFirstName,GuestLastName,GuestNationality,GuestPhoneNumber,GuestMobileNumber," +
+            "GuestId,PostAdressStreet1,PostAdressStreet2,PostAdressStreet3,PostAdressZipCode,PostAdressCity," +
+            "LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity")]GuestDataViewModel newGuest)
+        {
+            if (ModelState.IsValid)
+            {
+
+                Camping2000Db Db = new Camping2000Db();
+                Guest guestData = new Guest();
+                Adress guestAdress = new Adress();
+                guestData.GuestId = newGuest.GuestId;
+                guestData.GuestFirstName = newGuest.GuestFirstName;
+                guestData.GuestLastName = newGuest.GuestLastName;
+                guestData.GuestNationality = newGuest.GuestNationality;
+                guestData.GuestPhoneNumber = newGuest.GuestPhoneNumber;
+                guestData.GuestMobileNumber = newGuest.GuestMobileNumber;
+                guestData.GuestHasReserved = false;
+                guestData.GuestHasCheckedIn = false;
+                guestData.GuestHasPaid = 0;
+                guestData.GuestHasToPay = 0;
+                guestAdress.GuestId = newGuest.GuestId;
+                guestAdress.LivingAdressStreet1 = newGuest.LivingAdressStreet1;
+                guestAdress.LivingAdressStreet2 = newGuest.LivingAdressStreet2;
+                guestAdress.LivingAdressStreet3 = newGuest.LivingAdressStreet3;
+                guestAdress.LivingAdressZipCode = newGuest.LivingAdressZipCode;
+                guestAdress.LivingAdressCity = newGuest.LivingAdressCity;
+                guestAdress.PostAdressStreet1 = newGuest.PostAdressStreet1;
+                guestAdress.PostAdressStreet2 = newGuest.PostAdressStreet2;
+                guestAdress.PostAdressStreet3 = newGuest.PostAdressStreet3;
+                guestAdress.PostAdressZipCode = newGuest.PostAdressZipCode;
+                guestAdress.PostAdressCity = newGuest.PostAdressCity;
+                Db.Guests.Add(guestData);
+                Db.Adresses.Add(guestAdress);
+                int numberOfSaves = Db.SaveChanges();
+                if (numberOfSaves < 2)
+                {
+                    ViewBag.Errormessage = "The registration did not complete. please try again in a while.";
+                    return PartialView("_GuestData", newGuest);
+                }
+                return PartialView("_RegistrationComplete");
+            }
+            else
+            {
+                return PartialView("_GuestData", newGuest);
+            }
         }
     }
 }

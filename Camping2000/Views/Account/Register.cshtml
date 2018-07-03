@@ -5,7 +5,13 @@
 
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@*using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) *@
+@using (Ajax.BeginForm("Register", "Account",
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
 {
     @Html.AntiForgeryToken()
     <h4>Create a new account.</h4>
@@ -16,124 +22,7 @@
 
 
 
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("First Name")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("UserFirstName")
-        </div>
-    </div>
 
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("Last Name")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("UserLastName")
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("Nationality")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("UserNationality")
-        </div>
-    </div>
-    <hr />
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("LivingAdress Street")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("LivingAdressStreet1")
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("LivingAdress Street")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("LivingAdressStreet2")
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("LivingAdress Street")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("LivingAdressStreet3")
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("LivingAdress ZipCode")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("LivingAdressZipCode")
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("LivingAdress City")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("LivingAdressCity")
-        </div>
-    </div>
-    <hr />
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            
-        </div>
-        <div class="col-md-10">
-    <input type="button" value="Copy Livingadress to Postadress" class="btn btn-default" />
-           
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("PostAdress Street")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("PostAdressStreet1")
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("PostAdress Street")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("PostAdressStreet2")
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("PostAdress Street")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("PostAdressStreet3")
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("PostAdress ZipCode")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("PostAdressZipCode")
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-2 control-label">
-            @Html.Label("PostAdress City")
-        </div>
-        <div class="col-md-10">
-            @Html.TextBox("PostAdressCity")
-        </div>
-    </div>
-    <hr />
 
 
 

@@ -210,6 +210,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Camping2000Db.cs" />
+    <Compile Include="Models\GuestDataViewModel.cs" />
     <Compile Include="Models\ItemToRent.cs" />
     <Compile Include="Models\LargeCabin.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -348,7 +349,9 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-TW.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -408,6 +411,8 @@
     <Content Include="Views\Home\_NoVacantSpot.cshtml" />
     <Content Include="Views\Home\_ShowVacantSpots.cshtml" />
     <Content Include="Views\Home\_NoAvailableSpotToChangeTo.cshtml" />
+    <Content Include="Views\Shared\_GuestData.cshtml" />
+    <Content Include="Views\Home\_RegistrationComplete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

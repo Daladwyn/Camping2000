@@ -1,18 +1,28 @@
 ﻿using System;
-using System.Web;
-using System.Web.Services;
-using System.Web.Services.Protocols;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
 
 namespace Camping2000.Models
 {
-    public class Adress
+    public class GuestDataViewModel
     {
-        [Key]
-        public int AdressId { get; set; }
         [Required]
-        public string GuestId { get; set; }
+        public string GuestId { get; set; } //needs to be string to match identitys format for userId
+        [Required]
+        [MaxLength(80)]
+        public string GuestFirstName { get; set; }
+        [Required]
+        [MaxLength(40)]
+        public string GuestNationality { get; set; }
+        [MaxLength(80)]
+        public string GuestLastName { get; set; }
+        [Phone]
+        public string GuestPhoneNumber { get; set; }
+        [Phone]
+        public string GuestMobileNumber { get; set; }
+        public int AdressId { get; set; }
         [MaxLength(100)]
         public string LivingAdressStreet1 { get; set; }
         [MaxLength(100)]
@@ -29,9 +39,9 @@ namespace Camping2000.Models
         public string PostAdressStreet2 { get; set; }
         [MaxLength(100)]
         public string PostAdressStreet3 { get; set; }
-        [Range(0,99999)]
+        [Range(0, 99999)]
         public int PostAdressZipCode { get; set; }
         [MaxLength(100)]
-        public string PostAdressCity        { get; set; }
+        public string PostAdressCity { get; set; }
     }
 }
