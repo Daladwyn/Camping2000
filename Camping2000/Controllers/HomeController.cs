@@ -588,17 +588,23 @@ namespace Camping2000.Controllers
             }
             listOfAppGuests.Sort();
             listOfCampingGuests.Sort();
-            if ((listOfCampingGuests.Count < 1) && (listOfAppGuests.Count == listOfCampingGuests.Count + 1))
-            {
-                newGuest.GuestId = listOfAppGuests[0];
-                return PartialView("_GuestData", newGuest);
-
-            }
             for (int i = 0; i < listOfAppGuests.Count; i++)
             {
+                if ((listOfCampingGuests.Count < 1) && (listOfAppGuests.Count == listOfCampingGuests.Count + 1))
+                {
+                    newGuest.GuestId = listOfAppGuests[0];
+                    return PartialView("_GuestData", newGuest);
+                }
                 if (listOfAppGuests[i] != listOfCampingGuests[i])
                 {
                     newGuest.GuestId = listOfAppGuests[i];
+                    return PartialView("_GuestData", newGuest);
+                }
+                else
+                {
+                    listOfAppGuests.Remove(listOfAppGuests[i]);
+                    listOfCampingGuests.Remove(listOfCampingGuests[i]);
+                    i--;
                 }
             }
             return PartialView("_GuestData", newGuest);

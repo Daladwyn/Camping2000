@@ -40,8 +40,9 @@ namespace Camping2000.Migrations.Camping2000Db
                  new Camping { ItemName = "Trailer Spot4", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "14", CampingPrice = 100, CampingElectricity = true },
                  new Camping { ItemName = "Trailer Spot5", ItemIsBooked = false, ItemNumberOfPersons = 10, CampingSpot = "15", CampingPrice = 100, CampingElectricity = true });
             context.SaveChanges();
-            //context.Guests.AddOrUpdate(n => n.GuestFirstName,
-            //    new Guest { GuestFirstName = "Christian", GuestLastName = "Levin", GuestNationality = "Swedish", GuestHasCheckedIn = false, GuestHasPaid = 0, GuestHasReserved = false, GuestHasToPay = 0, GuestMobileNumber = "0704242136", GuestId = "70dad621-3717-417a-8567-39d9914c1304" });
+            context.Guests.AddOrUpdate(n => n.GuestFirstName,
+                new Guest { GuestFirstName = "Christian", GuestLastName = "Levin", GuestNationality = "Swedish", GuestHasCheckedIn = false, GuestHasPaid = 0, GuestHasReserved = false, GuestHasToPay = 0, GuestMobileNumber = "0704242136", GuestId = "70dad621-3717-417a-8567-39d9914c1304" });
+            context.SaveChanges();
         }
     }
 }
