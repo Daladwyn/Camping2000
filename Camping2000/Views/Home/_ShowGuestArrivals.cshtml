@@ -26,23 +26,23 @@
                     <input type="number" name="NumberOfCheckInGuests" placeholder="Number of Guests" min="1" max="10" />
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-">
                 <div class="form-group">
                     <input type="submit" name="CheckIn" value="Check In" />
                     @*@Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })*@
                 </div>
-            </div>
+         </div>
         </div>
     </div>
     <div class="form-group">
         @Html.Hidden("BookingId", Model.BookingId)
-        @Html.Hidden("GuestId", Model.GuestId)
+        @*Html.Hidden("GuestId", Model.GuestId)
         @Html.Hidden("ItemId", Model.ItemId)
         @Html.Hidden("GuestFirstName", Model.GuestFirstName)
         @Html.Hidden("GuestLastName", Model.GuestLastName)
         @Html.Hidden("ItemName",Model.ItemName)
         @Html.Hidden("NumberOfGuests", Model.NumberOfGuests)
-        @Html.Hidden("BookingPrice",Model.BookingPrice)
+        @Html.Hidden("BookingPrice",Model.BookingPrice)*@
     </div>
 }
 @ViewBag.Errormessage

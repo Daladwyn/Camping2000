@@ -10,19 +10,13 @@ namespace Camping2000.Models
     {
         [Required]
         public int BookingId { get; set; }
-        [Required]
         public int ItemId { get; set; }
-        [Required]
         public string GuestId { get; set; }
-        [Required]
         public string GuestFirstName { get; set; }
-        [Required]
         public string GuestLastName { get; set; }
-        [Required]
         public decimal BookingPrice { get; set; }
-        [Range(1,10)]
+        [Range(1, 10)]
         public int NumberOfGuests { get; set; }
-        [Required]
         [MaxLength(40)]
         public string ItemName { get; set; }
     }

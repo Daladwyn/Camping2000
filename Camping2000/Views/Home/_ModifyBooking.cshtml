@@ -1,9 +1,25 @@
-﻿@model List<Camping2000.Models.Booking>
+﻿@model List<Camping2000.Models.BookingGuestViewModel>
 
 <h2>Which booking needs to be modified:</h2>
-
-@foreach (var booking in Model)
+@ViewBag.Errormessage
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Guest FirstName")
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Guest LastName")
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Booking Id")
+    </div>
+    <div class="col-md-6">
+    </div>
+</div>
+@if (Model != null)
 {
-    Html.RenderAction("ListPresentBookings");
+    foreach (var booking in Model)
+    {
+        Html.RenderAction("ListPresentBookings", booking);
 
+    }
 }

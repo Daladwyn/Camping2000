@@ -1,75 +1,157 @@
-﻿@model Camping2000.Models.Booking
+﻿@model Camping2000.Models.ModifyBookingViewModel
 
-<h2>GuestFirstName GuestLastNames Booking Details:</h2>
-@*<h2>@Model.GuestFirstName @Model.GuestLastName Booking Details:</h2> *@
 
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Arrival date:")
-    </div>
-    <div class="col-md-2">
-        @Model.BookingStartDate
-    </div>
-    <div class="col-md-2">
-        @Html.Label("Change to:")
-    </div>
-    <div class="form-group">
-        <div class="col-md-6">
-            <input type="date" name="BookingStartDate" min="2018-06-15" />
+<h2>@Model.GuestFirstName @Model.GuestLastName Booking Details:</h2>
+
+@using (Ajax.BeginForm("UpdatedBooking", "Home",
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
+{
+
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Arrival date:")
+        </div>
+        <div class="col-md-2">
+            @Model.BookingStartDate
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Change to:")
+        </div>
+        <div class="form-group">
+            <div class="col-md-6">
+                <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" />
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Departure date:")
-    </div>
-    <div class="col-md-2">
-        @Model.BookingEndDate
-    </div>
-    <div class="col-md-2">
-        @Html.Label("Change to:")
-    </div>
-    <div class="form-group">
-        <div class="col-md-6">
-            <input type="date" name="BookingEndDate" min="2018-06-16" />
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Departure date:")
+        </div>
+        <div class="col-md-2">
+            @Model.BookingEndDate
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Change to:")
+        </div>
+        <div class="form-group">
+            <div class="col-md-6">
+                <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" />
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Camping spot:")
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Power outlet:")
+        </div>
+        <div class="col-md-2">
+            @if (Model.BookingNeedsElectricity == true)
+            {
+                <div>Yes</div>
+            }
+            else
+            {
+                <div>No</div>
+            }
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Change to:")
+        </div>
+        <div class="form-group">
+            <div class="col-md-6">
+                <select name="ChangeBookingNeedsElectricity">
+                    @if (Model.BookingNeedsElectricity == true)
+                    {
+                        <option value="true">Power output</option>
+                        <option value="false">No Power output</option>
+                    }
+                    else
+                    {
+                        <option value="false">No Power output</option>
+                        <option value="true">Power output</option>
+                    }
+                </select>
+            </div>
+        </div>
     </div>
-    <div class="col-md-2">
-        nr: @Model.ItemId
-        @*nr: @Model.ItemName*@
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Partysize:")
+        </div>
+        <div class="col-md-2">
+            @Model.NumberOfGuests
+        </div>
+        <div class="col-md-2">
+            @Html.Label("New partysize:")
+        </div>
+        <div class="form-group">
+            <div class="col-md-6">
+                <input type="number" id="NumberOfGuests" name="NumberOfGuests" min="1" max="10" value="@Model.NumberOfGuests" />
+            </div>
+        </div>
     </div>
-    <div class="col-md-2">
-        @Html.Label("Change to:")
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Camping spot:")
+        </div>
+        <div class="col-md-2">
+            @Model.ItemName
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Change to:")
+        </div>
+        <div class="form-group">
+            <div class="col-md-6">
+                <select class="form-group" name="NewSpot">
+                    @foreach (var spot in Model.VacantSpots)
+                    {
+                        <option value="@spot.ItemId">@spot.ItemName</option>
+                    }
+                </select>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Present Cost:")
+        </div>
+        <div class="col-md-2">
+            @Model.BookingPrice
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Future Cost:")
+        </div>
         <div class="col-md-6">
-            @*Html.RenderAction("ShowVacantSpots")*@
 
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Present Cost:")
-    </div>
-    <div class="col-md-2">
-        650 kr.
-        @*@Model.Booking*@
-        @Model.BookingPrice
-    </div>
-    <div class="col-md-2">
-        @Html.Label("Future Cost:")
-    </div>
-    <div class="col-md-6">
+    <div class="row">
+        <div class="col-md-2">
+            <input type="submit" value="Cancel Changes" />
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <input type="submit" value="Accept Changes" />
+            </div>
+        </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-6">
+
+        </div>
 
     </div>
-</div>
-@Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
-@Ajax.ActionLink("Accept Changes", "UpdatedBooking", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
+    <div class="form-group">
+        @Html.Hidden("BookingId",Model.BookingId)
+        @Html.Hidden("GuestId",Model.GuestId)
+        @Html.Hidden("ItemId",Model.ItemId)
+    </div>
+}
+@*Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
+    @Ajax.ActionLink("Accept Changes", "UpdatedBooking", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })*@
 
 

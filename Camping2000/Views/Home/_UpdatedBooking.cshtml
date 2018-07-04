@@ -1,7 +1,7 @@
-﻿@model Camping2000.Models.Booking
+﻿@model Camping2000.Models.ModifyBookingViewModel
 <h2>Booking Details.</h2>
 
-<p>GuestFirstname GuestLastnames booking with bookingnumber: @Model.BookingId have been modified to the following:</p>
+<p>@Model.GuestFirstName @Model.GuestLastName booking with bookingnumber: @Model.BookingId have been modified to the following:</p>
 <div>
     <div class="row">
         <div class="col-md-2">
@@ -28,7 +28,35 @@
             Camping spot:
         </div>
         <div class="col-md-3">
-            nr: @Model.ItemId
+            nr: @Model.ItemName
+        </div>
+    </div>
+</div>
+<div>
+    <div class="row">
+        <div class="col-md-2">
+            Power Output:
+        </div>
+        <div class="col-md-3">
+            @if (Model.BookingNeedsElectricity == true)
+            {
+                <div>Yes</div>
+            }
+            else
+            {
+                <div>No</div>
+            }
+
+        </div>
+    </div>
+</div>
+<div>
+    <div class="row">
+        <div class="col-md-2">
+            Party Size:
+        </div>
+        <div class="col-md-3">
+            @Model.NumberOfGuests
         </div>
     </div>
 </div>
@@ -38,7 +66,7 @@
             New price is:
         </div>
         <div class="col-md-3">
-            550kr
+            @Model.BookingPrice
         </div>
     </div>
 </div>

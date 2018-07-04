@@ -27,7 +27,10 @@
 <div>
     @ViewBag.Errormessage
 </div>
-@foreach (var reservation in Model)
+@if (Model!=null)
 {
-    Html.RenderAction("ShowGuestArrivals", reservation);
+    foreach (var reservation in Model)
+    {
+        Html.RenderAction("ShowGuestArrivals", reservation);
+    }
 }
