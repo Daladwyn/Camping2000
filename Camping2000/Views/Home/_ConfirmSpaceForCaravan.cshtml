@@ -5,9 +5,9 @@
 <hr />
 @ViewBag.Errormessage
 <div>
-    <p>You arrive on:@Model.BookingStartDate)</p>
+    <p>You arrive on:@Model.BookingStartDate.ToShortDateString()</p>
 
-    <p>You depart on:@Model.BookingEndDate</p>
+    <p>You depart on:@Model.BookingEndDate.ToShortDateString()</p>
 
     <p>You are @Model.NumberOfGuests people.</p>
 

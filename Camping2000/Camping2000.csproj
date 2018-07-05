@@ -210,6 +210,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Camping2000Db.cs" />
+    <Compile Include="Models\GuestAdressViewModel.cs" />
     <Compile Include="Models\GuestDataViewModel.cs" />
     <Compile Include="Models\ItemToRent.cs" />
     <Compile Include="Models\LargeCabin.cs" />

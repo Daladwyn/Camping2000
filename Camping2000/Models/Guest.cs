@@ -27,7 +27,9 @@ namespace Camping2000.Models
         public bool GuestHasCheckedIn { get; set; }
         public decimal GuestHasToPay { get; set; } //this property is used for gathering the amount the guest have to pay.
         public decimal GuestHasPaid { get; set; }// This property is used as a checker if the guest have paid.
+        [MaxLength(20)]
         public string GuestPhoneNumber { get; set; }
+        [MaxLength(20)]
         public string GuestMobileNumber { get; set; }// public int UserTelephoneNr { get; set; } Is located in ManageViewModel as PhoneNumber
     }
 }
