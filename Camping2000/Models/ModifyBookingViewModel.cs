@@ -12,11 +12,12 @@ namespace Camping2000.Models
         public int BookingId { get; set; }
         [Required]
         public string GuestId { get; set; }
-                public string GuestFirstName { get; set; }
-                public string GuestLastName { get; set; }
+        public string GuestFirstName { get; set; }
+        public string GuestLastName { get; set; }
+        public bool GuestHasCheckedIn { get; set; }
         [Required]
         public int ItemId { get; set; }
-                public string ItemName { get; set; }
+        public string ItemName { get; set; }
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
@@ -31,7 +32,6 @@ namespace Camping2000.Models
         [Required]
         public bool BookingNeedsElectricity { get; set; }
         public List<Camping> VacantSpots = new List<Camping>();
-        public bool GuestHasCheckedIn { get; set; }
     }
 
 }

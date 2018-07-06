@@ -432,7 +432,31 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult ArrivalsDepartures()
         {
-            return PartialView("_ArrivalsDepartures");
+            Camping2000Db Db = new Camping2000Db();
+            List<ModifyBookingViewModel> arrivalsDepartures = new List<ModifyBookingViewModel>();
+            Guest aGuest = new Guest();
+            foreach (var booking in Db.Bookings)
+            {
+                if ((booking.BookingStartDate == DateTime.Now.Date) || (booking.BookingEndDate == DateTime.Now.Date))
+                {
+                    aGuest = Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId);
+                    arrivalsDepartures.Add(new ModifyBookingViewModel
+                    {
+                        BookingId = booking.BookingId,
+                        BookingStartDate = booking.BookingStartDate,
+                        BookingEndDate = booking.BookingEndDate,
+                        GuestId = booking.GuestId,
+                        ItemId = booking.ItemId,
+                        NumberOfGuests = booking.NumberOfGuests,
+                        BookingNeedsElectricity = booking.BookingNeedsElectricity,
+                        GuestFirstName = aGuest.GuestFirstName,
+                        GuestLastName = aGuest.GuestLastName,
+                        GuestHasCheckedIn = booking.GuestHasCheckedIn
+
+                    });
+                }
+            }
+            return PartialView("_ArrivalsDepartures", arrivalsDepartures);
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult CheckInConfirmation(int BookingId, int NumberOfCheckInGuests)
@@ -511,15 +535,36 @@ namespace Camping2000.Controllers
         public ActionResult CheckOutConfirmation(BookingGuestViewModel checkingOutGuest)
         {
             Camping2000Db Db = new Camping2000Db();
-            Guest departingGuest = Db.Guests.SingleOrDefault(i => i.GuestId == checkingOutGuest.GuestId);
             Booking departingGuestBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == checkingOutGuest.BookingId);
-            Camping departedGuestSpot = Db.Camping.SingleOrDefault(i => i.ItemId == checkingOutGuest.ItemId);
-            departingGuest.GuestHasCheckedIn = false;
-            departingGuest.GuestHasReserved = false;
-            departingGuest.GuestHasPaid = departingGuest.GuestHasToPay;
-            departingGuestBooking.GuestHasCheckedIn = false;
-            departingGuestBooking.GuestHasReserved = false;
-            departedGuestSpot.ItemIsBooked = false;
+            Guest departingGuest = Db.Guests.SingleOrDefault(i => i.GuestId == departingGuestBooking.GuestId);
+            Camping departedGuestSpot = Db.Camping.SingleOrDefault(i => i.ItemId == departingGuestBooking.ItemId);
+            List<Booking> otherGuestBookings = new List<Booking>();
+            //otherGuestBookings.Add(Db.Bookings.Where( (i => i.GuestId == departingGuest.GuestId));
+            foreach (var booking in Db.Bookings) //collect any other bookings the guest have made
+            {
+                if (booking.GuestId == departingGuest.GuestId)
+                {
+                    otherGuestBookings.Add(booking);
+                }
+            }
+            if (otherGuestBookings.Count < 2)
+            {
+                departingGuest.GuestHasCheckedIn = false;
+                departingGuest.GuestHasReserved = false;
+                departingGuest.GuestHasPaid = departingGuest.GuestHasPaid + departingGuest.GuestHasToPay;
+                departingGuestBooking.GuestHasCheckedIn = false;
+                departingGuestBooking.GuestHasReserved = false;
+                departedGuestSpot.ItemIsBooked = false;
+            }
+            else
+            {
+                departingGuest.GuestHasCheckedIn = true;
+                departingGuest.GuestHasReserved = false;
+                departingGuest.GuestHasPaid = departingGuest.GuestHasPaid + departingGuest.GuestHasToPay;
+                departingGuestBooking.GuestHasCheckedIn = false;
+                departingGuestBooking.GuestHasReserved = false;
+                departedGuestSpot.ItemIsBooked = false;
+            }
             int numberOfSaves = Db.SaveChanges();
             if (numberOfSaves != 3)
             {
@@ -535,6 +580,7 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult ShowGuestArrivals(BookingGuestViewModel arrivals)
         {
+
             return PartialView("_ShowGuestArrivals", arrivals);
         }
         [Authorize(Roles = "Administrators")]
@@ -629,7 +675,7 @@ namespace Camping2000.Controllers
                 GuestId = currentGuest.GuestId,
                 GuestFirstName = currentGuest.GuestFirstName,
                 GuestLastName = currentGuest.GuestLastName,
-                GuestHasCheckedIn= currentBooking.GuestHasCheckedIn,
+                GuestHasCheckedIn = currentBooking.GuestHasCheckedIn,
                 ItemId = currentSpot.ItemId,
                 ItemName = currentSpot.ItemName,
                 BookingStartDate = currentBooking.BookingStartDate,
@@ -686,7 +732,7 @@ namespace Camping2000.Controllers
                     if (currentSpot.CampingElectricity == modifiedSpot.CampingElectricity)
                     {
                         currentSpot.ItemIsBooked = false;
-                        
+
                         Db.SaveChanges();
                         currentSpot = modifiedSpot;
                         currentSpot.ItemIsBooked = true;
@@ -700,7 +746,7 @@ namespace Camping2000.Controllers
                         currentSpot.ItemIsBooked = false;
                         currentSpot = modifiedSpot;
                         currentSpot.ItemIsBooked = true;
-                        currentBooking.BookingPrice = currentSpot.CampingPrice*currentBooking.NumberOfGuests;
+                        currentBooking.BookingPrice = currentSpot.CampingPrice * currentBooking.NumberOfGuests;
                         currentBooking.BookingNeedsElectricity = modifiedSpot.CampingElectricity;
                         currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
 
@@ -724,18 +770,79 @@ namespace Camping2000.Controllers
             }
         }
         [Authorize(Roles = "Administrators")]
-        public ActionResult SearchForGuest()
+        public ActionResult SearchForGuest(string firstName, string lastName)
         {
-            return PartialView("_ShowFoundGuests");
+            firstName = firstName.ToLower();
+            lastName = lastName.ToLower();
+            Camping2000Db Db = new Camping2000Db();
+            List<Guest> foundGuests = new List<Guest>();
+            if ((firstName != "") && (lastName == ""))
+            {
+                foreach (var guest in Db.Guests)
+                {
+                    if (guest.GuestFirstName.ToLower() == firstName)
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            else if ((firstName != "") && (lastName != ""))
+            {
+                foreach (var guest in Db.Guests)
+                {
+                    if ((guest.GuestFirstName.ToLower() == firstName) && (guest.GuestLastName.ToLower() == lastName))
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            else if ((firstName == "") && (lastName != ""))
+            {
+                foreach (var guest in Db.Guests)
+                {
+                    if (guest.GuestLastName.ToLower() == lastName)
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            return PartialView("_ShowFoundGuests", foundGuests);
         }
         [Authorize(Roles = "Administrators")]
-        public ActionResult ModifySpecificGuestDetails()
+        public ActionResult ModifySpecificGuestDetails([Bind(Include = "GuestId")]Guest searchedGuest)
         {
-            return PartialView("_GuestDetails");
+            Camping2000Db Db = new Camping2000Db();
+            Guest foundGuest = Db.Guests.SingleOrDefault(i => i.GuestId == searchedGuest.GuestId);
+            Adress foundAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == searchedGuest.GuestId);
+            GuestAdressViewModel completeGuestDetails = new GuestAdressViewModel
+            {
+                GuestId = foundGuest.GuestId,
+                GuestFirstName = foundGuest.GuestFirstName,
+                GuestLastName = foundGuest.GuestLastName,
+                GuestNationality = foundGuest.GuestNationality,
+                GuestMobileNumber = foundGuest.GuestMobileNumber,
+                GuestPhoneNumber = foundGuest.GuestPhoneNumber,
+                AdressId = foundAdress.AdressId,
+                PostAdressCity = foundAdress.PostAdressCity,
+                PostAdressStreet1 = foundAdress.PostAdressStreet1,
+                PostAdressStreet2 = foundAdress.PostAdressStreet2,
+                PostAdressStreet3 = foundAdress.PostAdressStreet3,
+                PostAdressZipCode = foundAdress.PostAdressZipCode,
+                LivingAdressCity = foundAdress.LivingAdressCity,
+                LivingAdressStreet1 = foundAdress.LivingAdressStreet1,
+                LivingAdressStreet2 = foundAdress.LivingAdressStreet2,
+                LivingAdressStreet3 = foundAdress.LivingAdressStreet3,
+                LivingAdressZipCode = foundAdress.LivingAdressZipCode
+            };
+            return PartialView("_GuestDetails", completeGuestDetails);
         }
         [Authorize(Roles = "Administrators")]
-        public ActionResult UpdatedGuestDetails()
+        public ActionResult UpdatedGuestDetails([Bind(Include = "GuestFirstName,GuestLastName,GuestNationality,GuestPhoneNumber,GuestMobileNumber," +
+            "LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity," +
+            "PostAdressStreet1,PostAdressStreet2,PostAdressStreet3,PostAdressZipCode,PostAdressCity")] GuestAdressViewModel newGuestData)
         {
+            Camping2000Db Db = new Camping2000Db();
+
             return PartialView("_UpdatedGuestDetails");
         }
         public ActionResult ShowVacantFullsign()

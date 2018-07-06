@@ -1,6 +1,6 @@
 ﻿@model Camping2000.Models.ModifyBookingViewModel
 
-<h2>@Model.GuestFirstName @Model.GuestLastName Booking Details:</h2>
+<h2>@Model.GuestFirstName @Model.GuestLastName booking details for bookingId:@Model.BookingId:</h2>
 <hr />
 @ViewBag.Errormessage
 @ViewBag.ElectricMessage
@@ -11,7 +11,7 @@
                 InsertionMode = InsertionMode.Replace,
             }))
 {
-        <div class="row">
+    <div class="row">
         <div class="col-md-2">
             @Html.Label("Arrival date:")
         </div>
@@ -140,7 +140,7 @@
     <hr />
     <div class="row">
         <div class="col-md-2">
-            <input type="submit" value="Cancel Changes" />
+
         </div>
         <div class="col-md-2">
             <div class="form-group">
@@ -148,19 +148,23 @@
             </div>
         </div>
         <div class="col-md-2">
-            <input type="submit" value="Delete Reservation" />
-        </div>
-        <div class="col-md-6">
+
+            <div class="col-md-6">
+
+            </div>
 
         </div>
+        <div class="form-group">
+            @Html.Hidden("BookingId", Model.BookingId)
+            @Html.Hidden("GuestId", Model.GuestId)
+            @Html.Hidden("ItemId", Model.ItemId)
+        </div>
 
-    </div>
-    <div class="form-group">
-        @Html.Hidden("BookingId", Model.BookingId)
-        @Html.Hidden("GuestId", Model.GuestId)
-        @Html.Hidden("ItemId", Model.ItemId)
     </div>
 }
+@*<input type="submit" onclick="@(Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace }))"/>*@
+<input type="submit" value="Delete Reservation" />
+<input type="submit" value="Cancel Changes" />
 @*Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
     @Ajax.ActionLink("Accept Changes", "UpdatedBooking", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })*@
 

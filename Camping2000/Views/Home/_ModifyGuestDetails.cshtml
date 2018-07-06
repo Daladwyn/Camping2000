@@ -9,37 +9,34 @@
         }))
 {
     <div class="row">
-        <div class="form-group">
-            <div class="col-md-2">
-                @Html.Label("Guests first name:")
-
-            </div>
-            <div class="col-md-2">
-                @Html.Editor("GuestFirstName")
-            </div>
+        <div class="col-md-2">
             <div class="form-group">
-                <div class="col-md-2">
-                    @Html.Label("Guests last name:")
-                </div>
-                <div class="col-md-2">
-                    @Html.Editor("GuestLastName")
-                </div>
-                <div class="form-group">
-                <div class="col-md-4">
-                    <input type="button" value="Search" class="btn btn-default"/>
-
-                </div>
+                @Html.Label("Guests first name:")
             </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <input type="text" name="firstName" />
             </div>
-            @*<div class="col-md-4">
-            @Ajax.ActionLink("Search", "SearchForGuest", ajaxOptions: new AjaxOptions { UpdateTargetId = "EndOfFoundGuests", InsertionMode = InsertionMode.InsertBefore })
-        </div>*@
-            <div id="EndOfFoundGuests"></div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                @Html.Label("Guests last name:")
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <input type="text" name="lastName" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <input type="submit" value="Search" class="btn btn-default" />
         </div>
 
-
-
     </div>
-
+    @*<div class="col-md-4">
+            @Ajax.ActionLink("Search", "SearchForGuest", ajaxOptions: new AjaxOptions { UpdateTargetId = "EndOfFoundGuests", InsertionMode = InsertionMode.InsertBefore })
+        </div>*@
+    <div id="EndOfFoundGuests"></div>
 }
 

@@ -1,25 +1,21 @@
-﻿@model List<Camping2000.Models.BookingGuestViewModel >
+﻿@model List<Camping2000.Models.ModifyBookingViewModel>
 
 <h2>Arrivals @DateTime.Now.Day - @DateTime.Now.Month - @DateTime.Now.Year</h2>
 
 @foreach (var guestBooking in Model)
-    {
-    @*Html.Partial("_ShowGuestarrivals","ShowGuestArrivals")*@
-    Html.RenderAction("ShowGuestArrivals",guestBooking);
-
-    }
-
-@for (int i = 0; i < 4; i++)
 {
+    if ((guestBooking.BookingStartDate == DateTime.Now.Date) && (guestBooking.GuestHasCheckedIn == false))
+    {
+        Html.RenderAction("ShowGuestArrivals", guestBooking);
+    }
 }
 
 <h2>Departures @DateTime.Now.Day - @DateTime.Now.Month - @DateTime.Now.Year</h2>
-
-@for (int i = 0; i <6; i++)
+@foreach (var guestBooking in Model)
 {
-    Html.RenderAction("ShowGuestDepartures");
+    if ((guestBooking.BookingEndDate == DateTime.Now.Date) && (guestBooking.GuestHasCheckedIn == true))
+    {
+        Html.RenderAction("ShowGuestDepartures", guestBooking);
+    }
 }
 
-@*Html.Partial("_ShowGuestDepartures", "ShowGuestDepartures")
-
-@Html.Partial()*@

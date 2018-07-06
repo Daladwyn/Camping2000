@@ -2,247 +2,228 @@
 
 <h2>Modify a Guests Details</h2>
 
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("Present FirstName:")
-    </div>
-    <div class="col-md-3">
-        @Model.GuestFirstName
-    </div>
-    <div class="col-md-3">
-        @Html.Label("Change to new Firstname:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("GuestFirstName")
-    </div>
-
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("Present LastName:")
-    </div>
-    <div class="col-md-3">
-        @Model.GuestLastName
-    </div>
-    <div class="col-md-3">
-        @Html.Label("Change to new Lastname:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("GuestLastName")
-    </div>
-
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("Present Nationality:")
-    </div>
-    <div class="col-md-3">
-        @Model.GuestNationality
-    </div>
-    <div class="col-md-3">
-        @Html.Label("Change to new Nationality:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("GuestNationality")
-    </div>
-
-</div>
-
-@*<div class="row">
-        <div class="col-md-3">
-            @Html.Label("Present Emailadress:")
-        </div>
-        <div class="col-md-3">
-            Guest@mail.com
-        </div>
-        <div class="col-md-3">
-            @Html.Label("Change to new Emailadress:")
-        </div>
-        <div class="col-md-3">
-            @Html.Editor("UserMailadress")
-        </div>
-
-    </div>*@
-<hr />
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("LivingAdressStreet1:")
-    </div>
-    <div class="col-md-3">
-        @Model.LivingAdressStreet1
-    </div>
-
-    <div class="col-md-3">
-        @Html.Label("Change LivingAdressStreet1:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("LivingAdressStreet1")
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("LivingAdressStreet2:")
-    </div>
-    <div class="col-md-3">
-        @Model.LivingAdressStreet2
-    </div>
-
-    <div class="col-md-3">
-        @Html.Label("Change LivingAdressStreet2:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("LivingAdressStreet2")
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("LivingAdressStreet3:")
-    </div>
-    <div class="col-md-3">
-        @Model.LivingAdressStreet3
-    </div>
-
-    <div class="col-md-3">
-        @Html.Label("Change LivingAdressStreet3:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("LivingAdressStreet3")
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("LivingAdress ZipCode:")
-    </div>
-    <div class="col-md-3">
-        @Model.LivingAdressZipCode
-    </div>
-
-    <div class="col-md-3">
-        @Html.Label("Change LivingAdress ZipCode:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("LivingAdressZipCode")
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("LivingAdress City:")
-    </div>
-    <div class="col-md-3">
-        @Model.LivingAdressCity
-    </div>
-
-    <div class="col-md-3">
-        @Html.Label("Change LivingAdress City:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("LivingAdressCity")
-    </div>
-</div>
-
-<hr />
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("PostAdressStreet1:")
-    </div>
-    <div class="col-md-3">
-        @Model.PostAdressStreet1
-    </div>
-
-    <div class="col-md-3">
-        @Html.Label("Change PostAdressStreet1:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("PostAdressStreet1")
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("PostAdressStreet2:")
-    </div>
-    <div class="col-md-3">
-        @Model.PostAdressStreet2
-    </div>
-
-    <div class="col-md-3">
-        @Html.Label("Change PostAdressStreet2:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("PostAdressStreet2")
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("PostAdressStreet3:")
-    </div>
-    <div class="col-md-3">
-        @Model.PostAdressStreet3
-    </div>
-
-    <div class="col-md-3">
-        @Html.Label("Change PostAdressStreet3:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("PostAdressStreet3")
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("PostAdress ZipCode:")
-    </div>
-    <div class="col-md-3">
-        @Model.PostAdressZipCode
-    </div>
-
-    <div class="col-md-3">
-        @Html.Label("Change PostAdress ZipCode:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("PostAdressZipCode")
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        @Html.Label("PostAdress City:")
-    </div>
-    <div class="col-md-3">
-        @Model.PostAdressCity
-    </div>
-
-    <div class="col-md-3">
-        @Html.Label("Change PostAdress City:")
-    </div>
-    <div class="col-md-3">
-        @Html.Editor("PostAdress City")
-    </div>
-</div>
-@*
+@using (Ajax.BeginForm("UpdatedGuestDetails", "Home",
+        ajaxOptions: new AjaxOptions
+        {
+            UpdateTargetId = "EndOfFoundGuests",
+            InsertionMode = InsertionMode.InsertBefore,
+        }))
+{
     <div class="row">
-    <div class="col-md-3">
-        PostAdress City:
+        <div class="col-md-3">
+            @Html.Label("Present FirstName:")
+        </div>
+        <div class="col-md-3">
+            @Model.GuestFirstName
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change to new Firstname:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("GuestFirstName")
+        </div>
     </div>
-    <div class="col-md-3">
-        GuestAdress
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("Present LastName:")
+        </div>
+        <div class="col-md-3">
+            @Model.GuestLastName
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change to new Lastname:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("GuestLastName")
+        </div>
     </div>
-
-    <div class="col-md-3">
-        Change PostAdress City:
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("Present Nationality:")
+        </div>
+        <div class="col-md-3">
+            @Model.GuestNationality
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change to new Nationality:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("GuestNationality")
+        </div>
     </div>
-    <div class="col-md-3">
-        @Html.Editor("PostAdress City")
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("Phone number:")
+        </div>
+        <div class="col-md-3">
+            @Model.GuestPhoneNumber
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change to:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("GuestPhoneNumber")
+        </div>
     </div>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("Mobilephone number:")
+        </div>
+        <div class="col-md-3">
+            @Model.GuestMobileNumber
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change to:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("GuestMobileNumber")
+        </div>
     </div>
-*@
-@Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
-@Ajax.ActionLink("Accept Changes", "UpdatedGuestDetails", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
-
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("LivingAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Model.LivingAdressStreet1
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change LivingAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("LivingAdressStreet1")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("LivingAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Model.LivingAdressStreet2
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change LivingAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("LivingAdressStreet2")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("LivingAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Model.LivingAdressStreet3
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change LivingAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("LivingAdressStreet3")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("LivingAdress ZipCode:")
+        </div>
+        <div class="col-md-3">
+            @Model.LivingAdressZipCode
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change LivingAdress ZipCode:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("LivingAdressZipCode")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("LivingAdress City:")
+        </div>
+        <div class="col-md-3">
+            @Model.LivingAdressCity
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change LivingAdress City:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("LivingAdressCity")
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("PostAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Model.PostAdressStreet1
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change PostAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("PostAdressStreet1")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("PostAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Model.PostAdressStreet2
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change PostAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("PostAdressStreet2")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("PostAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Model.PostAdressStreet3
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change PostAdressStreet:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("PostAdressStreet3")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("PostAdress ZipCode:")
+        </div>
+        <div class="col-md-3">
+            @Model.PostAdressZipCode
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change PostAdress ZipCode:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("PostAdressZipCode")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("PostAdress City:")
+        </div>
+        <div class="col-md-3">
+            @Model.PostAdressCity
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Change PostAdress City:")
+        </div>
+        <div class="col-md-3">
+            @Html.Editor("PostAdressCity")
+        </div>
+    </div>
+    <div>
+        <input type="submit" value="Accept Changes" />
+    </div>
+}@*
+                 @Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
+    @Ajax.ActionLink("Accept Changes", "UpdatedGuestDetails", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })*@
