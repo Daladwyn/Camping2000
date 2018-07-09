@@ -1,4 +1,5 @@
-﻿@model Camping2000.Models.IndexViewModel
+﻿@using Microsoft.AspNet.Identity
+@model Camping2000.Models.IndexViewModel
 @{
     ViewBag.Title = "Manage";
 }
@@ -9,41 +10,21 @@
 <div>
     <h4>Change your account settings</h4>
     <hr />
-    @*Html.RenderAction()*@
-    <dl class="dl-horizontal">
-        <dt>First name:</dt>
-        <dd>Guest First Name</dd>
-        <dt>Last name:</dt>
-        <dd>Guest Last Name</dd>
-        <dt>Nationality:</dt>
-        <dd>Guest Nationality</dd>
-    </dl>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>LivingAdress Street</dt>
-        <dd>Guest LivingAdress</dd>
-        <dt>LivingAdress Street</dt>
-        <dd>Guest LivingAdress</dd>
-        <dt>LivingAdress Street</dt>
-        <dd>Guest LivingAdress</dd>
-        <dt>LivingAdress ZipCode</dt>
-        <dd>Guest LivingAdress ZipCode</dd>
-        <dt>LivingAdress City</dt>
-        <dd>Guest LivingAdress City</dd>
-    </dl>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>PostAdress Street</dt>
-        <dd>Guest PostAdress</dd>
-        <dt>PostAdress Street</dt>
-        <dd>Guest PostAdress</dd>
-        <dt>PostAdress Street</dt>
-        <dd>Guest PostAdress</dd>
-        <dt>PostAdress ZipCode</dt>
-        <dd>Guest PostAdress ZipCode</dd>
-        <dt>PostAdress City</dt>
-        <dd>Guest PostAdress City</dd>
-    </dl>
+
+      @{var GuestId = new RouteValueDictionary();
+        GuestId.Add("GuestId", User.Identity.GetUserId()); }
+    
+
+    @Ajax.ActionLink("Your details", "GuestDetails","Home", routeValues: GuestId,
+    ajaxOptions: new AjaxOptions
+    {
+        UpdateTargetId = "ContentBody",
+        InsertionMode = InsertionMode.Replace,
+    })
+
+
+   
+   
     <hr />
     <dl class="dl-horizontal">
         <dt>Password:</dt>

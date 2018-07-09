@@ -415,6 +415,7 @@
     <Content Include="Views\Home\_NoAvailableSpotToChangeTo.cshtml" />
     <Content Include="Views\Shared\_GuestData.cshtml" />
     <Content Include="Views\Home\_RegistrationComplete.cshtml" />
+    <Content Include="Views\Home\_searchbar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

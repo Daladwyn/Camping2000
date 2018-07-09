@@ -1,6 +1,6 @@
-﻿@model Camping2000.Models.Guest
+﻿@model Camping2000.Models.GuestAdressViewModel
 
-<h2>Guest details is updated.</h2>
+<h2>Guest details is updated for @Model.GuestFirstName @Model.GuestLastName.</h2>
 
 
 <div class="row">
@@ -59,10 +59,27 @@
 
 <div class="row">
     <div class="col-md-2">
-        @Html.Label("Emailadress:")
+        @Html.Label("Phone Number")
     </div>
     <div class="col-md-2">
-        Guest@mail.com@*Model.GuestEmailAdress*@
+        @Model.GuestPhoneNumber
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-4">
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Mobile Number")
+    </div>
+    <div class="col-md-2">
+        @Model.GuestMobileNumber
     </div>
     <div class="col-md-2">
 
@@ -77,10 +94,10 @@
 <hr />
 <div class="row">
     <div class="col-md-2">
-        @Html.Label("LivingAdressStreet1:")
+        @Html.Label("LivingAdressStreet:")
     </div>
     <div class="col-md-2">
-        @*Model.GuestLivingadressStreet1*@
+        @Model.LivingAdressStreet1
     </div>
 
     <div class="col-md-2">
@@ -95,10 +112,10 @@
 
 <div class="row">
     <div class="col-md-2">
-        @Html.Label("LivingAdressStreet2:")
+        @Html.Label("LivingAdressStreet:")
     </div>
     <div class="col-md-2">
-        GuestLivingAdress
+        @Model.LivingAdressStreet2
     </div>
 
     <div class="col-md-2">
@@ -113,10 +130,10 @@
 
 <div class="row">
     <div class="col-md-2">
-        @Html.Label("LivingAdressStreet3:")
+        @Html.Label("LivingAdressStreet:")
     </div>
     <div class="col-md-2">
-        GuestLivingAdress
+        @Model.LivingAdressStreet3
     </div>
 
     <div class="col-md-2">
@@ -134,7 +151,7 @@
         @Html.Label("LivingAdress ZipCode:")
     </div>
     <div class="col-md-2">
-        111 11
+        @Model.LivingAdressZipCode
     </div>
 
     <div class="col-md-2">
@@ -152,7 +169,7 @@
         @Html.Label("LivingAdress City:")
     </div>
     <div class="col-md-2">
-        GuestLivingAdress City
+        @Model.LivingAdressCity
     </div>
 
     <div class="col-md-2">
@@ -168,10 +185,10 @@
 
 <div class="row">
     <div class="col-md-2">
-        @Html.Label("PostAdressStreet1:")
+        @Html.Label("PostAdressStreet:")
     </div>
     <div class="col-md-2">
-        GuestPostAdress
+        @Model.PostAdressStreet1
     </div>
 
     <div class="col-md-2">
@@ -186,10 +203,10 @@
 
 <div class="row">
     <div class="col-md-2">
-        @Html.Label("PostAdressStreet2:")
+        @Html.Label("PostAdressStreet:")
     </div>
     <div class="col-md-2">
-        GuestPostAdress
+        @Model.PostAdressStreet2
     </div>
 
     <div class="col-md-2">
@@ -204,10 +221,10 @@
 
 <div class="row">
     <div class="col-md-2">
-        @Html.Label("PostAdressStreet3:")
+        @Html.Label("PostAdressStreet:")
     </div>
     <div class="col-md-2">
-        GuestPostAdress
+        @Model.PostAdressStreet3
     </div>
 
     <div class="col-md-2">
@@ -225,7 +242,7 @@
         @Html.Label("PostAdress ZipCode:")
     </div>
     <div class="col-md-2">
-        111 11
+        @Model.PostAdressZipCode
     </div>
 
     <div class="col-md-2">
@@ -243,7 +260,7 @@
         @Html.Label("PostAdress City:")
     </div>
     <div class="col-md-2">
-        GuestPostAdress City
+        @Model.PostAdressCity
     </div>
 
     <div class="col-md-2">
@@ -255,26 +272,6 @@
     <div class="col-md-4">
     </div>
 </div>
-@*
-
-    <div class="row">
-    <div class="col-md-2">
-        PostAdress City:
-    </div>
-    <div class="col-md-2">
-        GuestPostAdress City
-    </div>
-
-    <div class="col-md-2">
-
-    </div>
-    <div class="col-md-2">
-
-    </div>
-    <div class="col-md-4">
-    </div>
-    </div>
-*@
 @Ajax.ActionLink("Done", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
 @*Ajax.ActionLink("Accept Changes", "UpdatedGuestDetails", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })*@
 

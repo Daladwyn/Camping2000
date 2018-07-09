@@ -1,12 +1,12 @@
 ﻿@model Camping2000.Models.GuestAdressViewModel
 
-<h2>Modify a Guests Details</h2>
+<h2>Modify the details of @Model.GuestFirstName @Model.GuestLastName:</h2>
 
 @using (Ajax.BeginForm("UpdatedGuestDetails", "Home",
         ajaxOptions: new AjaxOptions
         {
-            UpdateTargetId = "EndOfFoundGuests",
-            InsertionMode = InsertionMode.InsertBefore,
+            UpdateTargetId = "ContentBody",
+            InsertionMode = InsertionMode.Replace,
         }))
 {
     <div class="row">
@@ -220,6 +220,9 @@
         <div class="col-md-3">
             @Html.Editor("PostAdressCity")
         </div>
+    </div>
+    <div>
+        @Html.Hidden("GuestId", Model.GuestId)
     </div>
     <div>
         <input type="submit" value="Accept Changes" />

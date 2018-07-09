@@ -772,10 +772,16 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult SearchForGuest(string firstName, string lastName)
         {
-            firstName = firstName.ToLower();
-            lastName = lastName.ToLower();
             Camping2000Db Db = new Camping2000Db();
             List<Guest> foundGuests = new List<Guest>();
+            string errormessage = "";
+            if ((firstName == "") && (lastName == ""))
+            {
+                ViewBag.Errormessage = "Please specify the guests name before searching.";
+                return PartialView("_ShowFoundGuests", foundGuests);
+            }
+            firstName = firstName.ToLower();
+            lastName = lastName.ToLower();
             if ((firstName != "") && (lastName == ""))
             {
                 foreach (var guest in Db.Guests)
@@ -806,9 +812,19 @@ namespace Camping2000.Controllers
                     }
                 }
             }
+            if ((firstName != "") && (foundGuests.Count < 1))
+            {
+                errormessage = $"A guest with the name of {firstName} was not found. Please try again.";
+                ViewBag.Errormessage = errormessage;
+            }
+            else if ((lastName != "") && (foundGuests.Count < 1))
+            {
+                errormessage = $"A guest with the name of {lastName} was not found. Please try again.";
+                ViewBag.Errormessage = errormessage;
+            }
             return PartialView("_ShowFoundGuests", foundGuests);
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Guests")]
         public ActionResult ModifySpecificGuestDetails([Bind(Include = "GuestId")]Guest searchedGuest)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -836,14 +852,32 @@ namespace Camping2000.Controllers
             };
             return PartialView("_GuestDetails", completeGuestDetails);
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Guests")]
         public ActionResult UpdatedGuestDetails([Bind(Include = "GuestFirstName,GuestLastName,GuestNationality,GuestPhoneNumber,GuestMobileNumber," +
-            "LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity," +
+            "GuestId,LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity," +
             "PostAdressStreet1,PostAdressStreet2,PostAdressStreet3,PostAdressZipCode,PostAdressCity")] GuestAdressViewModel newGuestData)
         {
             Camping2000Db Db = new Camping2000Db();
+            Guest oldGuestData = Db.Guests.SingleOrDefault(i => i.GuestId == newGuestData.GuestId);
+            Adress oldGuestAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == newGuestData.GuestId);
+            oldGuestData.GuestFirstName = newGuestData.GuestFirstName;
+            oldGuestData.GuestLastName = newGuestData.GuestLastName;
+            oldGuestData.GuestNationality = newGuestData.GuestNationality;
+            oldGuestData.GuestPhoneNumber = newGuestData.GuestPhoneNumber;
+            oldGuestData.GuestMobileNumber = newGuestData.GuestMobileNumber;
+            oldGuestAdress.LivingAdressStreet1 = newGuestData.LivingAdressStreet1;
+            oldGuestAdress.LivingAdressStreet2 = newGuestData.LivingAdressStreet2;
+            oldGuestAdress.LivingAdressStreet3 = newGuestData.LivingAdressStreet3;
+            oldGuestAdress.LivingAdressZipCode = newGuestData.LivingAdressZipCode;
+            oldGuestAdress.LivingAdressCity = newGuestData.LivingAdressCity;
+            oldGuestAdress.PostAdressStreet1 = newGuestData.PostAdressStreet1;
+            oldGuestAdress.PostAdressStreet2 = newGuestData.PostAdressStreet2;
+            oldGuestAdress.PostAdressStreet3 = newGuestData.PostAdressStreet3;
+            oldGuestAdress.PostAdressZipCode = newGuestData.PostAdressZipCode;
+            oldGuestAdress.PostAdressCity = newGuestData.PostAdressCity;
+            Db.SaveChanges();
 
-            return PartialView("_UpdatedGuestDetails");
+            return PartialView("_UpdatedGuestDetails", newGuestData);
         }
         public ActionResult ShowVacantFullsign()
         {
@@ -959,6 +993,35 @@ namespace Camping2000.Controllers
             {
                 return PartialView("_GuestData", newGuest);
             }
+        }
+        //[Authorize(Roles = "Administrators, Guests")]
+        public ActionResult GuestDetails(string GuestId)
+        {
+            Camping2000Db Db = new Camping2000Db();
+            Guest foundGuest = Db.Guests.SingleOrDefault(i => i.GuestId == GuestId);
+            Adress foundAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == GuestId);
+            GuestAdressViewModel completeGuestDetails = new GuestAdressViewModel
+            {
+                GuestId = foundGuest.GuestId,
+                GuestFirstName = foundGuest.GuestFirstName,
+                GuestLastName = foundGuest.GuestLastName,
+                GuestNationality = foundGuest.GuestNationality,
+                GuestMobileNumber = foundGuest.GuestMobileNumber,
+                GuestPhoneNumber = foundGuest.GuestPhoneNumber,
+                AdressId = foundAdress.AdressId,
+                PostAdressCity = foundAdress.PostAdressCity,
+                PostAdressStreet1 = foundAdress.PostAdressStreet1,
+                PostAdressStreet2 = foundAdress.PostAdressStreet2,
+                PostAdressStreet3 = foundAdress.PostAdressStreet3,
+                PostAdressZipCode = foundAdress.PostAdressZipCode,
+                LivingAdressCity = foundAdress.LivingAdressCity,
+                LivingAdressStreet1 = foundAdress.LivingAdressStreet1,
+                LivingAdressStreet2 = foundAdress.LivingAdressStreet2,
+                LivingAdressStreet3 = foundAdress.LivingAdressStreet3,
+                LivingAdressZipCode = foundAdress.LivingAdressZipCode
+            };
+            return PartialView("_GuestDetails", completeGuestDetails);
+            //return RedirectToAction("ModifySpecificGuestDetails",presentGuest);
         }
     }
 }
