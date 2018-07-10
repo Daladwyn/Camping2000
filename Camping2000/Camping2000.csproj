@@ -416,6 +416,10 @@
     <Content Include="Views\Shared\_GuestData.cshtml" />
     <Content Include="Views\Home\_RegistrationComplete.cshtml" />
     <Content Include="Views\Home\_searchbar.cshtml" />
+    <Content Include="Views\Home\_CancelReservation.cshtml" />
+    <Content Include="Views\Home\_FailedCancelReservation.cshtml" />
+    <Content Include="Views\Home\_ChangeStartDate.cshtml" />
+    <Content Include="Views\Home\_FailedChangeStartDate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

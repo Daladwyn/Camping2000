@@ -1,0 +1,18 @@
+﻿@model Camping2000.Models.ModifyBookingViewModel
+
+<h2>Failure to cancel the booking.</h2>
+<hr />
+<div>
+@ViewBag.Errormessage
+</div>
+<hr />
+@using (Ajax.BeginForm("ModifyBooking", "Home",
+           ajaxOptions: new AjaxOptions
+           {
+               UpdateTargetId = "ContentBody",
+               InsertionMode = InsertionMode.Replace,
+           }))
+{
+        <input type="submit" value="Return to Bookings" />
+}
+

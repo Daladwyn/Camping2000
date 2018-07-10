@@ -1,0 +1,26 @@
+﻿@model Camping2000.Models.ModifyBookingViewModel
+
+<h2>No success!</h2>
+
+@ViewBag.Errormessage
+
+@using (Ajax.BeginForm("GoToStart", "Home",
+           ajaxOptions: new AjaxOptions
+           {
+               UpdateTargetId = "ContentBody",
+               InsertionMode = InsertionMode.Replace,
+           }))
+{
+
+    <input type="submit" value="Done" />
+}
+
+@using (Ajax.BeginForm("ModifyBooking", "Home",
+           ajaxOptions: new AjaxOptions
+           {
+               UpdateTargetId = "ContentBody",
+               InsertionMode = InsertionMode.Replace,
+           }))
+{
+    <input type="submit" value="Return to Bookings" />
+}
