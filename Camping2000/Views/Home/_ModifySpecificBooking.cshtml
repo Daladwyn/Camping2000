@@ -248,6 +248,31 @@
 
 @*<input type="submit" onclick="@(Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace }))"/>*@
 <div class="row">
+
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+
+            <input type="submit" value="Cancel Changes" />
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("ModifyBooking", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+            <input type="submit" value="Return to Bookings" />
+        }
+    </div>
+
     <div class="col-md-2">
         @using (Ajax.BeginForm("CancelReservation", "Home",
                    ajaxOptions: new AjaxOptions
@@ -262,17 +287,8 @@
             <input type="submit" value="Delete Reservation" />
         }
     </div>
-    <div class="col-md-2">
-        @using (Ajax.BeginForm("GoToStart", "Home",
-                   ajaxOptions: new AjaxOptions
-                   {
-                       UpdateTargetId = "ContentBody",
-                       InsertionMode = InsertionMode.Replace,
-                   }))
-        {
+    <div class="col-md-6">
 
-            <input type="submit" value="Cancel Changes" />
-        }
     </div>
 </div>
 @*Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
