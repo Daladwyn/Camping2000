@@ -420,6 +420,7 @@
     <Content Include="Views\Home\_FailedCancelReservation.cshtml" />
     <Content Include="Views\Home\_ChangeStartDate.cshtml" />
     <Content Include="Views\Home\_FailedChangeStartDate.cshtml" />
+    <Content Include="Views\Home\_ChangePartySize.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -436,21 +436,24 @@ namespace Camping2000.Controllers
             {
                 if ((booking.BookingStartDate == DateTime.Now.Date) || (booking.BookingEndDate == DateTime.Now.Date))
                 {
-                    aGuest = Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId);
-                    arrivalsDepartures.Add(new ModifyBookingViewModel
+                    if (booking.GuestId != null)
                     {
-                        BookingId = booking.BookingId,
-                        BookingStartDate = booking.BookingStartDate,
-                        BookingEndDate = booking.BookingEndDate,
-                        GuestId = booking.GuestId,
-                        ItemId = booking.ItemId,
-                        NumberOfGuests = booking.NumberOfGuests,
-                        BookingNeedsElectricity = booking.BookingNeedsElectricity,
-                        GuestFirstName = aGuest.GuestFirstName,
-                        GuestLastName = aGuest.GuestLastName,
-                        GuestHasCheckedIn = booking.GuestHasCheckedIn
+                        aGuest = Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId);
+                        arrivalsDepartures.Add(new ModifyBookingViewModel
+                        {
+                            BookingId = booking.BookingId,
+                            BookingStartDate = booking.BookingStartDate,
+                            BookingEndDate = booking.BookingEndDate,
+                            GuestId = booking.GuestId,
+                            ItemId = booking.ItemId,
+                            NumberOfGuests = booking.NumberOfGuests,
+                            BookingNeedsElectricity = booking.BookingNeedsElectricity,
+                            GuestFirstName = aGuest.GuestFirstName,
+                            GuestLastName = aGuest.GuestLastName,
+                            GuestHasCheckedIn = booking.GuestHasCheckedIn
+                        });
 
-                    });
+                    };
                 }
             }
             return PartialView("_ArrivalsDepartures", arrivalsDepartures);
@@ -1038,19 +1041,21 @@ namespace Camping2000.Controllers
             Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
             List<Booking> bookingsWithSameCampingSpot = new List<Booking>();
             List<int> disAllowableBookings = new List<int>();
+            List<Camping> ListOfSpots = new List<Camping>();
             int numberOfDays = 0;
-            decimal estimatedPrice = 0;
+            //decimal estimatedPrice = 0;
             foreach (var booking in Db.Bookings) //gather all bookings that have the same Itemid as the present one 
             {
-                if (booking.ItemId == currentItem.ItemId)
+                if ((booking.ItemId == currentItem.ItemId) && (booking.BookingEndDate > bookingToModify.BookingStartDate) && (booking.BookingStartDate < bookingToModify.BookingStartDate))
                 {
                     bookingsWithSameCampingSpot.Add(booking);
                 }
             }
-            if (bookingsWithSameCampingSpot.Count < 2)//If no other bookings exist change startday and booking price
+            if (bookingsWithSameCampingSpot.Count < 1)//If no other bookings exist change startday and booking price
             {
+                currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
                 numberOfDays = currentBooking.BookingEndDate.DayOfYear - bookingToModify.BookingStartDate.DayOfYear;
-                currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice;
+                currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;
                 bookingToModify.BookingPrice = currentBooking.BookingPrice;
                 currentBooking.BookingStartDate = bookingToModify.BookingStartDate;
                 Db.SaveChanges();
@@ -1059,85 +1064,44 @@ namespace Camping2000.Controllers
             }
             else
             {
-                foreach (var booking in bookingsWithSameCampingSpot)//if other bookings exist check if bookings end date is before the new startdate
+                ViewBag.Message = "A change of spot is needed.";
+                foreach (var booking in Db.Bookings)//gather data of free spaces
                 {
-                    if (booking.BookingEndDate <= bookingToModify.BookingStartDate) { }//If startdate is not after enddate, another spot have to be chosen
-                    else
+                    if ((booking.BookingEndDate >= bookingToModify.BookingStartDate) || (booking.BookingStartDate <= currentBooking.BookingEndDate))
                     {
                         disAllowableBookings.Add(booking.BookingId);
-                    }
+                    }//If startdate is not after enddate, another spot have to be chosen
                 }
-                if (disAllowableBookings.Count < 1)//if no conflicting booking exists
-                {
-                    numberOfDays = currentBooking.BookingEndDate.DayOfYear - bookingToModify.BookingStartDate.DayOfYear;
-                    currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice;
-                    bookingToModify.BookingPrice = currentBooking.BookingPrice;
-                    currentBooking.BookingStartDate = bookingToModify.BookingStartDate;
-                    Db.SaveChanges();
-                    ViewBag.Message = "The rescheduling of the startdate succeded with no change in placement.";
-                    return PartialView("_ChangeStartDate", bookingToModify);
-                }
-                List<Booking> currentBookings = Db.Bookings.ToList();//Gather all present bookings in a list.
-                List<int> eligibleSpots = new List<int>();
-                List<int> notEligibleSpots = new List<int>();
-                List<Camping> ListOfSpots = new List<Camping>();
-                ViewBag.Errormessage = "";
-
+                disAllowableBookings.Sort();
                 if (currentBooking.BookingNeedsElectricity == true)
                 {
-                    using (var context = new Camping2000Db())
+                    foreach (var spot in Db.Camping)
                     {
-                        foreach (var spot in context.Camping)
+                        if (spot.CampingElectricity == true)
                         {
-                            if (spot.CampingElectricity == true)
-                            {
-                                ListOfSpots.Add(spot);
-                            }
+                            ListOfSpots.Add(spot);
                         }
                     }
-                    currentBooking.BookingPrice = ListOfSpots[0].CampingPrice;
+                    // currentBooking.BookingPrice = ListOfSpots[0].CampingPrice;
                 }
-                else if (currentBooking.BookingNeedsElectricity == false)//Gather spots based on if electricity is  not needed as price differs
+                else //Gather spots based on if electricity is  not needed as price differs
                 {
-                    using (var context = new Camping2000Db())
+                    foreach (var spot in Db.Camping)
                     {
-                        foreach (var spot in context.Camping)
+                        if (spot.CampingElectricity == false)
                         {
-                            if (spot.CampingElectricity == false)
-                            {
-                                ListOfSpots.Add(spot);
-                            }
+                            ListOfSpots.Add(spot);
                         }
                     }
-                    currentBooking.BookingPrice = ListOfSpots[0].CampingPrice;
+                    //currentBooking.BookingPrice = ListOfSpots[0].CampingPrice;
                 }
-                if ((currentBookings.Capacity != 0))//check if any bookings is present
-                {
-                    foreach (var booking in currentBookings)
-                    {
-                        if ((currentBooking.BookingStartDate >= booking.BookingEndDate) || (currentBooking.BookingEndDate <= booking.BookingStartDate))//if the new bookings startdate is between the booked spots start and end date
-                        {
-                            eligibleSpots.Add(booking.ItemId);
-                        }
-                        else
-                        {
-                            notEligibleSpots.Add(booking.ItemId);
-                        }
-                    }
-                }
-                else //if no bookings is present choose the first spot
-                {
-                    currentBooking.ItemId = ListOfSpots[0].ItemId;
-                }
-                eligibleSpots.Sort();
-                notEligibleSpots.Sort();
-                if (ListOfSpots.Capacity < notEligibleSpots.Capacity)
+                if (ListOfSpots.Capacity < disAllowableBookings.Capacity)
                 {
                     for (int i = ListOfSpots.Count - 1; i >= 0; i--)
                     {
-                        for (int y = notEligibleSpots.Count - 1; y >= 0; y--)
+                        for (int y = disAllowableBookings.Count - 1; y >= 0; y--)
                         {
-                            if (ListOfSpots[i].ItemId == notEligibleSpots[y])
+                            if (ListOfSpots[i].ItemId == disAllowableBookings[y])
                             {
                                 ListOfSpots.Remove(ListOfSpots[i]);
                             }
@@ -1146,11 +1110,11 @@ namespace Camping2000.Controllers
                 }
                 else
                 {
-                    for (int i = notEligibleSpots.Count - 1; i >= 0; i--)
+                    for (int i = disAllowableBookings.Count - 1; i >= 0; i--)
                     {
                         for (int y = ListOfSpots.Count - 1; y >= 0; y--)
                         {
-                            if (ListOfSpots[y].ItemId == notEligibleSpots[i])
+                            if (ListOfSpots[y].ItemId == disAllowableBookings[i])
                             {
                                 ListOfSpots.Remove(ListOfSpots[y]);
                             }
@@ -1163,22 +1127,22 @@ namespace Camping2000.Controllers
                     return PartialView("_FailedChangeStartDate", currentBooking);
                 }
                 currentBooking.ItemId = ListOfSpots[0].ItemId;
+                currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
                 //Calculate the price for the guest
+                currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
+                currentBooking.BookingStartDate = bookingToModify.BookingStartDate;
                 numberOfDays = currentBooking.BookingEndDate.DayOfYear - currentBooking.BookingStartDate.DayOfYear;
-                estimatedPrice = currentBooking.BookingPrice * numberOfDays * currentBooking.NumberOfGuests;
-                currentBooking.BookingPrice = estimatedPrice;
+                currentBooking.BookingPrice = currentItem.CampingPrice * numberOfDays * currentBooking.NumberOfGuests;
+                // currentBooking.BookingPrice = estimatedPrice;
                 Db.SaveChanges();
-                //    int checkDbSave = context.SaveChanges();
-                //    if (checkDbSave < 1)
-                //    {
-                //        ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
-                //        return PartialView("_SpaceForCaravan", newBooking);
-                //    }
-                //}
-                
+
+                bookingToModify.BookingStartDate = currentBooking.BookingStartDate;
+                bookingToModify.BookingEndDate = currentBooking.BookingEndDate;
+                bookingToModify.BookingPrice = currentBooking.BookingPrice;
+
+                return PartialView("_ChangeStartDate", bookingToModify);
             }
 
-            return PartialView("_ChangeStartDate", currentBooking);
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult ChangeEndDate([Bind(Include = "BookingId,GuestId,ItemId,BookingEndDate")] ModifyBookingViewModel bookingToModify)
@@ -1200,21 +1164,21 @@ namespace Camping2000.Controllers
             }
             foreach (var booking in allElligibleBookingSpots)
             {
-                if (booking.BookingStartDate> bookingToModify.BookingEndDate)
+                if (booking.BookingStartDate > bookingToModify.BookingEndDate)
                 {
                     allElligibleBookingDates.Add(booking);
                 }
             }
-             //sortera listan på startdatum
-             //kolla att nytt slutdatum är mindre än startdatum.
-             //om slutdatum är mindre genomför ändring i bokningen av slutdatum och priset
-             //om slutdatum är mer än startdatum meddela att ett byte av spot måste göras
-             //leta upp första spoten beroende på om eluttag krävs
-             //ta fram alla bokningar för aktuell spot 
-             //se ifall spoten är ledig mellan startdatum och slutdatum
-             //är den ledig, lägg till en ny bokning med startdatum och slutdatum. spara gamal boknings slutdatum
-             //är den inte ledig ta nästa spot och se ifall den är ledig...
-           
+            //sortera listan på startdatum
+            //kolla att nytt slutdatum är mindre än startdatum.
+            //om slutdatum är mindre genomför ändring i bokningen av slutdatum och priset
+            //om slutdatum är mer än startdatum meddela att ett byte av spot måste göras
+            //leta upp första spoten beroende på om eluttag krävs
+            //ta fram alla bokningar för aktuell spot 
+            //se ifall spoten är ledig mellan startdatum och slutdatum
+            //är den ledig, lägg till en ny bokning med startdatum och slutdatum. spara gamal boknings slutdatum
+            //är den inte ledig ta nästa spot och se ifall den är ledig...
+
 
 
 
@@ -1238,26 +1202,79 @@ namespace Camping2000.Controllers
             return PartialView("_ChangePowerOutlet", currentBooking);
         }
         [Authorize(Roles = "Administrators")]
-        public ActionResult ChangePartySize([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
+        public ActionResult ChangePartySize([Bind(Include = "BookingId,GuestId,ItemId,NumberOfGuests")] ModifyBookingViewModel bookingToModify)
         {
-            Camping2000Db Db = new Camping2000Db();
-            ModifyBookingViewModel currentBookingView = new ModifyBookingViewModel();
-            Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
-            Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
-            Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
-            //är man inte incheckad, ta bort bokningspriset som gäst skall betala
-            //räkna ut det nya priset och uppdatera gästens pris att betala
-
-            //är man incheckad spara undan antal dagar man bott och hur många som bott
-            //subtrahera bokkningskostnaden ifrån gästens betala belopp.
-            //räkna ut hur många dagar man bott, med hur många.
-            //räkna ut hur många dagar till man kommer bo och med hur många.
-            //addera de två kostnaderna och lägg detta på bokningen. uppdatera gästens belopp att betala
-
-
-
-
-            return PartialView("_ChangePartySize", currentBooking);
+            if (ModelState.IsValid)
+            {
+                Camping2000Db Db = new Camping2000Db();
+                List<ModifyBookingViewModel> currentBookingView = new List<ModifyBookingViewModel>();
+                Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
+                List<Booking> lb = new List<Booking>();
+                Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
+                Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
+                int numberOfDays = 0;
+                if (currentBooking.GuestHasCheckedIn == false)
+                {
+                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
+                    numberOfDays = currentBooking.BookingEndDate.DayOfYear - currentBooking.BookingStartDate.DayOfYear;
+                    currentBooking.BookingPrice = numberOfDays * bookingToModify.NumberOfGuests * currentItem.CampingPrice;
+                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
+                    currentBooking.NumberOfGuests = bookingToModify.NumberOfGuests;
+                    Db.SaveChanges();
+                    lb.Add(currentBooking);
+                    //bookingToModify.BookingPrice = currentBooking.BookingPrice;
+                    //currentBookingView.Add(bookingToModify);
+                    return PartialView("_ChangePartySize", lb);
+                }
+                else
+                {
+                    bookingToModify.BookingEndDate = currentBooking.BookingEndDate;
+                    Booking newBooking = new Booking(); ;//initialize a new booking with the values of the present booking
+                    newBooking.BookingStartDate = DateTime.Now;
+                    newBooking.BookingEndDate = bookingToModify.BookingEndDate;
+                    newBooking.GuestHasCheckedIn = true;
+                    newBooking.GuestHasReserved = false;
+                    newBooking.NumberOfGuests = bookingToModify.NumberOfGuests;
+                    Db.Bookings.Add(newBooking);
+                    Db.SaveChanges();
+                    bookingToModify.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
+                    newBooking.BookingNeedsElectricity = bookingToModify.BookingNeedsElectricity;
+                    newBooking.BookingPrice = 0;
+                    newBooking.GuestId = bookingToModify.GuestId;
+                    newBooking.ItemId = bookingToModify.ItemId;
+                    newBooking.NumberOfGuests = bookingToModify.NumberOfGuests;
+                    Db.SaveChanges();
+                    currentBooking.BookingEndDate = DateTime.Now;   //change end date for present booking
+                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice; //subtract the present bookingprice for the guest to pay 
+                    numberOfDays = currentBooking.BookingEndDate.DayOfYear - currentBooking.BookingStartDate.DayOfYear; //calculate number of days the present stay was
+                    if (numberOfDays == 0)
+                    {
+                        currentBooking.BookingPrice = 0; //if guest changes number of persons before first night but after checkin
+                    }
+                    else
+                    {
+                        currentBooking.BookingPrice = numberOfDays * currentBooking.NumberOfGuests * currentItem.CampingPrice; //calculate the present bookingprce
+                    }
+                    lb.Add(currentBooking);
+                    numberOfDays = newBooking.BookingEndDate.DayOfYear - newBooking.BookingStartDate.DayOfYear;  //calculate the days in the new booking
+                    if (numberOfDays != 0)
+                    {
+                        newBooking.BookingPrice = numberOfDays * bookingToModify.NumberOfGuests * currentItem.CampingPrice;   //calculate the new bookings price
+                    }
+                    else
+                    {
+                        ViewBag.Errormessage = "Guest can not change partysize last booked day.";
+                    }
+                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice + newBooking.BookingPrice; //update the amount the guest have to pay 
+                    lb.Add(newBooking);
+                    Db.SaveChanges();
+                    return PartialView("_ChangePartySize", lb);
+                }
+            }
+            else
+            {
+                return RedirectToAction("ModifySpecificBooking", bookingToModify);
+            }
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult ChangeCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)

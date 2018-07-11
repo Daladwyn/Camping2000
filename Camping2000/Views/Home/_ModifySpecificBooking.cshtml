@@ -59,36 +59,36 @@
     <div class="col-md-2">
         @Model.BookingEndDate.ToShortDateString()
     </div>
-    
-        @using (Ajax.BeginForm("ChangeEndDate", "Home",
-       ajaxOptions: new AjaxOptions
-       {
-           UpdateTargetId = "ContentBody",
-           InsertionMode = InsertionMode.Replace,
-       }))
-        {
-            <div class="col-md-2">
-                <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}",DateTime.Now)" />
-            </div>
-            <div class="col-md-2">
-                @Html.Hidden("BookingId", Model.BookingId)
-                @Html.Hidden("GuestId", Model.GuestId)
-                @Html.Hidden("ItemId", Model.ItemId)
-                <input type="submit" value="Change Departuredate" />
-            </div>
-            <div class="col-md-4">
 
-            </div>
-        }
+    @using (Ajax.BeginForm("ChangeEndDate", "Home",
+   ajaxOptions: new AjaxOptions
+   {
+       UpdateTargetId = "ContentBody",
+       InsertionMode = InsertionMode.Replace,
+   }))
+    {
+        <div class="col-md-2">
+            <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}",DateTime.Now)" />
+        </div>
+        <div class="col-md-2">
+            @Html.Hidden("BookingId", Model.BookingId)
+            @Html.Hidden("GuestId", Model.GuestId)
+            @Html.Hidden("ItemId", Model.ItemId)
+            <input type="submit" value="Change Departuredate" />
+        </div>
+        <div class="col-md-4">
 
-        @*Html.Label("Change to:")
+        </div>
+    }
+
+    @*Html.Label("Change to:")
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" />
             </div>
         </div>*@
-    
+
 </div>
 <div class="row">
     <div class="col-md-2">
@@ -145,28 +145,35 @@
     <div class="col-md-2">
         @Model.NumberOfGuests
     </div>
-    <div class="col-md-8">
-        @using (Ajax.BeginForm("ChangePartySize", "Home",
-       ajaxOptions: new AjaxOptions
-       {
-           UpdateTargetId = "ContentBody",
-           InsertionMode = InsertionMode.Replace,
-       }))
-        {
-            @Html.Hidden("BookingId", Model.BookingId)
-            @Html.Hidden("GuestId", Model.GuestId)
-            @Html.Hidden("ItemId", Model.ItemId)
+
+    @using (Ajax.BeginForm("ChangePartySize", "Home",
+   ajaxOptions: new AjaxOptions
+   {
+       UpdateTargetId = "ContentBody",
+       InsertionMode = InsertionMode.Replace,
+   }))
+    {
+        @Html.Hidden("BookingId", Model.BookingId)
+        @Html.Hidden("GuestId", Model.GuestId)
+        @Html.Hidden("ItemId", Model.ItemId)
+        <div class="col-md-2">
+            <input type="number" id="NumberOfGuests" name="NumberOfGuests" min="1" max="10" value="@Model.NumberOfGuests" />
+        </div>
+        <div class="col-md-2">
             <input type="submit" value="Change partysize" />
-        }
-        @*Html.Label("New partysize:")
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    }
+    @*Html.Label("New partysize:")
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
             </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <input type="number" id="NumberOfGuests" name="NumberOfGuests" min="1" max="10" value="@Model.NumberOfGuests" />
-                </div>
-            </div>*@
-    </div>
+        </div>*@
 </div>
+    </div>
 <div class="row">
     <div class="col-md-2">
         @Html.Label("Camping spot:")
@@ -240,27 +247,33 @@
 
 
 @*<input type="submit" onclick="@(Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace }))"/>*@
-@using (Ajax.BeginForm("CancelReservation", "Home",
-           ajaxOptions: new AjaxOptions
-           {
-               UpdateTargetId = "ContentBody",
-               InsertionMode = InsertionMode.Replace,
-           }))
-{
-    @Html.Hidden("BookingId", Model.BookingId)
-    @Html.Hidden("GuestId", Model.GuestId)
-    @Html.Hidden("ItemId", Model.ItemId)
-    <input type="submit" value="Delete Reservation" />
-}
-@using (Ajax.BeginForm("GoToStart", "Home",
-           ajaxOptions: new AjaxOptions
-           {
-               UpdateTargetId = "ContentBody",
-               InsertionMode = InsertionMode.Replace,
-           }))
-{
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("CancelReservation", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+            @Html.Hidden("BookingId", Model.BookingId)
+            @Html.Hidden("GuestId", Model.GuestId)
+            @Html.Hidden("ItemId", Model.ItemId)
+            <input type="submit" value="Delete Reservation" />
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
 
-    <input type="submit" value="Cancel Changes" />
-}
+            <input type="submit" value="Cancel Changes" />
+        }
+    </div>
+</div>
 @*Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
     @Ajax.ActionLink("Accept Changes", "UpdatedBooking", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })*@
