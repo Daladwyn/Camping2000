@@ -421,6 +421,8 @@
     <Content Include="Views\Home\_ChangeStartDate.cshtml" />
     <Content Include="Views\Home\_FailedChangeStartDate.cshtml" />
     <Content Include="Views\Home\_ChangePartySize.cshtml" />
+    <Content Include="Views\Home\_ChangeEndDate.cshtml" />
+    <Content Include="Views\Home\_FailedChangeEndDate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
