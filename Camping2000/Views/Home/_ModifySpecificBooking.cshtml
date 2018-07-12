@@ -35,7 +35,7 @@
         }))
         {
             <div class="col-md-2">
-                <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" />
+                <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingStartDate.AddDays(365))" />
             </div>
             <div class="col-md-2">
                 @Html.Hidden("BookingId", Model.BookingId)
@@ -68,7 +68,7 @@
    }))
     {
         <div class="col-md-2">
-            <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}",DateTime.Now)" />
+            <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}",DateTime.Now)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingEndDate.AddDays(365))" />
         </div>
         <div class="col-md-2">
             @Html.Hidden("BookingId", Model.BookingId)

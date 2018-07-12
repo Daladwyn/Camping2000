@@ -1057,6 +1057,7 @@ namespace Camping2000.Controllers
                 currentBooking.BookingStartDate = bookingToModify.BookingStartDate;
                 numberOfDays = currentBooking.BookingEndDate.DayOfYear - currentBooking.BookingStartDate.DayOfYear;
                 currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;
+                currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
                 bookingToModify.BookingPrice = currentBooking.BookingPrice;
                 Db.SaveChanges();
                 ViewBag.Message = "The rescheduling of the startdate succeded with no change in placement.";
@@ -1250,18 +1251,245 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult ChangePowerOutlet([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
-            Camping2000Db Db = new Camping2000Db();
-            ModifyBookingViewModel currentBookingView = new ModifyBookingViewModel();
-            Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
-            Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
-            Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
-            //leta upp alla spots som uppfyller power outlet
-            //
+            if (ModelState.IsValid)
+            {
 
+                Camping2000Db Db = new Camping2000Db();
+                List<ModifyBookingViewModel> currentBookingView = new List<ModifyBookingViewModel>();
+                Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
+                Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
+                Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
+                List<Booking> allBookings = Db.Bookings.ToList();
+                List<int> disAllowableBookings = new List<int>();
+                List<Booking> bookingsWithSameCampingSpot = new List<Booking>();
+                List<Camping> ListOfSpots = new List<Camping>();
+                int numberOfDays = 0;
+                List<Booking> lb = new List<Booking>();
+                if (currentBooking.GuestHasCheckedIn == false)
+                {
+                    currentBooking.BookingNeedsElectricity = (currentBooking.BookingNeedsElectricity == false) ? currentBooking.BookingNeedsElectricity = true : currentBooking.BookingNeedsElectricity = false; //switch the electrical needs of the booking.
+                    foreach (var booking in Db.Bookings)//see if any bookings exits that collide with the current booking
+                    {
+                        if ((booking.BookingNeedsElectricity == currentBooking.BookingNeedsElectricity) && ((booking.BookingEndDate > currentBooking.BookingStartDate) || (booking.BookingStartDate < currentBooking.BookingEndDate)))
+                        {
+                            disAllowableBookings.Add(booking.ItemId);
+                        }
+                    }
+                    disAllowableBookings.Sort();
+                    if (currentBooking.BookingNeedsElectricity == true) //Gather spots based on electrical demand
+                    {
+                        foreach (var spot in Db.Camping)
+                        {
+                            if (spot.CampingElectricity == true)
+                            {
+                                ListOfSpots.Add(spot);
+                            }
+                        }
+                    }
+                    else //Gather spots based on if electricity is  not needed as price differs
+                    {
+                        foreach (var spot in Db.Camping)
+                        {
+                            if (spot.CampingElectricity == false)
+                            {
+                                ListOfSpots.Add(spot);
+                            }
+                        }
+                    }
 
+                    if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
+                    {
+                        ViewBag.Errormessage = "There are no available spots that matches your need for electricity.";
+                        return PartialView("_FailedChangePowerOutlet", currentBooking);
+                    }
+                    if (disAllowableBookings.Count < 1)//if no collision is detected and the guest is not checked in, change spot
+                    {
+                        currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
+                        numberOfDays = currentBooking.BookingEndDate.DayOfYear - currentBooking.BookingStartDate.DayOfYear;
+                        currentItem = ListOfSpots[0];
+                        currentBooking.ItemId = currentItem.ItemId;
+                        currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;
+                        Db.SaveChanges();
+                        lb.Add(currentBooking);
+                        ViewBag.Message = "The change of poweroutlet succeded. See details below.";
+                        return PartialView("_ChangeStartDate", lb);
+                    }
+                    if (ListOfSpots.Capacity < disAllowableBookings.Capacity)
+                    {
+                        for (int i = ListOfSpots.Count - 1; i >= 0; i--)
+                        {
+                            for (int y = disAllowableBookings.Count - 1; y >= 0; y--)
+                            {
+                                if (ListOfSpots[i].ItemId == disAllowableBookings[y])
+                                {
+                                    ListOfSpots.Remove(ListOfSpots[i]);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = disAllowableBookings.Count - 1; i >= 0; i--)
+                        {
+                            for (int y = ListOfSpots.Count - 1; y >= 0; y--)
+                            {
+                                if (ListOfSpots[y].ItemId == disAllowableBookings[i])
+                                {
+                                    ListOfSpots.Remove(ListOfSpots[y]);
+                                }
+                            }
+                        }
+                    }
+                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
+                    numberOfDays = currentBooking.BookingEndDate.DayOfYear - currentBooking.BookingStartDate.DayOfYear;
+                    currentBooking.ItemId = ListOfSpots[0].ItemId;
+                    currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
+                    currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;
+                    Db.SaveChanges();
+                    currentBookingView[0].BookingEndDate = currentBooking.BookingEndDate;
+                    currentBookingView[0].BookingStartDate = currentBooking.BookingStartDate;
+                    currentBookingView[0].ItemName = currentItem.ItemName;
+                    currentBookingView[0].BookingPrice = currentBooking.BookingPrice;
+                    currentBookingView[0].BookingId = currentBooking.BookingId;
+                    currentBookingView[0].GuestId = currentBooking.GuestId;
+                    currentBookingView[0].ItemId = currentItem.ItemId;
+                    currentBookingView[0].NumberOfGuests = currentBooking.NumberOfGuests;
+                    currentBookingView[0].BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
 
+                    //currentBookingView.Add(currentBooking);
+                    ViewBag.Message = "The change of poweroutlet succeded. See details below.";
+                    return PartialView("_ChangeStartDate", currentBookingView);
+                    //return PartialView("_ChangeStartDate", lb);
+                    //currentBooking.BookingNeedsElectricity
+                    //currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
+                    //numberOfDays
+                }
+                else
+                {
+                    bookingToModify.BookingNeedsElectricity = (currentBooking.BookingNeedsElectricity == false) ? currentBooking.BookingNeedsElectricity = true : currentBooking.BookingNeedsElectricity = false; //switch the electrical needs of the booking.
+                    bookingToModify.BookingEndDate = currentBooking.BookingEndDate;
+                    bookingToModify.NumberOfGuests = currentBooking.NumberOfGuests;
 
-            return PartialView("_ChangePowerOutlet", currentBooking);
+                    currentBooking.BookingEndDate = DateTime.Now;
+                    Booking newBooking = new Booking(); ;//initialize a new booking with the values of the present booking
+                    newBooking.BookingStartDate = DateTime.Now;
+                    newBooking.BookingEndDate = bookingToModify.BookingEndDate;
+                    newBooking.GuestHasCheckedIn = true;
+                    newBooking.GuestHasReserved = false;
+                    newBooking.NumberOfGuests = bookingToModify.NumberOfGuests;
+                    Db.Bookings.Add(newBooking);
+                    Db.SaveChanges();
+                    newBooking.BookingNeedsElectricity = bookingToModify.BookingNeedsElectricity;
+                    newBooking.BookingPrice = 0;
+                    newBooking.GuestId = bookingToModify.GuestId;
+                    //newBooking.ItemId=     Have to figure out which spot is free....
+                    Db.SaveChanges();
+                    foreach (var booking in Db.Bookings)//see if any bookings exits that collide with the current booking
+                    {
+                        if ((booking.BookingNeedsElectricity == currentBooking.BookingNeedsElectricity) && ((booking.BookingEndDate > currentBooking.BookingStartDate) || (booking.BookingStartDate < currentBooking.BookingEndDate)))
+                        {
+                            disAllowableBookings.Add(booking.ItemId);
+                        }
+                    }
+                    disAllowableBookings.Sort();
+                    if (currentBooking.BookingNeedsElectricity == true) //Gather spots based on electrical demand
+                    {
+                        foreach (var spot in Db.Camping)
+                        {
+                            if (spot.CampingElectricity == true)
+                            {
+                                ListOfSpots.Add(spot);
+                            }
+                        }
+                    }
+                    else //Gather spots based on if electricity is  not needed as price differs
+                    {
+                        foreach (var spot in Db.Camping)
+                        {
+                            if (spot.CampingElectricity == false)
+                            {
+                                ListOfSpots.Add(spot);
+                            }
+                        }
+                    }
+                    if (ListOfSpots.Capacity < disAllowableBookings.Capacity)
+                    {
+                        for (int i = ListOfSpots.Count - 1; i >= 0; i--)
+                        {
+                            for (int y = disAllowableBookings.Count - 1; y >= 0; y--)
+                            {
+                                if (ListOfSpots[i].ItemId == disAllowableBookings[y])
+                                {
+                                    ListOfSpots.Remove(ListOfSpots[i]);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = disAllowableBookings.Count - 1; i >= 0; i--)
+                        {
+                            for (int y = ListOfSpots.Count - 1; y >= 0; y--)
+                            {
+                                if (ListOfSpots[y].ItemId == disAllowableBookings[i])
+                                {
+                                    ListOfSpots.Remove(ListOfSpots[y]);
+                                }
+                            }
+                        }
+                    }
+                    if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
+                    {
+                        ViewBag.Errormessage = "There are no available spots that matches your need for electricity.";
+                        return PartialView("_FailedChangePowerOutlet", lb);
+                    }
+                    newBooking.ItemId = ListOfSpots[0].ItemId;
+                    currentItem.ItemIsBooked = false;
+                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
+                    numberOfDays = currentBooking.BookingEndDate.DayOfYear - currentBooking.BookingStartDate.DayOfYear;
+                    if (numberOfDays == 0)
+                    {
+                        ViewBag.Errormessage = "The change of poweroutlet is on the same day as checkin day.";
+                        currentBooking.BookingPrice = 0;
+                    }
+                    else
+                    {
+                        currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;
+                    }
+                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
+                    Db.SaveChanges();
+                    currentBookingView[0].BookingEndDate = currentBooking.BookingEndDate;
+                    currentBookingView[0].BookingStartDate = currentBooking.BookingStartDate;
+                    currentBookingView[0].ItemName = currentItem.ItemName;
+                    currentBookingView[0].BookingPrice = currentBooking.BookingPrice;
+                    currentBookingView[0].BookingId = currentBooking.BookingId;
+                    currentBookingView[0].GuestId = currentBooking.GuestId;
+                    currentBookingView[0].ItemId = currentItem.ItemId;
+                    currentBookingView[0].NumberOfGuests = currentBooking.NumberOfGuests;
+                    currentBookingView[0].BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
+                    
+                    currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == newBooking.ItemId);
+                    currentItem.ItemIsBooked = true;
+                    numberOfDays = newBooking.BookingEndDate.DayOfYear - newBooking.BookingStartDate.DayOfYear;
+                    if (numberOfDays == 0)
+                    {
+                        ViewBag.Errormessage = "The change of poweroutlet is on the same day as checkout day.";
+                        newBooking.BookingPrice = 0;
+                    }
+                    else
+                    {
+                        newBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * newBooking.NumberOfGuests;
+                    }
+                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + newBooking.BookingPrice;
+                    Db.SaveChanges();
+                    currentBookingView
+                    return PartialView("_ChangePowerOutlet", currentBookingView);
+                }
+            }
+            else
+            {
+                return RedirectToAction("ModifySpecificBooking", bookingToModify);
+            }
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult ChangePartySize([Bind(Include = "BookingId,GuestId,ItemId,NumberOfGuests")] ModifyBookingViewModel bookingToModify)
@@ -1304,7 +1532,7 @@ namespace Camping2000.Controllers
                     newBooking.BookingPrice = 0;
                     newBooking.GuestId = bookingToModify.GuestId;
                     newBooking.ItemId = bookingToModify.ItemId;
-                    newBooking.NumberOfGuests = bookingToModify.NumberOfGuests;
+                    //newBooking.NumberOfGuests = bookingToModify.NumberOfGuests;
                     Db.SaveChanges();
                     currentBooking.BookingEndDate = DateTime.Now;   //change end date for present booking
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice; //subtract the present bookingprice for the guest to pay 

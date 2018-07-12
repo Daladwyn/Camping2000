@@ -15,7 +15,7 @@
                 @Html.Label("Arrival date: ")
             </div>
             <div class="col-md-3">
-                <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" />
+                <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingStartDate.AddDays(365))" />
             </div>
             <div class="col-md-7">
             </div>
@@ -27,7 +27,7 @@
                 @Html.Label("Departure date: ")
             </div>
             <div class="col-md-3">
-                <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" />
+                <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingEndDate.AddDays(365))"/>
             </div>
             <div class="col-md-7">
             </div>
@@ -71,7 +71,7 @@
                 @Model.BookingPrice
             </div>
             <div class="col-md-2">
-                @Html.Label("Estimated price: ")
+                @*Html.Label("Estimated price: ")*@
             </div>
             <div class="col-md-6">
             </div>
