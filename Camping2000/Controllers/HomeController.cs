@@ -1621,7 +1621,7 @@ namespace Camping2000.Controllers
                         collidingBookingsWPN.Add(booking);
                     }
                 }
-                foreach (var booking in collidingBookingsWPN)
+                foreach (var booking in collidingBookingsWPN)// remove camping items that is part of the collision bookings.
                 {
                     for (int i = 0; i < availableSpots.Count; i++)
                     {
