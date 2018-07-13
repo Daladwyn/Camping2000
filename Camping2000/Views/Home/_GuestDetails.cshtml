@@ -1,4 +1,5 @@
-﻿@model Camping2000.Models.GuestAdressViewModel
+﻿@using Microsoft.AspNet.Identity
+@model Camping2000.Models.GuestAdressViewModel
 
 <h2>Modify the details of @Model.GuestFirstName @Model.GuestLastName:</h2>
 
@@ -225,31 +226,41 @@
         @Html.Hidden("GuestId", Model.GuestId)
     </div>
     <hr />
-        <div class="col-md-2">
+    <div class="col-md-2">
         <input type="submit" value="Accept Changes" />
     </div>
-    }
-<div class="col-md-2">
-    @using (Ajax.BeginForm("GoToStart", "Home",
-               ajaxOptions: new AjaxOptions
-               {
-                   UpdateTargetId = "ContentBody",
-                   InsertionMode = InsertionMode.Replace,
-               }))
-    {
-                <input type="submit" value="Cancel Changes" />
-    }
+}
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+            <input type="submit" value="Cancel Changes" />
+        }
     </div>
-<div class="col-md-2">
-    @using (Ajax.BeginForm("ModifyGuestDetails", "Home",
+    @if (User.IsInRole("Administrators"))
+    {
+        <div class="col-md-2">
+            @using (Ajax.BeginForm("ModifyGuestDetails", "Home",
         ajaxOptions: new AjaxOptions
         {
             UpdateTargetId = "ContentBody",
             InsertionMode = InsertionMode.Replace,
         }))
+            {
+                <input type="submit" value="Modify a Guest Details" />
+            }
+        </div>
+        <div class="col-md-8">
+
+        </div>
+    }
+    else
     {
-        <input type="submit" value="Modify a Guest Details" />
+        <div class="col-md-10"></div>
     }
 </div>
-@*
-           

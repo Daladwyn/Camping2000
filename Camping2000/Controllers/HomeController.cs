@@ -532,14 +532,14 @@ namespace Camping2000.Controllers
             }
         }
         [Authorize(Roles = "Administrators")]
-        public ActionResult CheckOutConfirmation(BookingGuestViewModel checkingOutGuest)
+        public ActionResult CheckOutConfirmation([Bind(Include = "BookingId")]BookingGuestViewModel checkingOutGuest)
         {
             Camping2000Db Db = new Camping2000Db();
             Booking departingGuestBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == checkingOutGuest.BookingId);
             Guest departingGuest = Db.Guests.SingleOrDefault(i => i.GuestId == departingGuestBooking.GuestId);
             Camping departedGuestSpot = Db.Camping.SingleOrDefault(i => i.ItemId == departingGuestBooking.ItemId);
             List<Booking> otherGuestBookings = new List<Booking>();
-            //otherGuestBookings.Add(Db.Bookings.Where( (i => i.GuestId == departingGuest.GuestId));
+            
             foreach (var booking in Db.Bookings) //collect any other bookings the guest have made
             {
                 if (booking.GuestId == departingGuest.GuestId)
@@ -547,11 +547,11 @@ namespace Camping2000.Controllers
                     otherGuestBookings.Add(booking);
                 }
             }
-            if (otherGuestBookings.Count < 2)
+            if (otherGuestBookings.Count == 1)
             {
                 departingGuest.GuestHasCheckedIn = false;
                 departingGuest.GuestHasReserved = false;
-                departingGuest.GuestHasPaid = departingGuest.GuestHasPaid + departingGuest.GuestHasToPay;
+                departingGuest.GuestHasPaid = departingGuest.GuestHasPaid + departingGuestBooking.BookingPrice;
                 departingGuestBooking.GuestHasCheckedIn = false;
                 departingGuestBooking.GuestHasReserved = false;
                 departedGuestSpot.ItemIsBooked = false;
@@ -560,7 +560,7 @@ namespace Camping2000.Controllers
             {
                 departingGuest.GuestHasCheckedIn = true;
                 departingGuest.GuestHasReserved = false;
-                departingGuest.GuestHasPaid = departingGuest.GuestHasPaid + departingGuest.GuestHasToPay;
+                departingGuest.GuestHasPaid = departingGuest.GuestHasPaid + departingGuestBooking.BookingPrice;
                 departingGuestBooking.GuestHasCheckedIn = false;
                 departingGuestBooking.GuestHasReserved = false;
                 departedGuestSpot.ItemIsBooked = false;
@@ -1052,19 +1052,27 @@ namespace Camping2000.Controllers
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
             Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
             Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
-            List<Booking> bookingsWithSameCampingSpot = new List<Booking>();
+            List<Booking> bookingsWSCSpot = new List<Booking>(); //bookingsWithSameCampingSpot
+            List<Booking> bookingsWSCSECB = new List<Booking>(); //bookingsWithSameCampingSpotExcludingCurrentBooking
             List<int> disAllowableBookings = new List<int>();
             List<Camping> ListOfSpots = new List<Camping>();
             int numberOfDays = 0;
-            //decimal estimatedPrice = 0;
-            foreach (var booking in Db.Bookings) //gather all bookings that have the same Itemid as the present one 
+            
+            foreach (var booking in Db.Bookings) //gather all bookings that have the same Itemid as the present one and date collision
             {
                 if ((booking.ItemId == currentItem.ItemId) && (booking.BookingEndDate > bookingToModify.BookingStartDate) && (booking.BookingStartDate < bookingToModify.BookingStartDate))
                 {
-                    bookingsWithSameCampingSpot.Add(booking);
+                    bookingsWSCSpot.Add(booking);
                 }
             }
-            if (bookingsWithSameCampingSpot.Count < 1)//If no other bookings exist change startday and booking price
+            foreach (var booking in bookingsWSCSpot)
+            {
+                if (booking.BookingId != currentBooking.BookingId)
+                {
+                    bookingsWSCSECB.Add(booking);
+                }
+            }
+            if (bookingsWSCSECB.Count < 1)//If no other bookings exist change startday and booking price
             {
                 currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
                 currentBooking.BookingStartDate = bookingToModify.BookingStartDate;
@@ -1072,6 +1080,9 @@ namespace Camping2000.Controllers
                 currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;
                 currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
                 bookingToModify.BookingPrice = currentBooking.BookingPrice;
+                bookingToModify.BookingEndDate = currentBooking.BookingEndDate;
+                bookingToModify.NumberOfGuests = currentBooking.NumberOfGuests;
+                bookingToModify.ItemName = currentItem.ItemName;
                 Db.SaveChanges();
                 ViewBag.Message = "The rescheduling of the startdate succeded with no change in placement.";
                 return PartialView("_ChangeStartDate", bookingToModify);
