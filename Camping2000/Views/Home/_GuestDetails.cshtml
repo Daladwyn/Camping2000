@@ -225,12 +225,10 @@
         @Html.Hidden("GuestId", Model.GuestId)
     </div>
     <hr />
-
-    <div class="col-md-2">
+        <div class="col-md-2">
         <input type="submit" value="Accept Changes" />
     </div>
-
-}
+    }
 <div class="col-md-2">
     @using (Ajax.BeginForm("GoToStart", "Home",
                ajaxOptions: new AjaxOptions
@@ -239,11 +237,9 @@
                    InsertionMode = InsertionMode.Replace,
                }))
     {
-
-        <input type="submit" value="Cancel Changes" />
+                <input type="submit" value="Cancel Changes" />
     }
-
-</div>
+    </div>
 <div class="col-md-2">
     @using (Ajax.BeginForm("ModifyGuestDetails", "Home",
         ajaxOptions: new AjaxOptions
@@ -256,5 +252,4 @@
     }
 </div>
 @*
-                 @Ajax.ActionLink("Cancel Changes", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
-    @Ajax.ActionLink("Accept Changes", "UpdatedGuestDetails", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })*@
+           

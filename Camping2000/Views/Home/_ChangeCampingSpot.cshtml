@@ -1,0 +1,72 @@
+﻿@model Camping2000.Models.ModifyBookingViewModel
+
+<h2>Spot options:</h2>
+<p>The following spots are available spots in regards to the guests request for power outlet.</p>
+@using (Ajax.BeginForm("ChangeChooseCampingSpot", "Home",
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
+{
+    @Html.AntiForgeryToken()
+    if (@Model.VacantSpots != null)
+    {
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Label("Spot Id");
+            </div>
+            <div class="col-md-2">
+                <select name="ItemId">
+                    @foreach (var spot in @Model.VacantSpots)
+                    {
+                        <option value="@spot.ItemId">@spot.ItemName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                @Html.Hidden("BookingId", Model.BookingId)
+                @Html.Hidden("GuestId", Model.GuestId)
+                <input type="submit" value="Chosen Spot" />
+            </div>
+            <div class="col-md-6">
+
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div class="row">
+            <p>There is no vacant spot to change to.</p>
+        </div>
+    }
+}
+<hr />
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Done" />
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("ModifyBooking", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Return to Bookings" />
+        }
+    </div>
+    <div class="col-md-8"></div>
+</div>

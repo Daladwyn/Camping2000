@@ -1,0 +1,29 @@
+﻿
+<h2>No data was found!</h2>
+
+@ViewBag.Errormessage
+<hr />
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.ReplaceWith,
+                   }))
+        {
+            <input type="submit" value="Done" />
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("Index", "Manage",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "MainBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+            <input type="submit" value="Return to Details" />
+        }
+    </div>
+</div>

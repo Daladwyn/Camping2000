@@ -425,6 +425,9 @@
     <Content Include="Views\Home\_FailedChangeEndDate.cshtml" />
     <Content Include="Views\Home\_ChangePowerOutlet.cshtml" />
     <Content Include="Views\Home\_FailedChangePowerOutlet.cshtml" />
+    <Content Include="Views\Home\_FailedGuestDetails.cshtml" />
+    <Content Include="Views\Home\_ChangeCampingSpot.cshtml" />
+    <Content Include="Views\Home\_ChangeConfirmationCampingSpot.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

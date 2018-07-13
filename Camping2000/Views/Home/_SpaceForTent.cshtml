@@ -9,6 +9,7 @@
                 InsertionMode = InsertionMode.Replace,
             }))
 {
+    @Html.AntiForgeryToken()
     <div class="form-group">
         <div class="row">
             <div class="col-md-2">
@@ -27,7 +28,7 @@
                 @Html.Label("Departure date: ")
             </div>
             <div class="col-md-3">
-                <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingEndDate.AddDays(365))"/>
+                <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingEndDate.AddDays(365))" />
             </div>
             <div class="col-md-7">
             </div>
@@ -71,8 +72,7 @@
                 @Model.BookingPrice
             </div>
             <div class="col-md-2">
-                @*Html.Label("Estimated price: ")*@
-            </div>
+                          </div>
             <div class="col-md-6">
             </div>
         </div>

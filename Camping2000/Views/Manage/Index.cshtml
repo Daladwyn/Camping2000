@@ -14,7 +14,7 @@
       @{var GuestId = new RouteValueDictionary();
         GuestId.Add("GuestId", User.Identity.GetUserId()); }
     
-
+    @ViewBag.Errormessage
     @Ajax.ActionLink("Your details", "GuestDetails","Home", routeValues: GuestId,
     ajaxOptions: new AjaxOptions
     {

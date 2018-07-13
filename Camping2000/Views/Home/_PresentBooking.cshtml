@@ -7,6 +7,7 @@
                 InsertionMode = InsertionMode.Replace,
             }))
 {
+    @Html.AntiForgeryToken()
     <div class="row">
         <div class="col-md-2">
             @Model.GuestFirstName
@@ -22,7 +23,9 @@
                 <input type="submit" value="Modify Booking" />
             </div>
             <div class="form-group">
-                @Html.Hidden("bookingId", Model.BookingId)
+                @Html.Hidden("BookingId", Model.BookingId)
+                @Html.Hidden("ItemId",Model.ItemId)
+                @Html.Hidden("GuestId",Model.GuestId)
             </div>
             @*Ajax.ActionLink("Modify Booking Details", "ModifySpecificBooking", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })*@
         </div>
