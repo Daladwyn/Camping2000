@@ -2,18 +2,56 @@
 
 <h2>Arrivals @DateTime.Now.Day - @DateTime.Now.Month - @DateTime.Now.Year</h2>
 
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("First Name")
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Last Name")
+    </div>
+    <div class="col-md-1">
+        @Html.Label("BookingId")
+    </div>
+    <div class="col-md-1">
+        @Html.Label("Partysize")
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Check in Partysize")
+    </div>
+    <div class="col-md-4">
+        
+    </div>
+</div>
 @foreach (var guestBooking in Model)
 {
-    if ((guestBooking.BookingStartDate == DateTime.Now.Date) && (guestBooking.GuestHasCheckedIn == false))
+    if ((guestBooking.BookingStartDate.ToShortDateString() == DateTime.Now.ToShortDateString()) && (guestBooking.GuestHasCheckedIn == false))
     {
         Html.RenderAction("ShowGuestArrivals", guestBooking);
     }
 }
 
 <h2>Departures @DateTime.Now.Day - @DateTime.Now.Month - @DateTime.Now.Year</h2>
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Firstname")
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Lastname")
+    </div>
+    <div class="col-md-1">
+        @Html.Label("Booking Id")
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Spot Name")
+    </div>
+    <div class="col-md-5">
+
+    </div>
+</div>
 @foreach (var guestBooking in Model)
 {
-    if ((guestBooking.BookingEndDate == DateTime.Now.Date) && (guestBooking.GuestHasCheckedIn == true))
+    if ((guestBooking.BookingEndDate.ToShortDateString() == DateTime.Now.ToShortDateString()) && (guestBooking.GuestHasCheckedIn == true))
     {
         Html.RenderAction("ShowGuestDepartures", guestBooking);
     }

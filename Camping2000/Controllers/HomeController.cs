@@ -393,7 +393,7 @@ namespace Camping2000.Controllers
             ViewBag.Errormessage = "";
             foreach (var booking in allBookings)
             {
-                if ((booking.BookingEndDate == DateTime.Now.Date) && (booking.GuestHasCheckedIn == true))
+                if ((booking.BookingEndDate.ToShortDateString() == DateTime.Now.ToShortDateString()) && (booking.GuestHasCheckedIn == true))
                 {
                     departingGuestBooking.Add(booking);
                 }
@@ -426,19 +426,23 @@ namespace Camping2000.Controllers
 
             return PartialView("_CheckOut", presentDepartingBookings);
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionist")]
         public ActionResult ArrivalsDepartures()
         {
             Camping2000Db Db = new Camping2000Db();
             List<ModifyBookingViewModel> arrivalsDepartures = new List<ModifyBookingViewModel>();
-            Guest aGuest = new Guest();
-            foreach (var booking in Db.Bookings)
+            List<Booking> allBookings = Db.Bookings.ToList();
+            Booking currentBooking = new Booking();
+            Guest currentGuest = new Guest();
+            Camping currentItem = new Camping();
+            foreach (var booking in allBookings)
             {
-                if ((booking.BookingStartDate == DateTime.Now.Date) || (booking.BookingEndDate == DateTime.Now.Date))
+                if ((booking.BookingStartDate.ToShortDateString() == DateTime.Now.ToShortDateString()) || (booking.BookingEndDate.ToShortDateString() == DateTime.Now.ToShortDateString()))
                 {
                     if (booking.GuestId != null)
                     {
-                        aGuest = Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId);
+                        currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId);
+                        currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId);
                         arrivalsDepartures.Add(new ModifyBookingViewModel
                         {
                             BookingId = booking.BookingId,
@@ -446,10 +450,11 @@ namespace Camping2000.Controllers
                             BookingEndDate = booking.BookingEndDate,
                             GuestId = booking.GuestId,
                             ItemId = booking.ItemId,
+                            ItemName = currentItem.ItemName,
                             NumberOfGuests = booking.NumberOfGuests,
                             BookingNeedsElectricity = booking.BookingNeedsElectricity,
-                            GuestFirstName = aGuest.GuestFirstName,
-                            GuestLastName = aGuest.GuestLastName,
+                            GuestFirstName = currentGuest.GuestFirstName,
+                            GuestLastName = currentGuest.GuestLastName,
                             GuestHasCheckedIn = booking.GuestHasCheckedIn
                         });
 
@@ -458,7 +463,7 @@ namespace Camping2000.Controllers
             }
             return PartialView("_ArrivalsDepartures", arrivalsDepartures);
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionist")]
         public ActionResult CheckInConfirmation(int BookingId, int NumberOfCheckInGuests)
         {
             if (ModelState.IsValid)
@@ -531,7 +536,7 @@ namespace Camping2000.Controllers
                 return PartialView("_Checkin", checkInBooking);
             }
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionist")]
         public ActionResult CheckOutConfirmation(BookingGuestViewModel checkingOutGuest)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -577,18 +582,17 @@ namespace Camping2000.Controllers
         {
             return PartialView("Index");
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionist")]
         public ActionResult ShowGuestArrivals(BookingGuestViewModel arrivals)
         {
-
             return PartialView("_ShowGuestArrivals", arrivals);
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionist")]
         public ActionResult ShowGuestDepartures(BookingGuestViewModel departures)
         {
             return PartialView("_ShowGuestDepartures", departures);
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionist")]
         public ActionResult ModifyBooking()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -831,7 +835,8 @@ namespace Camping2000.Controllers
             }
             return PartialView("_ShowFoundGuests", foundGuests);
         }
-        [Authorize(Roles = "Administrators, Guests")]
+        //[Authorize(Roles = "Administrators, Guests")]
+        //[AllowAnonymous]
         public ActionResult ModifySpecificGuestDetails([Bind(Include = "GuestId")]Guest searchedGuest)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -1286,7 +1291,7 @@ namespace Camping2000.Controllers
                     currentBooking.BookingNeedsElectricity = (currentBooking.BookingNeedsElectricity == false) ? currentBooking.BookingNeedsElectricity = true : currentBooking.BookingNeedsElectricity = false; //switch the electrical needs of the booking.
                     foreach (var booking in Db.Bookings)//see if any bookings exits that collide with the current booking
                     {
-                        if ((booking.BookingNeedsElectricity == currentBooking.BookingNeedsElectricity) && ((booking.BookingEndDate > currentBooking.BookingStartDate) || (booking.BookingStartDate < currentBooking.BookingEndDate)))
+                        if ((booking.BookingNeedsElectricity == currentBooking.BookingNeedsElectricity) && (((booking.BookingEndDate > currentBooking.BookingStartDate) && (booking.BookingEndDate <= currentBooking.BookingEndDate)) || ((booking.BookingStartDate < currentBooking.BookingEndDate) && (booking.BookingStartDate >= currentBooking.BookingStartDate))))
                         {
                             disAllowableBookings.Add(booking.ItemId);
                         }
@@ -1313,11 +1318,6 @@ namespace Camping2000.Controllers
                         }
                     }
 
-                    if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
-                    {
-                        ViewBag.Errormessage = "There are no available spots that matches your need for electricity.";
-                        return PartialView("_FailedChangePowerOutlet", currentBooking);
-                    }
                     if (disAllowableBookings.Count < 1)//if no collision is detected and the guest is not checked in, change spot
                     {
                         currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
@@ -1330,7 +1330,7 @@ namespace Camping2000.Controllers
                         ViewBag.Message = "The change of poweroutlet succeded. See details below.";
                         return PartialView("_ChangeStartDate", lb);
                     }
-                    if (ListOfSpots.Capacity < disAllowableBookings.Capacity)
+                    if (ListOfSpots.Capacity < disAllowableBookings.Capacity)//Remove camping spots that colliding bookings is using.
                     {
                         for (int i = ListOfSpots.Count - 1; i >= 0; i--)
                         {
@@ -1345,7 +1345,7 @@ namespace Camping2000.Controllers
                     }
                     else
                     {
-                        for (int i = disAllowableBookings.Count - 1; i >= 0; i--)
+                        for (int i = disAllowableBookings.Count - 1; i >= 0; i--)//Remove camping spots that colliding bookings is using.
                         {
                             for (int y = ListOfSpots.Count - 1; y >= 0; y--)
                             {
@@ -1355,6 +1355,11 @@ namespace Camping2000.Controllers
                                 }
                             }
                         }
+                    }
+                    if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
+                    {
+                        ViewBag.Errormessage = "There are no available spots that matches your need for electricity.";
+                        return PartialView("_FailedChangePowerOutlet", currentBooking);
                     }
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
                     numberOfDays = currentBooking.BookingEndDate.DayOfYear - currentBooking.BookingStartDate.DayOfYear;
@@ -1598,50 +1603,69 @@ namespace Camping2000.Controllers
                 Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
                 List<Camping> availableSpots = new List<Camping>();
                 List<Booking> collidingBookings = new List<Booking>();
-                List<Booking> collidingBookingsWPN = new List<Booking>();
-
-                foreach (var spot in Db.Camping)
+                List<Booking> collidingBookingsWPN = new List<Booking>();//collidingBookingsWithPowerNeed
+                if (currentBooking.GuestHasCheckedIn == true)
                 {
-                    if ((spot.ItemIsBooked == false) && (spot.ItemId != currentItem.ItemId) && (spot.CampingElectricity == currentBooking.BookingNeedsElectricity))
+                    foreach (var spot in Db.Camping)
                     {
-                        availableSpots.Add(spot);
-                    }
-                }
-                foreach (var booking in Db.Bookings) //detect colliding bookings
-                {
-                    if ((booking.BookingEndDate > currentBooking.BookingStartDate) || (booking.BookingStartDate < currentBooking.BookingEndDate))
-                    {
-                        collidingBookings.Add(booking);
-                    }
-                }
-                foreach (var booking in collidingBookings) //remove colliding bookings that have other needs regarding power outlet
-                {
-                    if (booking.BookingNeedsElectricity == currentBooking.BookingNeedsElectricity)
-                    {
-                        collidingBookingsWPN.Add(booking);
-                    }
-                }
-                foreach (var booking in collidingBookingsWPN)
-                {
-                    for (int i = 0; i < availableSpots.Count; i++)
-                    {
-                        if (availableSpots[i].ItemId == booking.ItemId)
+                        if ((spot.ItemIsBooked == false) && (spot.ItemId != currentItem.ItemId) && (spot.CampingElectricity == currentBooking.BookingNeedsElectricity))
                         {
-                            availableSpots.Remove(availableSpots[i]);
-                            i--;
+                            availableSpots.Add(spot);
                         }
                     }
+                    foreach (var booking in Db.Bookings) //detect colliding bookings
+                    {
+                        if (((booking.BookingEndDate > currentBooking.BookingStartDate) && (booking.BookingEndDate <= currentBooking.BookingEndDate)) || ((booking.BookingStartDate < currentBooking.BookingEndDate) && (booking.BookingStartDate >= currentBooking.BookingStartDate)))
+                        {
+                            collidingBookings.Add(booking);
+                        }
+                    }
+                    foreach (var booking in collidingBookings) //remove colliding bookings that have other needs regarding power outlet
+                    {
+                        if (booking.BookingNeedsElectricity == currentBooking.BookingNeedsElectricity)
+                        {
+                            collidingBookingsWPN.Add(booking);
+                        }
+                    }
+                    foreach (var booking in collidingBookingsWPN)
+                    {
+                        for (int i = 0; i < availableSpots.Count; i++)
+                        {
+                            if (availableSpots[i].ItemId == booking.ItemId)
+                            {
+                                availableSpots.Remove(availableSpots[i]);
+                                i--;
+                            }
+                        }
+                    }
+                    aBookingView.ItemId = currentItem.ItemId;
+                    aBookingView.ItemName = currentItem.ItemName;
+                    aBookingView.BookingId = currentBooking.BookingId;
+                    aBookingView.GuestId = currentGuest.GuestId;
+                    aBookingView.BookingStartDate = currentBooking.BookingStartDate;
+                    aBookingView.BookingEndDate = currentBooking.BookingEndDate;
+                    aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
+                    aBookingView.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
+                    aBookingView.VacantSpots = availableSpots;
+                    return PartialView("_ChangeCampingSpot", aBookingView);
                 }
-                aBookingView.ItemId = currentItem.ItemId;
-                aBookingView.ItemName = currentItem.ItemName;
-                aBookingView.BookingId = currentBooking.BookingId;
-                aBookingView.GuestId = currentGuest.GuestId;
-                aBookingView.BookingStartDate = currentBooking.BookingStartDate;
-                aBookingView.BookingEndDate = currentBooking.BookingEndDate;
-                aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
-                aBookingView.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
-                aBookingView.VacantSpots = availableSpots;
-                return PartialView("_ChangeCampingSpot", aBookingView);
+                else
+                {
+                    //inform that change of spot is only doable after checkin.
+                    aBookingView.ItemId = currentItem.ItemId;
+                    aBookingView.ItemName = currentItem.ItemName;
+                    aBookingView.BookingId = currentBooking.BookingId;
+                    aBookingView.GuestId = currentGuest.GuestId;
+                    aBookingView.BookingStartDate = currentBooking.BookingStartDate;
+                    aBookingView.BookingEndDate = currentBooking.BookingEndDate;
+                    aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
+                    aBookingView.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
+                    //aBookingView.VacantSpots = availableSpots;
+                    ViewBag.GuestHasCheckedIn = "false";
+                    return PartialView("_ChangeCampingSpot", aBookingView);
+
+
+                }
             }
             else
             {

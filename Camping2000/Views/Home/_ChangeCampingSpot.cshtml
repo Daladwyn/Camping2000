@@ -1,45 +1,53 @@
 ﻿@model Camping2000.Models.ModifyBookingViewModel
 
 <h2>Spot options:</h2>
-<p>The following spots are available spots in regards to the guests request for power outlet.</p>
-@using (Ajax.BeginForm("ChangeChooseCampingSpot", "Home",
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "ContentBody",
-                InsertionMode = InsertionMode.Replace,
-            }))
+@if (ViewBag.GuestHasCheckedIn == "false")
 {
-    @Html.AntiForgeryToken()
-    if (@Model.VacantSpots != null)
+    <p>The guest have to checkin before a change of spot is possible.</p>
+}
+else
+{
+    <p>The following spots are available spots in regards to the guests request for power outlet.</p>
+    <p>Bear in mind that spots can be unavailabe, due to both checked in and non checked in guests.</p>
+    using (Ajax.BeginForm("ChangeChooseCampingSpot", "Home",
+                ajaxOptions: new AjaxOptions
+                {
+                    UpdateTargetId = "ContentBody",
+                    InsertionMode = InsertionMode.Replace,
+                }))
     {
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("Spot Id");
-            </div>
-            <div class="col-md-2">
-                <select name="ItemId">
-                    @foreach (var spot in @Model.VacantSpots)
-                    {
-                        <option value="@spot.ItemId">@spot.ItemName</option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-2">
-                @Html.Hidden("BookingId", Model.BookingId)
-                @Html.Hidden("GuestId", Model.GuestId)
-                <input type="submit" value="Chosen Spot" />
-            </div>
-            <div class="col-md-6">
+        @Html.AntiForgeryToken()
+        if (@Model.VacantSpots != null)
+        {
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("Spot Id:")
+                </div>
+                <div class="col-md-2">
+                    <select name="ItemId">
+                        @foreach (var spot in @Model.VacantSpots)
+                        {
+                            <option value="@spot.ItemId">@spot.ItemName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    @Html.Hidden("BookingId", Model.BookingId)
+                    @Html.Hidden("GuestId", Model.GuestId)
+                    <input type="submit" value="Chosen Spot" />
+                </div>
+                <div class="col-md-6">
 
+                </div>
             </div>
-        </div>
 
-    }
-    else
-    {
-        <div class="row">
-            <p>There is no vacant spot to change to.</p>
-        </div>
+        }
+        else
+        {
+            <div class="row">
+                <p>There is no vacant spot to change to.</p>
+            </div>
+        }
     }
 }
 <hr />

@@ -67,35 +67,35 @@ namespace Camping2000.Controllers
         }
         //
         // GET: /Account/Checkin
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrators,Receptionist")]
         public ActionResult Checkin()
         {
             return RedirectToAction("Checkin", "Home");
         }
         //
         // GET: /Account/CheckOut
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrators,Receptionist")]
         public ActionResult CheckOut()
         {
             return RedirectToAction("CheckOut", "Home");
         }
         //
         // GET: /Account/ArrivalsDepartures
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrators,Receptionist")]
         public ActionResult ArrivalsDepartures()
         {
             return RedirectToAction("ArrivalsDepartures", "Home");
         }
         //
         // GET: /Account/ModifyBooking
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrators,Receptionist")]
         public ActionResult ModifyBooking()
         {
             return RedirectToAction("ModifyBooking", "Home");
         }
         //
         // GET: /Account/ModifyGuestDetails
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrators")]
         public ActionResult ModifyGuestDetails()
         {
             return RedirectToAction("ModifyGuestDetails", "Home");

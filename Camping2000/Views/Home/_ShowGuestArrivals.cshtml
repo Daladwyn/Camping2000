@@ -30,14 +30,13 @@
             <div class="col-md-">
                 <div class="form-group">
                     <input type="submit" name="CheckIn" value="Check In" />
-                    @*@Ajax.ActionLink("Check In", "CheckInConfirmation", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })*@
                 </div>
             </div>
         </div>
     </div>
     <div class="form-group">
         @Html.Hidden("BookingId", Model.BookingId)
-       
+
     </div>
 }
 @ViewBag.Errormessage
