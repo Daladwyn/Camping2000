@@ -4,6 +4,7 @@ using System.Web.Services;
 using System.Web.Services.Protocols;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Camping2000.Models
 {
@@ -21,7 +22,7 @@ namespace Camping2000.Models
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime BookingEndDate { get; set; }
-        [Range(1,10)]
+        [Range(1, 10)]
         public int NumberOfGuests { get; set; }
         public decimal BookingPrice { get; set; }
         public bool BookingNeedsElectricity { get; set; }

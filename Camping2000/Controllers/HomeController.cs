@@ -106,8 +106,16 @@ namespace Camping2000.Controllers
                     newBooking.ItemId = ListOfSpots[0].ItemId;
                 }
                 //Calculate the price for the guest
-                numberOfDays = newBooking.BookingEndDate.CompareTo(newBooking.BookingStartDate);
+                if (newBooking.BookingStartDate.Year==newBooking.BookingEndDate.Year)
+                {
                 numberOfDays = newBooking.BookingEndDate.DayOfYear - newBooking.BookingStartDate.DayOfYear;
+                }
+                else
+                {
+                    DateTime lastDay=DateTime.Now.Year+DateTime.
+                    numberOfDays=newBooking.BookingStartDate.
+                }
+
                 estimatedPrice = newBooking.BookingPrice * numberOfDays * newBooking.NumberOfGuests;
                 newBooking.BookingPrice = estimatedPrice;
                 //Save to database current info

@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
-@model Camping2000.Models.Booking
+
 <ul class="nav nav-pills nav-stacked">
-    <li>@Html.ActionLink("Bolmens Camping", "Index", "Home"@*, new { area = "" }, new { @class = "navbar-brand" }*@)</li>
+    <li>@Html.ActionLink("Bolmens Camping", "Index", "Home")</li>
     <li>
         @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
     </li>
@@ -11,14 +11,6 @@
             @Html.AntiForgeryToken()
             <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
         }
-    </li>
-    <li>
-        @Ajax.ActionLink("SpaceForTentssss", "Home",
-        ajaxOptions:new AjaxOptions
-        {
-            InsertionMode=InsertionMode.Replace,
-            UpdateTargetId="ContentBody",
-        })
     </li>
     <li>
         @Ajax.ActionLink("Space For Tents","SpaceForTent", new { BookingNeedsElectricity = false },
