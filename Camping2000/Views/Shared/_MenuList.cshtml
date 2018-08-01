@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
-
+@model Camping2000.Models.Booking
 <ul class="nav nav-pills nav-stacked">
     <li>@Html.ActionLink("Bolmens Camping", "Index", "Home"@*, new { area = "" }, new { @class = "navbar-brand" }*@)</li>
     <li>
@@ -13,19 +13,28 @@
         }
     </li>
     <li>
-        @Ajax.ActionLink("Space For Tents","SpaceForTent", new AjaxOptions
-{
-   UpdateTargetId = "ContentBody",
-   InsertionMode = InsertionMode.Replace
-})
+        @Ajax.ActionLink("SpaceForTentssss", "Home",
+        ajaxOptions:new AjaxOptions
+        {
+            InsertionMode=InsertionMode.Replace,
+            UpdateTargetId="ContentBody",
+        })
+    </li>
+    <li>
+        @Ajax.ActionLink("Space For Tents","SpaceForTent", new { BookingNeedsElectricity = false },
+      new AjaxOptions
+      {
+          UpdateTargetId = "ContentBody",
+          InsertionMode = InsertionMode.Replace
+      })
         @*Html.RenderAction("ShowVacantFullSign");*@
     </li>
     <li>
-        @Ajax.ActionLink("Space For caravan/trailer", "SpaceForCaravan", new AjaxOptions
-    {
-    UpdateTargetId = "ContentBody",
-    InsertionMode = InsertionMode.Replace
-    })
+        @Ajax.ActionLink("Space For caravan/trailer", "SpaceForTent", new { BookingNeedsElectricity = true }, new AjaxOptions
+   {
+       UpdateTargetId = "ContentBody",
+       InsertionMode = InsertionMode.Replace
+   })
     </li>
     @if (User.IsInRole("Receptionist"))
     {

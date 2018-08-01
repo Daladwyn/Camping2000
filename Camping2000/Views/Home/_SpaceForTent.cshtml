@@ -52,8 +52,18 @@
                 @Html.Label("Do you need electricity: ")
             </div>
             <div class="col-md-2">
-                <input type="radio" name="BookingNeedsElectricity" value="true" required>Yes
-                <input type="radio" name="BookingNeedsElectricity" value="false" checked required> No
+                @if (Model.BookingNeedsElectricity == true)
+                {
+                    <input type="radio" name="BookingNeedsElectricity" value="true" checked required placeholder="Yes" />
+                    <input type="radio" name="BookingNeedsElectricity" value="false" required placeholder="No" />
+                }
+                else
+                {
+                    <input type="radio" name="BookingNeedsElectricity" value="true" required placeholder="Yes" />
+                    <input type="radio" name="BookingNeedsElectricity" value="false" checked required placeholder="No" />
+                }
+
+
             </div>
             <div class="col-md-4">
                 Space with electricity costs 100Kr/Night/Person.
@@ -72,7 +82,7 @@
                 @Model.BookingPrice
             </div>
             <div class="col-md-2">
-                          </div>
+            </div>
             <div class="col-md-6">
             </div>
         </div>
