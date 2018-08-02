@@ -1,6 +1,19 @@
-﻿@model Camping2000.Models.Booking
+﻿@using Microsoft.AspNet.Identity
 
-<h2>Renting space for a tent.</h2>
+@model Camping2000.Models.Booking
+
+@if (Model.BookingNeedsElectricity == true)
+{
+    <div>
+        <h2>Renting space for a caravan/trailer.</h2>
+    </div>
+}
+else
+{
+    <div>
+        <h2>Renting space for a tent.</h2>
+    </div>
+}
 @ViewBag.Errormessage
 @using (Ajax.BeginForm("RentSpaceForTent", "Home",
             ajaxOptions: new AjaxOptions
@@ -16,7 +29,7 @@
                 @Html.Label("Arrival date: ")
             </div>
             <div class="col-md-3">
-                <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingStartDate.AddDays(365))" />
+                <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingStartDate.AddDays(365))" />
             </div>
             <div class="col-md-7">
             </div>
@@ -28,7 +41,7 @@
                 @Html.Label("Departure date: ")
             </div>
             <div class="col-md-3">
-                <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingEndDate.AddDays(365))" />
+                <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}", DateTime.Now.AddDays(1))" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingEndDate.AddDays(365))" />
             </div>
             <div class="col-md-7">
             </div>
@@ -40,7 +53,14 @@
                 @Html.Label("Number of guests: ")
             </div>
             <div class="col-md-3">
-                <input type="number" name="NumberOfGuests" min="1" max="10">
+                @if ((Model.NumberOfGuests >= 1) && (Model.NumberOfGuests <= 10))
+                {
+                    <input type="number" name="NumberOfGuests" value="@Model.NumberOfGuests" min="1" max="10">
+                }
+                else
+                {
+                    <input type="number" name="NumberOfGuests" min="1" max="10">
+                }
             </div>
             <div class="col-md-7">
             </div>
@@ -54,19 +74,32 @@
             <div class="col-md-2">
                 @if (Model.BookingNeedsElectricity == true)
                 {
-                    <input type="radio" name="BookingNeedsElectricity" value="true" checked required placeholder="Yes" />
-                    <input type="radio" name="BookingNeedsElectricity" value="false" required placeholder="No" />
+                    <div>
+                        <input type="radio" name="BookingNeedsElectricity" value="true" checked required /> Yes
+                        <input type="radio" name="BookingNeedsElectricity" value="false" required /> No
+                    </div>
                 }
                 else
                 {
-                    <input type="radio" name="BookingNeedsElectricity" value="true" required placeholder="Yes" />
-                    <input type="radio" name="BookingNeedsElectricity" value="false" checked required placeholder="No" />
+                    <div>
+                        <input type="radio" name="BookingNeedsElectricity" value="true" required /> Yes
+                        <input type="radio" name="BookingNeedsElectricity" value="false" checked required /> No
+                    </div>
                 }
-
-
             </div>
             <div class="col-md-4">
-                Space with electricity costs 100Kr/Night/Person.
+                @if (Model.BookingNeedsElectricity == true)
+                {
+                    <div>
+                        Space without electricity costs 50 kr/Night/Person.
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        Space with electricity costs 100 Kr/Night/Person.
+                    </div>
+                }
             </div>
             <div class="col-md-4">
 
@@ -80,6 +113,7 @@
             </div>
             <div class="col-md-1">
                 @Model.BookingPrice
+                @Html.Hidden("BookingPrice", Model.BookingPrice)
             </div>
             <div class="col-md-2">
             </div>
@@ -88,6 +122,15 @@
         </div>
     </div>
     <div class="form-group">
+        @if (Model.GuestId != null)
+        {
+            @Html.Hidden("GuestId", User.Identity.GetUserId())
+            @Html.Hidden("BookingId", Model.BookingId)
+            @*Html.Hidden("BookingStartDate", Model.BookingStartDate)
+            @Html.Hidden("BookingEndDate", Model.BookingEndDate)
+            @Html.Hidden("BookingNeedsElectricity", Model.BookingNeedsElectricity)
+            @Html.Hidden("NumberOfGuests", Model.NumberOfGuests)*@
+        }
         <input type="submit" value="Reserve" class="btn btn-default" />
     </div>
 }

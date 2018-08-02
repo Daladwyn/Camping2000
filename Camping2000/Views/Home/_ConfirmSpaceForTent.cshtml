@@ -57,27 +57,29 @@ ajaxOptions: new AjaxOptions
 else
 {
     <div>You need to login before you can reserve the spot.</div>
-    <div>
-        @using (Ajax.BeginForm("Register", "Account", htmlAttributes: new { id = "registerLink" }, routeValues: null,
-        ajaxOptions: new AjaxOptions
-        {
-            UpdateTargetId = "ContentBody",
-            InsertionMode = InsertionMode.Replace,
-        }))
-        {
-        <div class="form-group">
-            @Html.Hidden("GuestId", User.Identity.GetUserId())
-            @Html.Hidden("BookingId", Model.BookingId)
+    <div class="row">
+        <div class="col-md-1">
+            @using (Ajax.BeginForm("Register", "Account", htmlAttributes: new { id = "registerLink" }, routeValues: null,
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
+            {
+                <div class="form-group">
+                    @Html.Hidden("GuestId", User.Identity.GetUserId())
+                    @Html.Hidden("BookingId", Model.BookingId)
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Register" class="btn btn-default" />
+                </div>
+            }
         </div>
-        <div class="form-group">
-            <input type="submit" value="Register" class="btn btn-default" />
-        </div>
-        }
     </div>
-    <div>
-                @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+    <div class="col-md-1">
+        @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
     </div>
-    <div>
+    <div class="col-md-1">
         @using (Ajax.BeginForm("Login", "Account", htmlAttributes: new { id = "loginLink" }, routeValues: null,
                ajaxOptions: new AjaxOptions
                {
@@ -95,7 +97,10 @@ else
         }
 
     </div>
-    <div>
+    <div class="col-md-1">
         @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+    </div>
+    <div class="col-md-8">
+
     </div>
 }
