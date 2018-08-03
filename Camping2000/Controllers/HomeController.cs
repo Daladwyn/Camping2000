@@ -20,7 +20,7 @@ namespace Camping2000.Controllers
         {
             Camping2000Db Db = new Camping2000Db();
             Camping campingSpot = Db.Camping.FirstOrDefault(i => i.CampingElectricity == newBooking.BookingNeedsElectricity);
-            if (newBooking.GuestId == null)//if guestId is null get data for a reservation
+            if (newBooking.BookingId == 0)//if guestId is null its a new reservation
             {
                 newBooking.BookingNeedsElectricity = newBooking.BookingNeedsElectricity;
                 newBooking.BookingStartDate = DateTime.Now;
@@ -30,11 +30,12 @@ namespace Camping2000.Controllers
             }
             else //if GuestId is not null then the guest wants to change some data in reservation
             {
-                newBooking.BookingPrice = campingSpot.CampingPrice;
+                Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
+                newBooking.BookingPrice = currentBooking.BookingPrice;
                 return PartialView("_SpaceForTent", newBooking);
             }
         }
-        public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,BookingNeedsElectricity")]Booking newBooking)//missing data ItemId, GuestId, Price, Bookingid
+        public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,BookingNeedsElectricity,BookingId,GuestId")]Booking newBooking)//missing data ItemId, GuestId, Price, Bookingid
         {
             if (ModelState.IsValid)
             {
@@ -44,6 +45,17 @@ namespace Camping2000.Controllers
                 List<int> notEligibleSpots = new List<int>();//list of invalid spotnumbers
                 List<Camping> ListOfSpots = new List<Camping>();//list of valid spots
                 ViewBag.Errormessage = "";
+                if (newBooking.BookingId != 0)//a reservation readjustment have to exclude its own reservation
+                {
+                    for (int i = currentBookings.Count - 1; i >= 0; i--)
+                    {
+                        if (currentBookings[i].BookingId == newBooking.BookingId)
+                        {
+                            currentBookings.Remove(currentBookings[i]);
+                            newBooking.ItemId = 0;//
+                        }
+                    }
+                }
                 foreach (var spot in Db.Camping)//Gather spots based on if electricity is needed as price differs
                 {
                     if (spot.CampingElectricity == newBooking.BookingNeedsElectricity)
@@ -80,6 +92,7 @@ namespace Camping2000.Controllers
                             if (ListOfSpots[i].ItemId == notEligibleSpots[y])
                             {
                                 ListOfSpots.Remove(ListOfSpots[i]);
+                                i--;
                             }
                         }
                     }
@@ -92,9 +105,12 @@ namespace Camping2000.Controllers
                 }
                 numberOfDays = CalculateNumberOfDays(newBooking.BookingStartDate, newBooking.BookingEndDate); //Calculate number of days
                 newBooking.BookingPrice = ListOfSpots[0].CampingPrice * numberOfDays * newBooking.NumberOfGuests;//Calculate the price for the guest
-                Db.Bookings.Add(newBooking);//Save to database current info
+                if (newBooking.BookingId == 0)//Save to database current info if a new reservation and not a readjusted reservation
+                {
+                    Db.Bookings.Add(newBooking);
+                }
                 int checkDbSave = Db.SaveChanges();
-                if (checkDbSave < 1)
+                if (checkDbSave < 1) //Check is database save was ok
                 {
                     ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
                     return PartialView("_SpaceForTent", newBooking);

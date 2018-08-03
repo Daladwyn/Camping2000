@@ -122,15 +122,12 @@ else
         </div>
     </div>
     <div class="form-group">
-        @if (Model.GuestId != null)
-        {
-            @Html.Hidden("GuestId", User.Identity.GetUserId())
-            @Html.Hidden("BookingId", Model.BookingId)
-            @*Html.Hidden("BookingStartDate", Model.BookingStartDate)
+        @Html.Hidden("GuestId", User.Identity.GetUserId())
+        @Html.Hidden("BookingId", Model.BookingId)
+        @*Html.Hidden("BookingStartDate", Model.BookingStartDate)
             @Html.Hidden("BookingEndDate", Model.BookingEndDate)
             @Html.Hidden("BookingNeedsElectricity", Model.BookingNeedsElectricity)
             @Html.Hidden("NumberOfGuests", Model.NumberOfGuests)*@
-        }
         <input type="submit" value="Reserve" class="btn btn-default" />
     </div>
 }
