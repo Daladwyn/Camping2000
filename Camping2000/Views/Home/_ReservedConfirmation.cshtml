@@ -8,12 +8,12 @@
         This mail can be used when you check in.
     </p>
     
-    @Ajax.BeginForm("PrintReservation", "Home",
+    @using (Ajax.BeginForm("PrintReservation", "Home",
     ajaxOptions: new AjaxOptions
     {
         UpdateTargetId= "ContentBody",
         InsertionMode=InsertionMode.Replace
-    })
+    }))
     {
     @Html.Hidden("BookingId",@Model.BookingId)
     <input type="submit" value="Print out your reservation" />

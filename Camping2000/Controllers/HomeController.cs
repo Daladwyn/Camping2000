@@ -92,7 +92,10 @@ namespace Camping2000.Controllers
                             if (ListOfSpots[i].ItemId == notEligibleSpots[y])
                             {
                                 ListOfSpots.Remove(ListOfSpots[i]);
-                                i--;
+                                if (i >= 1)
+                                {
+                                    i--;
+                                }
                             }
                         }
                     }
@@ -122,6 +125,12 @@ namespace Camping2000.Controllers
                 return PartialView("_SpaceForTent", newBooking);//return previous view as indata is invalid
             }
         }
+        [HttpPost]
+        public ActionResult ConfirmSpace([Bind(Include = "BookingId,GuestId")]Booking acceptedBooking)
+        {
+            return PartialView("_ReservedConfirmation", acceptedBooking);
+        }
+        [HttpGet]
         public ActionResult ConfirmSpaceForTent([Bind(Include = "BookingId,GuestId")]Booking newBooking)
         //public ActionResult ConfirmSpaceForTent(int BookingId, string GuestId, int NumberOfGuests)
         {

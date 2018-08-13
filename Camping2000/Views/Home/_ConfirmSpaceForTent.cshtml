@@ -21,58 +21,50 @@
     }
 </div>
 <p>Your estimated price is: @Model.BookingPrice kr.</p>
-
-@*
-    @if (Request.IsAuthenticated)
+@if (Request.IsAuthenticated)
+{
+    using (Ajax.BeginForm("SpaceForTent", "Home",
+    ajaxOptions: new AjaxOptions
     {
-*@
-
-
-@using (Ajax.BeginForm("SpaceForTent", "Home",
-ajaxOptions: new AjaxOptions
-{
-    UpdateTargetId = "ContentBody",
-    InsertionMode = InsertionMode.Replace,
-}))
-{
-<div class="form-group">
-    @Html.ValidationSummary()
-    @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-    @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
-    @Html.HiddenFor(bsd => bsd.BookingStartDate, Model.BookingStartDate)
-    @Html.HiddenFor(bed => bed.BookingEndDate, Model.BookingEndDate)
-    @Html.HiddenFor(bne => bne.BookingNeedsElectricity, Model.BookingNeedsElectricity)
-    @Html.HiddenFor(nog => nog.NumberOfGuests, Model.NumberOfGuests)
-    @Html.HiddenFor(bp => bp.BookingPrice, Model.BookingPrice)
-</div>
-    <div class="form-group">
-        <input type="submit" value="Make Adjustments" class="btn btn-default" />
-    </div>
-}
-
-@using (Ajax.BeginForm("ConfirmSpaceForTent", "Home",
+        UpdateTargetId = "ContentBody",
+        InsertionMode = InsertionMode.Replace,
+    }))
+    {
+        <div class="form-group">
+            @Html.ValidationSummary()
+            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+            @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
+            @Html.HiddenFor(bsd => bsd.BookingStartDate, Model.BookingStartDate)
+            @Html.HiddenFor(bed => bed.BookingEndDate, Model.BookingEndDate)
+            @Html.HiddenFor(bne => bne.BookingNeedsElectricity, Model.BookingNeedsElectricity)
+            @Html.HiddenFor(nog => nog.NumberOfGuests, Model.NumberOfGuests)
+            @Html.HiddenFor(bp => bp.BookingPrice, Model.BookingPrice)
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Make Adjustments" class="btn btn-default" />
+        </div>
+    }
+    using (Ajax.BeginForm("ConfirmSpace", "Home",
 new AjaxOptions
 {
     UpdateTargetId = "ContentBody",
     InsertionMode = InsertionMode.Replace
 }))
-{ 
+    {
 
-    <div class="form-group">
-        
-        @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
-        <input type="hidden" name="BookingId" id="BookingId" value="@Model.BookingId" />
-        <input type="hidden" name="NumberOfGuests" id="NumberOfGuests" value="@Model.NumberOfGuests" />
-
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Accept reservation" class="btn btn-default" />
-    </div>
+        <div class="form-group">
+            @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
+            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+            
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Accept reservation" class="btn btn-default" />
+        </div>
+    }
 }
-@*}
-    else
-    {*@
-@*<div>You need to login before you can reserve the spot.</div>
+else
+{
+    <div>You need to login before you can reserve the spot.</div>
     <div class="row">
         <div class="col-md-1">
             @using (Ajax.BeginForm("Register", "Account", htmlAttributes: new { id = "registerLink" }, routeValues: null,
@@ -118,4 +110,4 @@ new AjaxOptions
     <div class="col-md-8">
 
     </div>
-    @*}*@
+}
