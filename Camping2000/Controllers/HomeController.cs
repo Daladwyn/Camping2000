@@ -559,7 +559,6 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult SearchForGuest(string firstName, string lastName)
         {
-            Camping2000Db Db = new Camping2000Db();
             List<Guest> foundGuests = new List<Guest>();
             string errormessage = "";
             if ((firstName == "") && (lastName == ""))
@@ -567,38 +566,7 @@ namespace Camping2000.Controllers
                 ViewBag.Errormessage = "Please specify the guests name before searching.";
                 return PartialView("_ShowFoundGuests", foundGuests);
             }
-            firstName = firstName.ToLower();
-            lastName = lastName.ToLower();
-            if ((firstName != "") && (lastName == ""))
-            {
-                foreach (var guest in Db.Guests)
-                {
-                    if (guest.GuestFirstName.ToLower() == firstName)
-                    {
-                        foundGuests.Add(guest);
-                    }
-                }
-            }
-            else if ((firstName != "") && (lastName != ""))
-            {
-                foreach (var guest in Db.Guests)
-                {
-                    if ((guest.GuestFirstName.ToLower() == firstName) && (guest.GuestLastName.ToLower() == lastName))
-                    {
-                        foundGuests.Add(guest);
-                    }
-                }
-            }
-            else if ((firstName == "") && (lastName != ""))
-            {
-                foreach (var guest in Db.Guests)
-                {
-                    if (guest.GuestLastName.ToLower() == lastName)
-                    {
-                        foundGuests.Add(guest);
-                    }
-                }
-            }
+            foundGuests = SearchForPeople(firstName, lastName);
             if ((firstName != "") && (foundGuests.Count < 1))
             {
                 errormessage = $"A guest with the name of {firstName} was not found. Please try again.";
@@ -1536,6 +1504,76 @@ namespace Camping2000.Controllers
         public ActionResult Logoff()
         {
             return RedirectToAction("Logoff", "Account");
+        }
+        public ActionResult ManageReceptionists()
+        {
+            return PartialView("_ManageReceptionists");
+        }
+        public ActionResult SearchNewReceptionist(string firstName, string lastName)
+        {
+            List<Guest> foundGuests = new List<Guest>();
+            string errormessage = "";
+            if ((firstName == "") && (lastName == ""))
+            {
+                ViewBag.Errormessage = "Please specify the guests name before searching.";
+                return PartialView("_ShowFoundGuests", foundGuests);
+            }
+            foundGuests = SearchForPeople(firstName, lastName);
+            if ((firstName != "") && (foundGuests.Count < 1))
+            {
+                errormessage = $"A guest with the name of {firstName} was not found. Please try again.";
+                ViewBag.Errormessage = errormessage;
+            }
+            else if ((lastName != "") && (foundGuests.Count < 1))
+            {
+                errormessage = $"A guest with the name of {lastName} was not found. Please try again.";
+                ViewBag.Errormessage = errormessage;
+            }
+            return PartialView("_ShowFoundCoworker", foundGuests);
+        }
+        public ActionResult ModifyCoworker([Bind(Include = "GuestId"]Guest coworker)
+        {
+            //look up coworker and assign rights
+            return PartialView("_ConfirmReceptionistRights");
+        }
+
+        static List<Guest> SearchForPeople(string firstName, string lastName)
+        {
+            Camping2000Db Db = new Camping2000Db();
+            List<Guest> foundGuests = new List<Guest>();
+            firstName = firstName.ToLower();
+            lastName = lastName.ToLower();
+            if ((firstName != "") && (lastName == ""))
+            {
+                foreach (var guest in Db.Guests)
+                {
+                    if (guest.GuestFirstName.ToLower() == firstName)
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            else if ((firstName != "") && (lastName != ""))
+            {
+                foreach (var guest in Db.Guests)
+                {
+                    if ((guest.GuestFirstName.ToLower() == firstName) && (guest.GuestLastName.ToLower() == lastName))
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            else if ((firstName == "") && (lastName != ""))
+            {
+                foreach (var guest in Db.Guests)
+                {
+                    if (guest.GuestLastName.ToLower() == lastName)
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            return foundGuests;
         }
         /// <summary>
         /// calculates a span of days. Take leapyears into consideration.

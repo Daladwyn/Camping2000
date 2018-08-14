@@ -1,0 +1,46 @@
+﻿@model List<Camping2000.Models.Guest>
+
+
+@if (Model.Count >= 1)
+{
+    foreach (var guest in Model)
+    {
+        using (Ajax.BeginForm("ModifyCoworker", "Home",
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("First Name")
+                </div>
+                <div class="col-md-2">
+                    @guest.GuestFirstName
+                </div>
+                <div class="col-md-2">
+                    @Html.Label("Last Name")
+                </div>
+                <div class="col-md-2">
+                    @guest.GuestLastName
+                </div>
+                <div class="col-md-4">
+                    <input type="submit" value="Assign Receptionist Rights" />
+
+                </div>
+            </div>
+            <div>
+                @Html.Hidden("GuestId", guest.GuestId)
+            </div>
+        }
+    }
+}
+else
+{
+    <div>
+        @ViewBag.Errormessage
+    </div>
+}
+

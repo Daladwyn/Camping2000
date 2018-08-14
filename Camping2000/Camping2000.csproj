@@ -428,6 +428,9 @@
     <Content Include="Views\Home\_FailedGuestDetails.cshtml" />
     <Content Include="Views\Home\_ChangeCampingSpot.cshtml" />
     <Content Include="Views\Home\_ChangeConfirmationCampingSpot.cshtml" />
+    <Content Include="Views\Home\_ManageReceptionists.cshtml" />
+    <Content Include="Views\Home\_SearchReceptionist.cshtml" />
+    <Content Include="Views\Home\_ShowFoundCoworker.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

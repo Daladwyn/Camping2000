@@ -1,7 +1,7 @@
-﻿@using (Ajax.BeginForm("SearchForGuest", "Home",
+﻿@using (Ajax.BeginForm("SearchNewReceptionist", "Home",
         ajaxOptions: new AjaxOptions
         {
-            UpdateTargetId = "EndOfFoundGuests",
+            UpdateTargetId = "EndOfFoundCoworkers",
             InsertionMode = InsertionMode.InsertBefore,
         }))
 {
@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-md-2">
             <div class="form-group">
-                @Html.Label("Guests first name:")
+                @Html.Label("First name:")
             </div>
         </div>
         <div class="col-md-2">
@@ -19,7 +19,7 @@
         </div>
         <div class="col-md-2">
             <div class="form-group">
-                @Html.Label("Guests last name:")
+                @Html.Label("Last name:")
             </div>
         </div>
         <div class="col-md-2">
@@ -32,3 +32,4 @@
         </div>
     </div>
 }
+

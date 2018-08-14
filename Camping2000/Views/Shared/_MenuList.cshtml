@@ -87,10 +87,17 @@ InsertionMode = InsertionMode.Replace
         </li>
         <li>
             @Ajax.ActionLink("Modify a Guests Details", "ModifyGuestDetails", new AjaxOptions
- {
- UpdateTargetId = "ContentBody",
- InsertionMode = InsertionMode.Replace
- })
+             {
+             UpdateTargetId = "ContentBody",
+             InsertionMode = InsertionMode.Replace
+             })
+        </li>
+        <li>
+            @Ajax.ActionLink("Receptionists", "ManageReceptionists", new AjaxOptions
+             {
+             UpdateTargetId = "ContentBody",
+             InsertionMode = InsertionMode.Replace
+             })
         </li>
     }
     <li>
