@@ -16,24 +16,25 @@ namespace Camping2000.Controllers
         {
             return View();
         }
-        public ActionResult SpaceForTent([Bind(Include = "GuestId,BookingId,BookingStartDate,BookingEndDate,BookingNeedsElectricity,NumberOfGuests")]Booking newBooking)
+
+        public ActionResult SpaceForTent([Bind(Include = "BookingNeedsElectricity")]Booking newBooking)
         {
             Camping2000Db Db = new Camping2000Db();
             Camping campingSpot = Db.Camping.FirstOrDefault(i => i.CampingElectricity == newBooking.BookingNeedsElectricity);
-            if (newBooking.BookingId == 0)//if guestId is null its a new reservation
-            {
-                newBooking.BookingNeedsElectricity = newBooking.BookingNeedsElectricity;
-                newBooking.BookingStartDate = DateTime.Now;
-                newBooking.BookingEndDate = DateTime.Now.AddDays(1);
-                newBooking.BookingPrice = campingSpot.CampingPrice;
-                return PartialView("_SpaceForTent", newBooking);
-            }
-            else //if GuestId is not null then the guest wants to change some data in reservation
-            {
-                Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
-                newBooking.BookingPrice = currentBooking.BookingPrice;
-                return PartialView("_SpaceForTent", newBooking);
-            }
+            newBooking.BookingNeedsElectricity = newBooking.BookingNeedsElectricity;
+            newBooking.BookingStartDate = DateTime.Now;
+            newBooking.BookingEndDate = DateTime.Now.AddDays(1);
+            newBooking.BookingPrice = campingSpot.CampingPrice;
+            return PartialView("_SpaceForTent", newBooking);
+        }
+        [HttpPost]
+        public ActionResult SpaceAdjustments([Bind(Include = "GuestId,BookingId,BookingStartDate,BookingEndDate,BookingNeedsElectricity,NumberOfGuests")]Booking newBooking)
+        {
+            Camping2000Db Db = new Camping2000Db();
+            Camping campingSpot = Db.Camping.FirstOrDefault(i => i.CampingElectricity == newBooking.BookingNeedsElectricity);
+            Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
+            newBooking.BookingPrice = currentBooking.BookingPrice;
+            return PartialView("_SpaceForTent", newBooking);
         }
         public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,BookingNeedsElectricity,BookingId,GuestId")]Booking newBooking)//missing data ItemId, GuestId, Price, Bookingid
         {
