@@ -125,7 +125,7 @@ namespace Camping2000.Controllers
                     updatedBooking.BookingNeedsElectricity = newBooking.BookingNeedsElectricity;
                     updatedBooking.BookingPrice = newBooking.BookingPrice;
                     updatedBooking.ItemId = newBooking.ItemId;
-                 
+
                     Db.SaveChanges();
                 }
                 int checkDbSave = Db.SaveChanges();
@@ -152,7 +152,6 @@ namespace Camping2000.Controllers
         }
         [HttpGet]
         public ActionResult ConfirmSpaceForTent([Bind(Include = "BookingId,GuestId")]Booking newBooking)
-        //public ActionResult ConfirmSpaceForTent(int BookingId, string GuestId, int NumberOfGuests)
         {
             if (ModelState.IsValid)
             {
