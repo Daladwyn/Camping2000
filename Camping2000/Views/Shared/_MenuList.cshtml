@@ -59,10 +59,10 @@ InsertionMode = InsertionMode.Replace
     {
         <li>
             @Ajax.ActionLink("Checking in", "CheckIn", new AjaxOptions
- {
- UpdateTargetId = "ContentBody",
- InsertionMode = InsertionMode.Replace
- })
+             {
+             UpdateTargetId = "ContentBody",
+             InsertionMode = InsertionMode.Replace
+             })
         </li>
         <li>
             @Ajax.ActionLink("Checking out", "CheckOut", new AjaxOptions
@@ -94,7 +94,7 @@ InsertionMode = InsertionMode.Replace
         </li>
     }
     <li>
-        
+
         <div class="col-md-1"></div>
         <div class="col-md-11">
             @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))

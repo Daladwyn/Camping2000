@@ -16,7 +16,6 @@ namespace Camping2000.Controllers
         {
             return View();
         }
-
         public ActionResult SpaceForTent([Bind(Include = "BookingNeedsElectricity")]Booking newBooking)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -147,6 +146,7 @@ namespace Camping2000.Controllers
             Camping2000Db Db = new Camping2000Db();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == acceptedBooking.BookingId);
             currentBooking.GuestId = acceptedBooking.GuestId;
+            currentBooking.GuestHasReserved = true;
             Db.SaveChanges();
             return PartialView("_ReservedConfirmation", acceptedBooking);
         }

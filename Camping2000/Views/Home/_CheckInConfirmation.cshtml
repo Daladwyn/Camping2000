@@ -6,4 +6,27 @@
 <p>The guest have been assigned to spot: @Model.ItemName</p>
 <p>Wish the guest a good stay and inform about the possibility to rent canoes or boats. </p>
 
-@Ajax.ActionLink("Back to Start", "GoToStart", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+            ajaxOptions: new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "ContentBody"
+            }))
+        {
+            <input type="submit" value="Back to Start" />
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("CheckIn", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       InsertionMode = InsertionMode.Replace,
+                       UpdateTargetId = "ContentBody"
+                   }))
+        {
+            <input type="submit" value="Back to CheckIn" />
+        }
+    </div>
+</div>

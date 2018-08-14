@@ -6,4 +6,27 @@
 <p>The guest have to be charged: @Model.BookingPrice kr.</p>
 <p>Wish the guest a good travel home and welcome again. </p>
 
-@Ajax.ActionLink("Back to Start", "GoToStart", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+            ajaxOptions: new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "ContentBody"
+            }))
+        {
+            <input type="submit" value="Back to Start" />
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("CheckOut", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       InsertionMode = InsertionMode.Replace,
+                       UpdateTargetId = "ContentBody"
+                   }))
+        {
+            <input type="submit" value="Back to CheckOut" />
+        }
+    </div>
+</div>
