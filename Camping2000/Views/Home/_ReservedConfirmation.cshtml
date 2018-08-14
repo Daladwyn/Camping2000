@@ -15,7 +15,7 @@
         InsertionMode=InsertionMode.Replace
     }))
     {
-    @Html.Hidden("BookingId",@Model.BookingId)
+    @Html.HiddenFor(b=>b.BookingId,@Model.BookingId)
     <input type="submit" value="Print out your reservation" />
     }
 </div>

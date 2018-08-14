@@ -21,20 +21,22 @@ namespace Camping2000.Controllers
         {
             Camping2000Db Db = new Camping2000Db();
             Camping campingSpot = Db.Camping.FirstOrDefault(i => i.CampingElectricity == newBooking.BookingNeedsElectricity);
-            newBooking.BookingNeedsElectricity = newBooking.BookingNeedsElectricity;
+            //newBooking.BookingNeedsElectricity = newBooking.BookingNeedsElectricity;
             newBooking.BookingStartDate = DateTime.Now;
             newBooking.BookingEndDate = DateTime.Now.AddDays(1);
             newBooking.BookingPrice = campingSpot.CampingPrice;
             return PartialView("_SpaceForTent", newBooking);
         }
         [HttpPost]
-        public ActionResult SpaceAdjustments([Bind(Include = "GuestId,BookingId,BookingStartDate,BookingEndDate,BookingNeedsElectricity,NumberOfGuests")]Booking newBooking)
+        public ActionResult SpaceAdjustments([Bind(Include = "BookingId,GuestId")]Booking newBooking)
         {
             Camping2000Db Db = new Camping2000Db();
-            Camping campingSpot = Db.Camping.FirstOrDefault(i => i.CampingElectricity == newBooking.BookingNeedsElectricity);
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
-            newBooking.BookingPrice = currentBooking.BookingPrice;
-            return PartialView("_SpaceForTent", newBooking);
+            currentBooking.GuestId = newBooking.GuestId;
+            Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
+            currentBooking.BookingPrice = currentSpot.CampingPrice;
+            Db.SaveChanges();
+            return PartialView("_SpaceForTent", currentBooking);
         }
         public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,BookingNeedsElectricity,BookingId,GuestId")]Booking newBooking)//missing data ItemId, GuestId, Price, Bookingid
         {
@@ -45,6 +47,7 @@ namespace Camping2000.Controllers
                 List<Booking> currentBookings = Db.Bookings.ToList();//Gather all present bookings in a list.
                 List<int> notEligibleSpots = new List<int>();//list of invalid spotnumbers
                 List<Camping> ListOfSpots = new List<Camping>();//list of valid spots
+                Booking updatedBooking = new Booking();
                 ViewBag.Errormessage = "";
                 if (newBooking.BookingId != 0)//a reservation readjustment have to exclude its own reservation
                 {
@@ -113,8 +116,19 @@ namespace Camping2000.Controllers
                 {
                     Db.Bookings.Add(newBooking);
                 }
+                else //if a booking exist update the booking with the new values
+                {
+                    updatedBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
+                    updatedBooking.BookingStartDate = newBooking.BookingStartDate;
+                    updatedBooking.BookingEndDate = newBooking.BookingEndDate;
+                    updatedBooking.NumberOfGuests = newBooking.NumberOfGuests;
+                    updatedBooking.BookingNeedsElectricity = newBooking.BookingNeedsElectricity;
+                    updatedBooking.BookingPrice = newBooking.BookingPrice;
+                    updatedBooking.ItemId = newBooking.ItemId;
+                    Db.SaveChanges();
+                }
                 int checkDbSave = Db.SaveChanges();
-                if (checkDbSave < 1) //Check is database save was ok
+                if ((checkDbSave < 1) && (newBooking.GuestId == null))//Check is database save was ok
                 {
                     ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
                     return PartialView("_SpaceForTent", newBooking);
@@ -129,6 +143,10 @@ namespace Camping2000.Controllers
         [HttpPost]
         public ActionResult ConfirmSpace([Bind(Include = "BookingId,GuestId")]Booking acceptedBooking)
         {
+            Camping2000Db Db = new Camping2000Db();
+            Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == acceptedBooking.BookingId);
+            currentBooking.GuestId = acceptedBooking.GuestId;
+            Db.SaveChanges();
             return PartialView("_ReservedConfirmation", acceptedBooking);
         }
         [HttpGet]
