@@ -125,6 +125,7 @@ namespace Camping2000.Controllers
                     updatedBooking.BookingNeedsElectricity = newBooking.BookingNeedsElectricity;
                     updatedBooking.BookingPrice = newBooking.BookingPrice;
                     updatedBooking.ItemId = newBooking.ItemId;
+                 
                     Db.SaveChanges();
                 }
                 int checkDbSave = Db.SaveChanges();
