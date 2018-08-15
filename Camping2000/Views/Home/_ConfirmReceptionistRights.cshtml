@@ -1,0 +1,18 @@
+﻿
+<h2>Modification of rights.</h2>
+
+<hr />
+
+<p>
+    @ViewBag.RightsMessage
+</p>
+@using (Ajax.BeginForm("GoToStart", "Home",
+                  ajaxOptions: new AjaxOptions
+                  {
+                      UpdateTargetId = "ContentBody",
+                      InsertionMode = InsertionMode.Replace,
+                  }))
+{
+
+    <input type="submit" value="Done" />
+}

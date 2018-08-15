@@ -181,7 +181,7 @@ namespace Camping2000.Controllers
         {
             return PartialView("Index");
         }
-        [Authorize(Roles = "Administrators,Receptionist")]
+        [Authorize(Roles = "Administrators,Receptionists")]
         public ActionResult CheckIn()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -234,7 +234,7 @@ namespace Camping2000.Controllers
             }
             return PartialView("_CheckIn", presentDayBookings);
         }
-        [Authorize(Roles = "Administrators, Receptionist")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult CheckOut()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -277,7 +277,7 @@ namespace Camping2000.Controllers
             }
             return PartialView("_CheckOut", presentDepartingBookings);
         }
-        [Authorize(Roles = "Administrators, Receptionist")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ArrivalsDepartures()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -313,7 +313,7 @@ namespace Camping2000.Controllers
             }
             return PartialView("_ArrivalsDepartures", arrivalsDepartures);
         }
-        [Authorize(Roles = "Administrators, Receptionist")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult CheckInConfirmation(int BookingId, int NumberOfCheckInGuests)
         {
             if (ModelState.IsValid)
@@ -388,7 +388,7 @@ namespace Camping2000.Controllers
                 return PartialView("_Checkin", checkInBooking);
             }
         }
-        [Authorize(Roles = "Administrators, Receptionist")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult CheckOutConfirmation([Bind(Include = "BookingId")]BookingGuestViewModel checkingOutGuest)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -440,17 +440,17 @@ namespace Camping2000.Controllers
         {
             return PartialView("Index");
         }
-        [Authorize(Roles = "Administrators, Receptionist")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ShowGuestArrivals(BookingGuestViewModel arrivals)
         {
             return PartialView("_ShowGuestArrivals", arrivals);
         }
-        [Authorize(Roles = "Administrators, Receptionist")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ShowGuestDepartures(BookingGuestViewModel departures)
         {
             return PartialView("_ShowGuestDepartures", departures);
         }
-        [Authorize(Roles = "Administrators, Receptionist")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ModifyBooking()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -506,12 +506,12 @@ namespace Camping2000.Controllers
         {
             return PartialView("_ModifyGuestDetails");
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ListPresentBookings(BookingGuestViewModel AGuestBooking)
         {
             return PartialView("_PresentBooking", AGuestBooking);
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ModifySpecificBooking([Bind(Include = "BookingId,ItemId,GuestId")] ModifyBookingViewModel aBookingToModify)
         {
             if (ModelState.IsValid)
@@ -792,7 +792,7 @@ namespace Camping2000.Controllers
                 return PartialView("_GuestDetails", completeGuestDetails);
             }
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangeStartDate([Bind(Include = "BookingId,GuestId,ItemId,BookingStartDate")] ModifyBookingViewModel bookingToModify)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -915,7 +915,7 @@ namespace Camping2000.Controllers
                 return PartialView("_ChangeStartDate", bookingToModify);
             }
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangeEndDate([Bind(Include = "BookingId,GuestId,ItemId,BookingEndDate")] ModifyBookingViewModel bookingToModify)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -1025,7 +1025,7 @@ namespace Camping2000.Controllers
                 return PartialView("_ChangeEndDate", bookingToModify);
             }
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangePowerOutlet([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
             if (ModelState.IsValid)
@@ -1272,7 +1272,7 @@ namespace Camping2000.Controllers
                 return RedirectToAction("ModifySpecificBooking", bookingToModify);
             }
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangePartySize([Bind(Include = "BookingId,GuestId,ItemId,NumberOfGuests")] ModifyBookingViewModel bookingToModify)
         {
             if (ModelState.IsValid)
@@ -1345,7 +1345,7 @@ namespace Camping2000.Controllers
                 return RedirectToAction("ModifySpecificBooking", bookingToModify);
             }
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangeCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
             if (ModelState.IsValid)
@@ -1471,7 +1471,7 @@ namespace Camping2000.Controllers
                 return PartialView("_FailedCancelReservation", bookingToModify); //check this returnstatment....
             }
         }
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangeChooseCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -1505,10 +1505,12 @@ namespace Camping2000.Controllers
         {
             return RedirectToAction("Logoff", "Account");
         }
+        [Authorize(Roles = "Administrators")]
         public ActionResult ManageReceptionists()
         {
             return PartialView("_ManageReceptionists");
         }
+        [Authorize(Roles = "Administrators")]
         public ActionResult SearchNewReceptionist(string firstName, string lastName)
         {
             List<Guest> foundGuests = new List<Guest>();
@@ -1531,12 +1533,38 @@ namespace Camping2000.Controllers
             }
             return PartialView("_ShowFoundCoworker", foundGuests);
         }
-        public ActionResult ModifyCoworker([Bind(Include = "GuestId"]Guest coworker)
+        [Authorize(Roles = "Administrators")]
+        public ActionResult ModifyCoworkerToReceptionist(string GuestId)
         {
-            //look up coworker and assign rights
+            Camping2000.Models.ApplicationDbContext Db = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(Db);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = userManager.FindById(GuestId); //find the new coWorker by the Id
+            userManager.AddToRole(user.Id, "Receptionists");//add new coWorker to the role of "Receptionists"
+            userManager.RemoveFromRole(user.Id, "Guests");//Remove the role of "Guest" from new coworker 
+            Db.SaveChanges();
+            ViewBag.RightsMessage = "The new coworker have now rights as a receptionist";
             return PartialView("_ConfirmReceptionistRights");
         }
-
+        [Authorize(Roles = "Administrators")]
+        public ActionResult ModifyCoWorkerToGuest(string GuestId)
+        {
+            Camping2000.Models.ApplicationDbContext Db = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(Db);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = userManager.FindById(GuestId); //find the new coWorker by the Id
+            userManager.AddToRole(user.Id, "Guests");//add former coWorker to the role of "Guest"
+            userManager.RemoveFromRole(user.Id, "Receptionists");//Remove the role of "Receptionists" from former coworker 
+            Db.SaveChanges();
+            ViewBag.RightsMessage = "The former coworker is no longer receptionist.";
+            return PartialView("_ConfirmReceptionistRights");
+        }
+        /// <summary>
+        /// Function that accepts one or two strings and return a list of guests 
+        /// </summary>
+        /// <param name="firstName"></param>
+        /// <param name="lastName"></param>
+        /// <returns></returns>
         static List<Guest> SearchForPeople(string firstName, string lastName)
         {
             Camping2000Db Db = new Camping2000Db();

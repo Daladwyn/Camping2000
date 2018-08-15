@@ -5,36 +5,48 @@
 {
     foreach (var guest in Model)
     {
-        using (Ajax.BeginForm("ModifyCoworker", "Home",
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Label("First Name")
+            </div>
+            <div class="col-md-2">
+                @guest.GuestFirstName
+            </div>
+            <div class="col-md-2">
+                @Html.Label("Last Name")
+            </div>
+            <div class="col-md-2">
+                @guest.GuestLastName
+            </div>
+            <div class="col-md-2">
+                @using (Ajax.BeginForm("ModifyCoworkerToReceptionist", "Home",
             ajaxOptions: new AjaxOptions
             {
                 UpdateTargetId = "ContentBody",
                 InsertionMode = InsertionMode.Replace,
             }))
-        {
-            @Html.AntiForgeryToken()
-            <div class="row">
-                <div class="col-md-2">
-                    @Html.Label("First Name")
-                </div>
-                <div class="col-md-2">
-                    @guest.GuestFirstName
-                </div>
-                <div class="col-md-2">
-                    @Html.Label("Last Name")
-                </div>
-                <div class="col-md-2">
-                    @guest.GuestLastName
-                </div>
-                <div class="col-md-4">
+                {
+                    <div>
+                        @Html.Hidden("GuestId", guest.GuestId)
+                    </div>
                     <input type="submit" value="Assign Receptionist Rights" />
-
-                </div>
+                }
             </div>
-            <div>
-                @Html.Hidden("GuestId", guest.GuestId)
+            <div class="col-md-2">
+                @using (Ajax.BeginForm("ModifyCoWorkerToGuest", "Home", new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "ContentBody"
+                }))
+                {
+                    <div>
+                        @Html.Hidden("GuestId", guest.GuestId)
+                    </div>
+                    <input type="submit" value="Remove Receptionist Rights" />
+                }
             </div>
-        }
+        </div>
     }
 }
 else
@@ -43,4 +55,3 @@ else
         @ViewBag.Errormessage
     </div>
 }
-

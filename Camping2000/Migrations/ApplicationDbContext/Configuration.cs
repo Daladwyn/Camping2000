@@ -28,7 +28,7 @@ namespace Camping2000.Migrations.ApplicationDbContext
 
             roleManager.Create(new IdentityRole("Administrators"));
             roleManager.Create(new IdentityRole("Guests"));
-            //roleManager.Create(new IdentityRole("Receptionist"));
+            roleManager.Create(new IdentityRole("Receptionists"));
             db.SaveChanges();
 
             var userStore = new UserStore<ApplicationUser>(context);
@@ -36,10 +36,10 @@ namespace Camping2000.Migrations.ApplicationDbContext
 
             userManager.Create(user: new ApplicationUser()
             {
-                UserName = "Admin@camping.com",
+                UserName = "Admin@camping.com",//Change emailadress before putting this bookingsystem into production
                 Email = "admin@camping.com",
 
-            }, password: "Test!0");
+            }, password: "Test!0");//Change password before putting this bookingsystem into production
             context.SaveChanges();
 
             var user = userManager.FindByName("Admin@camping.com");

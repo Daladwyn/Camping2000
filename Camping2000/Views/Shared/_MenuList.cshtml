@@ -24,7 +24,7 @@ InsertionMode = InsertionMode.Replace
        InsertionMode = InsertionMode.Replace
     })
     </li>
-    @if (User.IsInRole("Receptionist"))
+    @if (User.IsInRole("Receptionists"))
     {
         <li>
             @Ajax.ActionLink("Checking in", "CheckIn", new AjaxOptions

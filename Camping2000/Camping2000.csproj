@@ -431,6 +431,7 @@
     <Content Include="Views\Home\_ManageReceptionists.cshtml" />
     <Content Include="Views\Home\_SearchReceptionist.cshtml" />
     <Content Include="Views\Home\_ShowFoundCoworker.cshtml" />
+    <Content Include="Views\Home\_ConfirmReceptionistRights.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
