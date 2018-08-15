@@ -484,7 +484,6 @@ namespace Camping2000.Controllers
                 presentGuests.Add(Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId));
                 presentSpots.Add(Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId));
             }
-
             for (int i = 0; i < presentBookings.Count; i++)
             {
                 presentGuestBookings.Add(new BookingGuestViewModel
@@ -1558,6 +1557,52 @@ namespace Camping2000.Controllers
             Db.SaveChanges();
             ViewBag.RightsMessage = "The former coworker is no longer receptionist.";
             return PartialView("_ConfirmReceptionistRights");
+        }
+        [Authorize(Roles = "Administrators")]
+        public ActionResult ListReceptionists() //Gather all Guests that is receptionists
+        {
+            Camping2000Db Db = new Camping2000Db();
+            List<Guest> currentGuests = Db.Guests.ToList();
+            List<Guest> currentReceptionists = new List<Guest>();
+            foreach (var user in currentGuests)
+            {
+                if (user.)//IsInRole("Receptionists")
+                {
+
+                }
+            }
+
+
+            //ApplicationDbContext AppDb = new ApplicationDbContext();
+            //var userStore = new UserStore<ApplicationUser>(AppDb);
+            //var userManager = new UserManager<ApplicationUser>(userStore);
+            //foreach (var user in userManager)
+            //{
+
+            //}
+
+
+
+            //var RoleId = userManager.GetRoles("Receptionists");
+
+
+            //var Roledb = new ApplicationDbContext();
+            //var store = new RoleStore<IdentityRole>(Roledb);
+            //var roleManager = new RoleManager<IdentityRole>(store);
+
+            //var roleId = roleManager.FindById("Receptionists");
+
+            //List<string> receptionists = new List<string>();
+            //foreach (var user in Db.AspNetUserRoles)
+            //{
+            //    if (user.)
+            //    {
+
+            //    }
+            //}
+
+            // = ApplicationDb.Roles.SingleOrDefault()
+            return PartialView("");
         }
         /// <summary>
         /// Function that accepts one or two strings and return a list of guests 
