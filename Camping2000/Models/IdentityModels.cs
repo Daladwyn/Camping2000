@@ -31,5 +31,7 @@ namespace Camping2000.Models
         }
 
         public System.Data.Entity.DbSet<Camping2000.Models.Camping> Campings { get; set; }
+
+        public System.Data.Entity.DbSet<Camping2000.Models.Guest> Guests { get; set; }
     }
 }

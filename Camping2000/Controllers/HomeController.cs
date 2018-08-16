@@ -1535,26 +1535,55 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult ModifyCoworkerToReceptionist(string GuestId)
         {
-            Camping2000.Models.ApplicationDbContext Db = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(Db);
+            ApplicationDbContext ApplicationDb = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(ApplicationDb);
             var userManager = new UserManager<ApplicationUser>(userStore);
-            var user = userManager.FindById(GuestId); //find the new coWorker by the Id
+            Camping2000Db Db = new Camping2000Db();
+            Receptionist newCoWorker = new Receptionist//Create a new coworker and transfer guestId 
+            {
+                GuestId = GuestId
+            };
+            Receptionist CoWorker = Db.Receptionists.SingleOrDefault(g => g.GuestId == GuestId);//try and fetch the guestid 
+            if (CoWorker != null) //if coworker already exists in receptionist he should not be able to be granted rights
+            {
+                ViewBag.RightsMessage = "The new coworker have already rights as a receptionist";
+                return PartialView("_ConfirmReceptionistRights");
+            }
+            Db.Receptionists.Add(newCoWorker); //Add the new coworker to receptionists list
+            Db.SaveChanges();
+            var user = userManager.FindById(GuestId); //find the new coWorker by Id
             userManager.AddToRole(user.Id, "Receptionists");//add new coWorker to the role of "Receptionists"
             userManager.RemoveFromRole(user.Id, "Guests");//Remove the role of "Guest" from new coworker 
-            Db.SaveChanges();
+            ApplicationDb.SaveChanges();
             ViewBag.RightsMessage = "The new coworker have now rights as a receptionist";
             return PartialView("_ConfirmReceptionistRights");
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult ModifyCoWorkerToGuest(string GuestId)
         {
-            Camping2000.Models.ApplicationDbContext Db = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(Db);
+            ApplicationDbContext ApplicationDb = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(ApplicationDb);
             var userManager = new UserManager<ApplicationUser>(userStore);
+            Camping2000Db Db = new Camping2000Db(); //Save the removal of old coworkers ID in the receptionists table
+            List<Receptionist> allReceptionists = Db.Receptionists.ToList();//fetch all present receptionists
+            Receptionist oldCoWorker = Db.Receptionists.SingleOrDefault(g => g.GuestId == GuestId);
+            if (oldCoWorker == null)
+            {
+                ViewBag.RightsMessage = "The former coworkers receptionist rights is already removed.";
+                return PartialView("_ConfirmReceptionistRights");
+            }
+            for (int i = 0; i < allReceptionists.Count(); i++)
+            {
+                if (oldCoWorker.GuestId == allReceptionists[i].GuestId)
+                {
+                    Db.Receptionists.Remove(oldCoWorker);
+                }
+            }
+            Db.SaveChanges();
             var user = userManager.FindById(GuestId); //find the new coWorker by the Id
             userManager.AddToRole(user.Id, "Guests");//add former coWorker to the role of "Guest"
             userManager.RemoveFromRole(user.Id, "Receptionists");//Remove the role of "Receptionists" from former coworker 
-            Db.SaveChanges();
+            ApplicationDb.SaveChanges();
             ViewBag.RightsMessage = "The former coworker is no longer receptionist.";
             return PartialView("_ConfirmReceptionistRights");
         }
@@ -1562,47 +1591,21 @@ namespace Camping2000.Controllers
         public ActionResult ListReceptionists() //Gather all Guests that is receptionists
         {
             Camping2000Db Db = new Camping2000Db();
-            List<Guest> currentGuests = Db.Guests.ToList();
-            List<Guest> currentReceptionists = new List<Guest>();
-            foreach (var user in currentGuests)
+            List<Receptionist> currentReceptionists = Db.Receptionists.ToList();
+            List<Guest> receptionistData = new List<Guest>();
+            if (currentReceptionists == null)
             {
-                if (user.)//IsInRole("Receptionists")
-                {
-
-                }
+                ViewBag.NumberOfReceptionists = "There is none that have receptionist rights.";
             }
-
-
-            //ApplicationDbContext AppDb = new ApplicationDbContext();
-            //var userStore = new UserStore<ApplicationUser>(AppDb);
-            //var userManager = new UserManager<ApplicationUser>(userStore);
-            //foreach (var user in userManager)
-            //{
-
-            //}
-
-
-
-            //var RoleId = userManager.GetRoles("Receptionists");
-
-
-            //var Roledb = new ApplicationDbContext();
-            //var store = new RoleStore<IdentityRole>(Roledb);
-            //var roleManager = new RoleManager<IdentityRole>(store);
-
-            //var roleId = roleManager.FindById("Receptionists");
-
-            //List<string> receptionists = new List<string>();
-            //foreach (var user in Db.AspNetUserRoles)
-            //{
-            //    if (user.)
-            //    {
-
-            //    }
-            //}
-
-            // = ApplicationDb.Roles.SingleOrDefault()
-            return PartialView("");
+            else
+            {
+                foreach (var receptionist in currentReceptionists)
+                {
+                    receptionistData.Add(Db.Guests.SingleOrDefault(g => g.GuestId == receptionist.GuestId));
+                }
+                ViewBag.NumberOfReceptionists = "The following " + currentReceptionists.Count() + " have receptionist rights.";
+            }
+            return PartialView("_ListReceptionist", receptionistData);
         }
         /// <summary>
         /// Function that accepts one or two strings and return a list of guests 

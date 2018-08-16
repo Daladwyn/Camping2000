@@ -6,13 +6,27 @@
 <p>
     @ViewBag.RightsMessage
 </p>
-@using (Ajax.BeginForm("GoToStart", "Home",
-                  ajaxOptions: new AjaxOptions
-                  {
-                      UpdateTargetId = "ContentBody",
-                      InsertionMode = InsertionMode.Replace,
-                  }))
-{
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+                          ajaxOptions: new AjaxOptions
+                          {
+                              UpdateTargetId = "ContentBody",
+                              InsertionMode = InsertionMode.Replace,
+                          }))
+        {
 
-    <input type="submit" value="Done" />
-}
+            <input type="submit" value="Done" />
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("ManageReceptionists", "Home", new AjaxOptions
+        {
+            UpdateTargetId = "ContentBody",
+            InsertionMode = InsertionMode.Replace,
+        }))
+        {
+            <input type="submit" value="Back to Receptionist" />
+        }
+    </div>
+</div>

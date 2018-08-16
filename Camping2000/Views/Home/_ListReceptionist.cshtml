@@ -1,0 +1,57 @@
+﻿@model List<Camping2000.Models.Guest>
+
+<h2>The Following Receptionist Rights Exists.</h2>
+<hr />
+@if (Model != null)
+{
+    @ViewBag.NumberOfReceptionists
+    <hr />
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Firstname")
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Lastname")
+        </div>
+        <div class="col-md-8">
+        </div>
+    </div>
+    foreach (var receptionist in Model)
+    {
+        <div class="row">
+            <div class="col-md-2">
+                @receptionist.GuestFirstName
+            </div>
+            <div class="col-md-2">
+                @receptionist.GuestLastName
+            </div>
+            <div class="col-md-8">
+                @using (Ajax.BeginForm("ModifyCoWorkerToGuest", "Home", new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "ContentBody"
+                }))
+                {
+                    <div>
+                        @Html.Hidden("GuestId", receptionist.GuestId)
+                    </div>
+                    <input type="submit" value="Remove Receptionist Rights" />
+                }
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div>
+        @ViewBag.NumberOfReceptionists
+    </div>
+}
+@using (Ajax.BeginForm("ManageReceptionists", "Home", new AjaxOptions
+{
+    UpdateTargetId="ContentBody",
+    InsertionMode=InsertionMode.Replace,
+}))
+{
+    <input type="submit" value="Back to Receptionist" />
+}

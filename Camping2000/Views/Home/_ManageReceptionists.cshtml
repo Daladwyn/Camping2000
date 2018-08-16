@@ -6,8 +6,8 @@
 <hr />
 @using (Ajax.BeginForm("ListReceptionists", "Home", new AjaxOptions
 {
-    UpdateTargetId = "EndOfFoundCoworkers",
-    InsertionMode = InsertionMode.InsertBefore
+    UpdateTargetId = "ContentBody",
+    InsertionMode = InsertionMode.Replace
 }))
 {
     <input type="submit" value="Current Receptionists" />

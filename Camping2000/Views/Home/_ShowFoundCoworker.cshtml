@@ -19,7 +19,7 @@
             <div class="col-md-2">
                 @guest.GuestLastName
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 @using (Ajax.BeginForm("ModifyCoworkerToReceptionist", "Home",
             ajaxOptions: new AjaxOptions
             {
@@ -30,10 +30,11 @@
                     <div>
                         @Html.Hidden("GuestId", guest.GuestId)
                     </div>
-                    <input type="submit" value="Assign Receptionist Rights" />
+                    <input type="submit" value="Assign Rights" />
                 }
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
                 @using (Ajax.BeginForm("ModifyCoWorkerToGuest", "Home", new AjaxOptions
                 {
                     InsertionMode = InsertionMode.Replace,
@@ -43,9 +44,10 @@
                     <div>
                         @Html.Hidden("GuestId", guest.GuestId)
                     </div>
-                    <input type="submit" value="Remove Receptionist Rights" />
+                    <input type="submit" value="Remove Rights" />
                 }
             </div>
+            <div class="col-md-1"></div>
         </div>
     }
 }

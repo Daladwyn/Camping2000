@@ -218,6 +218,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ModifyBookingViewModel.cs" />
+    <Compile Include="Models\Receptionist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\SmallCabin.cs" />
     <Compile Include="Startup.cs" />
@@ -432,6 +433,7 @@
     <Content Include="Views\Home\_SearchReceptionist.cshtml" />
     <Content Include="Views\Home\_ShowFoundCoworker.cshtml" />
     <Content Include="Views\Home\_ConfirmReceptionistRights.cshtml" />
+    <Content Include="Views\Home\_ListReceptionist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
