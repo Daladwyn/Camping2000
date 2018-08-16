@@ -61,9 +61,16 @@ ajaxOptions: new AjaxOptions
             <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}",DateTime.Now)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingEndDate.AddDays(365))" />
         </div>
         <div class="col-md-2">
-            @Html.Hidden("BookingId", Model.BookingId)
-            @Html.Hidden("GuestId", Model.GuestId)
-            @Html.Hidden("ItemId", Model.ItemId)
+            @*Html.Hidden("BookingId", Model.BookingId)
+        @Html.Hidden("GuestId", Model.GuestId)
+        @Html.Hidden("ItemId", Model.ItemId)
+            <input type="hidden" name="BookingId" value="@Model.BookingId" />
+            <input type="hidden" name="GuestId" value="@Model.GuestId" />
+            <input type="hidden" name="ItemId" value="@Model.ItemId" />*@
+            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+            @Html.HiddenFor(c=>c.ItemId, Model.ItemId
+           )
             <input type="submit" value="Change Departuredate" />
         </div>
         <div class="col-md-4">
