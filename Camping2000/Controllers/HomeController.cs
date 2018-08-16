@@ -59,13 +59,8 @@ namespace Camping2000.Controllers
                         }
                     }
                 }
-                foreach (var spot in Db.Camping)//Gather spots based on if electricity is needed as price differs
-                {
-                    if (spot.CampingElectricity == newBooking.BookingNeedsElectricity)
-                    {
-                        ListOfSpots.Add(spot);
-                    }
-                }
+                ListOfSpots = FetchCampingSpots(newBooking.BookingNeedsElectricity);
+
                 if (newBooking.BookingStartDate >= newBooking.BookingEndDate)//check the start and end dates so start is before end.
                 {
                     ViewBag.Errormessage = "You must arrive before you can depart. Please choose another start and/or end date.";
@@ -88,20 +83,8 @@ namespace Camping2000.Controllers
                         }
                     }
                     notEligibleSpots.Sort();
-                    for (int i = ListOfSpots.Count - 1; i >= 0; i--)//remove occupied spots from the list of spots
-                    {
-                        for (int y = notEligibleSpots.Count - 1; y >= 0; y--)
-                        {
-                            if (ListOfSpots[i].ItemId == notEligibleSpots[y])
-                            {
-                                ListOfSpots.Remove(ListOfSpots[i]);
-                                if (i >= 1)
-                                {
-                                    i--;
-                                }
-                            }
-                        }
-                    }
+                    ListOfSpots = RemoveOccupiedSpots(ListOfSpots, notEligibleSpots);
+
                     if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
                     {
                         ViewBag.Errormessage = "There is no available space for you. Please choose another arrivaldate and departuredate.";
@@ -607,6 +590,7 @@ namespace Camping2000.Controllers
             };
             return PartialView("_GuestDetails", completeGuestDetails);
         }
+        [HttpPost]
         [Authorize(Roles = "Administrators, Guests")]
         public ActionResult UpdatedGuestDetails([Bind(Include = "GuestFirstName,GuestLastName,GuestNationality,GuestPhoneNumber,GuestMobileNumber," +
             "GuestId,LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity," +
@@ -703,6 +687,7 @@ namespace Camping2000.Controllers
             }
             return PartialView("_GuestData", newGuest);
         }
+        [HttpPost]
         public ActionResult SaveGuestData([Bind(Include = "GuestFirstName,GuestLastName,GuestNationality,GuestPhoneNumber,GuestMobileNumber," +
             "GuestId,PostAdressStreet1,PostAdressStreet2,PostAdressStreet3,PostAdressZipCode,PostAdressCity," +
             "LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity")]GuestDataViewModel newGuest)
@@ -791,6 +776,7 @@ namespace Camping2000.Controllers
                 return PartialView("_GuestDetails", completeGuestDetails);
             }
         }
+        [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangeStartDate([Bind(Include = "BookingId,GuestId,ItemId,BookingStartDate")] ModifyBookingViewModel bookingToModify)
         {
@@ -848,52 +834,9 @@ namespace Camping2000.Controllers
                     }
                 }
                 disAllowableBookings.Sort();
-                if (currentBooking.BookingNeedsElectricity == true)
-                {
-                    foreach (var spot in Db.Camping)
-                    {
-                        if (spot.CampingElectricity == true)
-                        {
-                            ListOfSpots.Add(spot);
-                        }
-                    }
-                }
-                else //Gather spots based on if electricity is  not needed as price differs
-                {
-                    foreach (var spot in Db.Camping)
-                    {
-                        if (spot.CampingElectricity == false)
-                        {
-                            ListOfSpots.Add(spot);
-                        }
-                    }
-                }
-                if (ListOfSpots.Capacity < disAllowableBookings.Capacity)
-                {
-                    for (int i = ListOfSpots.Count - 1; i >= 0; i--)
-                    {
-                        for (int y = disAllowableBookings.Count - 1; y >= 0; y--)
-                        {
-                            if (ListOfSpots[i].ItemId == disAllowableBookings[y])
-                            {
-                                ListOfSpots.Remove(ListOfSpots[i]);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = disAllowableBookings.Count - 1; i >= 0; i--)
-                    {
-                        for (int y = ListOfSpots.Count - 1; y >= 0; y--)
-                        {
-                            if (ListOfSpots[y].ItemId == disAllowableBookings[i])
-                            {
-                                ListOfSpots.Remove(ListOfSpots[y]);
-                            }
-                        }
-                    }
-                }
+                ListOfSpots = FetchCampingSpots(currentBooking.BookingNeedsElectricity);
+                ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings);
+
                 if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
                 {
                     ViewBag.Errormessage = "There are no available space for you. Please choose another arrivaldate.";
@@ -914,6 +857,7 @@ namespace Camping2000.Controllers
                 return PartialView("_ChangeStartDate", bookingToModify);
             }
         }
+        [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangeEndDate([Bind(Include = "BookingId,GuestId,ItemId,BookingEndDate")] ModifyBookingViewModel bookingToModify)
         {
@@ -957,54 +901,9 @@ namespace Camping2000.Controllers
                     }
                 }
                 disAllowableBookings.Sort();
-                if (currentBooking.BookingNeedsElectricity == true)
-                {
-                    foreach (var spot in allSpots)
-                    {
-                        if (spot.CampingElectricity == true)
-                        {
-                            ListOfSpots.Add(spot);
-                        }
-                    }
-                }
-                else //Gather spots based on if electricity is  not needed as price differs
-                {
-                    foreach (var spot in allSpots)
-                    {
-                        if (spot.CampingElectricity == false)
-                        {
-                            ListOfSpots.Add(spot);
-                        }
-                    }
-                }
-                if (ListOfSpots.Capacity < disAllowableBookings.Capacity)
-                {
-                    for (int i = ListOfSpots.Count - 1; i >= 0; i--)
-                    {
-                        for (int y = disAllowableBookings.Count - 1; y >= 0; y--)
-                        {
-                            if (ListOfSpots[i].ItemId == disAllowableBookings[y])
-                            {
-                                ListOfSpots.Remove(ListOfSpots[i]);
-                                i--;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = disAllowableBookings.Count - 1; i >= 0; i--)
-                    {
-                        for (int y = ListOfSpots.Count - 1; y >= 0; y--)
-                        {
-                            if (ListOfSpots[y].ItemId == disAllowableBookings[i])
-                            {
-                                ListOfSpots.Remove(ListOfSpots[y]);
-                                y--;
-                            }
-                        }
-                    }
-                }
+                ListOfSpots = FetchCampingSpots(currentBooking.BookingNeedsElectricity);
+                ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings);
+
                 if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
                 {
                     ViewBag.Errormessage = "There are no available space for you. Please choose another departuredate.";
@@ -1051,27 +950,7 @@ namespace Camping2000.Controllers
                         }
                     }
                     disAllowableBookings.Sort();
-                    if (currentBooking.BookingNeedsElectricity == true) //Gather spots based on electrical demand
-                    {
-                        foreach (var spot in Db.Camping)
-                        {
-                            if (spot.CampingElectricity == true)
-                            {
-                                ListOfSpots.Add(spot);
-                            }
-                        }
-                    }
-                    else //Gather spots based on if electricity is  not needed as price differs
-                    {
-                        foreach (var spot in Db.Camping)
-                        {
-                            if (spot.CampingElectricity == false)
-                            {
-                                ListOfSpots.Add(spot);
-                            }
-                        }
-                    }
-
+                    ListOfSpots = FetchCampingSpots(currentBooking.BookingNeedsElectricity);
                     if (disAllowableBookings.Count < 1)//if no collision is detected and the guest is not checked in, change spot
                     {
                         currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
@@ -1084,32 +963,8 @@ namespace Camping2000.Controllers
                         ViewBag.Message = "The change of poweroutlet succeded. See details below.";
                         return PartialView("_ChangeStartDate", lb);
                     }
-                    if (ListOfSpots.Capacity < disAllowableBookings.Capacity)//Remove camping spots that colliding bookings is using.
-                    {
-                        for (int i = ListOfSpots.Count - 1; i >= 0; i--)
-                        {
-                            for (int y = disAllowableBookings.Count - 1; y >= 0; y--)
-                            {
-                                if (ListOfSpots[i].ItemId == disAllowableBookings[y])
-                                {
-                                    ListOfSpots.Remove(ListOfSpots[i]);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int i = disAllowableBookings.Count - 1; i >= 0; i--)//Remove camping spots that colliding bookings is using.
-                        {
-                            for (int y = ListOfSpots.Count - 1; y >= 0; y--)
-                            {
-                                if (ListOfSpots[y].ItemId == disAllowableBookings[i])
-                                {
-                                    ListOfSpots.Remove(ListOfSpots[y]);
-                                }
-                            }
-                        }
-                    }
+                    ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings);
+
                     if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
                     {
                         ViewBag.Errormessage = "There are no available spots that matches your need for electricity.";
@@ -1160,52 +1015,9 @@ namespace Camping2000.Controllers
                         }
                     }
                     disAllowableBookings.Sort();
-                    if (bookingToModify.BookingNeedsElectricity == true) //Gather spots based on electrical demand
-                    {
-                        foreach (var spot in Db.Camping)
-                        {
-                            if (spot.CampingElectricity == true)
-                            {
-                                ListOfSpots.Add(spot);
-                            }
-                        }
-                    }
-                    else //Gather spots based on if electricity is  not needed as price differs
-                    {
-                        foreach (var spot in Db.Camping)
-                        {
-                            if (spot.CampingElectricity == false)
-                            {
-                                ListOfSpots.Add(spot);
-                            }
-                        }
-                    }
-                    if (ListOfSpots.Capacity < disAllowableBookings.Capacity)
-                    {
-                        for (int i = ListOfSpots.Count - 1; i >= 0; i--)
-                        {
-                            for (int y = disAllowableBookings.Count - 1; y >= 0; y--)
-                            {
-                                if (ListOfSpots[i].ItemId == disAllowableBookings[y])
-                                {
-                                    ListOfSpots.Remove(ListOfSpots[i]);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int i = disAllowableBookings.Count - 1; i >= 0; i--)
-                        {
-                            for (int y = ListOfSpots.Count - 1; y >= 0; y--)
-                            {
-                                if (ListOfSpots[y].ItemId == disAllowableBookings[i])
-                                {
-                                    ListOfSpots.Remove(ListOfSpots[y]);
-                                }
-                            }
-                        }
-                    }
+                    ListOfSpots = FetchCampingSpots(bookingToModify.BookingNeedsElectricity);
+                    ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings);
+
                     if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
                     {
                         ViewBag.Errormessage = "There are no available spots that matches your need for electricity.";
@@ -1269,6 +1081,7 @@ namespace Camping2000.Controllers
                 return RedirectToAction("ModifySpecificBooking", bookingToModify);
             }
         }
+        [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangePartySize([Bind(Include = "BookingId,GuestId,ItemId,NumberOfGuests")] ModifyBookingViewModel bookingToModify)
         {
@@ -1339,9 +1152,18 @@ namespace Camping2000.Controllers
             }
             else
             {
+                if (bookingToModify.NumberOfGuests < 1)
+                {
+                    ViewBag.Errormessage = "Number of guests is less than 0. Number of guests has to be between 1 and 10.";
+                }
+                if (bookingToModify.NumberOfGuests > 10)
+                {
+                    ViewBag.Errormessage = "Number of guests is greater than 10. Number of guests has to be between 1 and 10.";
+                }
                 return RedirectToAction("ModifySpecificBooking", bookingToModify);
             }
         }
+        [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangeCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
@@ -1352,19 +1174,21 @@ namespace Camping2000.Controllers
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
                 Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
                 Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
+                List<Camping> allSpots = Db.Camping.ToList();
                 List<Camping> availableSpots = new List<Camping>();
+                List<Booking> allBookings = Db.Bookings.ToList();
                 List<Booking> collidingBookings = new List<Booking>();
                 List<Booking> collidingBookingsWPN = new List<Booking>();//collidingBookingsWithPowerNeed
                 if (currentBooking.GuestHasCheckedIn == true)
                 {
-                    foreach (var spot in Db.Camping)
+                    foreach (var spot in allSpots)
                     {
                         if ((spot.ItemIsBooked == false) && (spot.ItemId != currentItem.ItemId) && (spot.CampingElectricity == currentBooking.BookingNeedsElectricity))
                         {
                             availableSpots.Add(spot);
                         }
                     }
-                    foreach (var booking in Db.Bookings) //detect colliding bookings
+                    foreach (var booking in allBookings) //detect colliding bookings
                     {
                         if (((booking.BookingEndDate > currentBooking.BookingStartDate) && (booking.BookingEndDate <= currentBooking.BookingEndDate)) || ((booking.BookingStartDate < currentBooking.BookingEndDate) && (booking.BookingStartDate >= currentBooking.BookingStartDate)))
                         {
@@ -1421,6 +1245,7 @@ namespace Camping2000.Controllers
                 return RedirectToAction("ModifySpecificBooking", bookingToModify);
             }
         }
+        [HttpPost]
         [Authorize(Roles = "Administrators")]
         public ActionResult CancelReservation([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
@@ -1437,7 +1262,8 @@ namespace Camping2000.Controllers
                 Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
                 Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
                 List<Booking> guestsOtherBookings = new List<Booking>();
-                foreach (var booking in Db.Bookings)
+                List<Booking> allbookings = Db.Bookings.ToList();
+                foreach (var booking in allbookings)
                 {
                     if ((booking.GuestId == bookingToModify.GuestId) && (booking.BookingId != currentBooking.BookingId))
                     {
@@ -1468,6 +1294,7 @@ namespace Camping2000.Controllers
                 return PartialView("_FailedCancelReservation", bookingToModify); //check this returnstatment....
             }
         }
+        [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangeChooseCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
@@ -1512,7 +1339,7 @@ namespace Camping2000.Controllers
         {
             List<Guest> foundGuests = new List<Guest>();
             string errormessage = "";
-            if ((firstName == "") && (lastName == ""))
+            if ((firstName == "") && (lastName == ""))//Check typed string to be something else than void
             {
                 ViewBag.Errormessage = "Please specify the guests name before searching.";
                 return PartialView("_ShowFoundGuests", foundGuests);
@@ -1604,6 +1431,50 @@ namespace Camping2000.Controllers
                 ViewBag.NumberOfReceptionists = "The following " + currentReceptionists.Count() + " have receptionist rights.";
             }
             return PartialView("_ListReceptionist", receptionistData);
+        }
+        /// <summary>
+        /// Function that collects Camping spots based upon if power is required
+        /// </summary>
+        /// <param name="BookingNeedsElectricity"></param>
+        /// <returns></returns>
+        static List<Camping> FetchCampingSpots(bool BookingNeedsElectricity)
+        {
+            Camping2000Db Db = new Camping2000Db();
+            List<Camping> allSpots = Db.Camping.ToList();
+            List<Camping> ListOfSpots = new List<Camping>();
+            foreach (var spot in allSpots)
+            {
+                if (spot.CampingElectricity == BookingNeedsElectricity)
+                {
+                    ListOfSpots.Add(spot);
+                }
+            }
+            return ListOfSpots;
+        }
+        /// <summary>
+        /// This function compares a list of spots against a list of numbers and 
+        /// removes matching items in the list of spots
+        /// </summary>
+        /// <param name="ListOfSpots"></param>
+        /// <param name="notEligibleSpots"></param>
+        /// <returns></returns>
+        static List<Camping> RemoveOccupiedSpots(List<Camping> ListOfSpots, List<int> notEligibleSpots)
+        {
+            for (int i = ListOfSpots.Count - 1; i >= 0; i--)//remove occupied spots from the list of spots
+            {
+                for (int y = notEligibleSpots.Count - 1; y >= 0; y--)
+                {
+                    if (ListOfSpots[i].ItemId == notEligibleSpots[y])
+                    {
+                        ListOfSpots.Remove(ListOfSpots[i]);
+                        if (i >= 1)
+                        {
+                            i--;
+                        }
+                    }
+                }
+            }
+            return ListOfSpots;
         }
         /// <summary>
         /// Function that accepts one or two strings and return a list of guests 
