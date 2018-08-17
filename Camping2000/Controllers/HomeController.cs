@@ -1439,6 +1439,39 @@ namespace Camping2000.Controllers
             }
             return PartialView("_ListReceptionist", receptionistData);
         }
+        [HttpPost]
+        [Authorize(Roles = "Administrators, Receptionists")]
+        public ActionResult MissedCheckins()
+        {
+            Camping2000Db Db = new Camping2000Db();
+            List<Booking> allBookings = Db.Bookings.ToList();
+            List<Booking> failedCheckins = new List<Booking>();
+            Guest guestThatFailedToCheckin = new Guest();
+            ModifyBookingViewModel failedBooking = new ModifyBookingViewModel();
+            List<ModifyBookingViewModel> allFailedBookings = new List<ModifyBookingViewModel>();
+            foreach (var booking in allBookings)//fetch the bookings that have not been checked in
+            {
+                if ((booking.GuestHasReserved == true) && (booking.BookingStartDate < DateTime.Now.Date))
+                {
+                    failedCheckins.Add(booking);
+                }
+            }
+            foreach (var booking in failedCheckins)//populate the view with data from list of failedcheckins
+            {
+                //Have to change failedbooking so that its not the adress to the data that is copied to the list. *struct*
+                guestThatFailedToCheckin = Db.Guests.SingleOrDefault(g => g.GuestId == booking.GuestId);
+                failedBooking.BookingId = booking.BookingId;
+                failedBooking.BookingStartDate = booking.BookingStartDate;
+                failedBooking.BookingEndDate = booking.BookingEndDate;
+                failedBooking.NumberOfGuests = booking.NumberOfGuests;
+                failedBooking.GuestFirstName = guestThatFailedToCheckin.GuestFirstName;
+                failedBooking.GuestLastName = guestThatFailedToCheckin.GuestLastName;
+                failedBooking.GuestId = guestThatFailedToCheckin.GuestId;
+                allFailedBookings.Add(failedBooking);
+                //failedBooking = null;
+            }
+            return PartialView("_MissedCheckins", allFailedBookings);
+        }
         /// <summary>
         /// Function that collects Camping spots based upon if power is required
         /// </summary>

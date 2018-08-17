@@ -1,0 +1,49 @@
+﻿@model Camping2000.Models.ModifyBookingViewModel
+
+<div class="row">
+    <div class="col-md-2">
+        @Model.GuestFirstName @Model.GuestLastName
+    </div>
+    <div class="col-md-1">
+        @Model.BookingId
+    </div>
+    <div class="col-md-3">
+        @Model.BookingStartDate.ToShortDateString() - @Model.BookingEndDate.ToShortDateString()
+    </div>
+    <div class="col-md-1">
+        @Model.NumberOfGuests
+    </div>
+    @using (Ajax.BeginForm("CheckInConfirmation", "Home",
+        ajaxOptions: new AjaxOptions
+        {
+            UpdateTargetId = "ContentBody",
+            InsertionMode = InsertionMode.Replace,
+        }))
+    {
+        <div class="col-md-1">
+            <input type="number" name="NumberOfCheckInGuests" placeholder="Number of Guests" min="1" max="10" />
+        </div>
+        <div class="col-md-1">
+            <input type="submit" value="Checkin" />
+            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+        </div>
+    }
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("CancelReservation", "Home",
+          ajaxOptions: new AjaxOptions
+          {
+              UpdateTargetId = "ContentBody",
+              InsertionMode = InsertionMode.Replace,
+          }))
+        {
+
+            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+            @Html.HiddenFor(c => c.ItemId, Model.ItemId)
+            <input type="submit" value="Delete Reservation" />
+        }
+    </div>
+    <div class="col-md-1">
+
+    </div>
+</div>

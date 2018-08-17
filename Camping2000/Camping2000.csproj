@@ -433,6 +433,8 @@
     <Content Include="Views\Home\_ShowFoundCoworker.cshtml" />
     <Content Include="Views\Home\_ConfirmReceptionistRights.cshtml" />
     <Content Include="Views\Home\_ListReceptionist.cshtml" />
+    <Content Include="Views\Home\_MissedCheckins.cshtml" />
+    <Content Include="Views\Home\_AMissedCheckin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

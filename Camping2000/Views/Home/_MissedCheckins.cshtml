@@ -1,0 +1,38 @@
+﻿@model List<Camping2000.Models.ModifyBookingViewModel>
+
+<h2>Guests that have made a reservation but not checked in.</h2>
+<hr />
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Name")
+    </div>
+    <div class="col-md-1">
+        @Html.Label("BookinId")
+    </div>
+    <div class="col-md-3">
+        @Html.Label("Arrivaldate - Departuredate")
+    </div>
+    <div class="col-md-1">
+        @Html.Label("Partysize")
+    </div>
+    <div class="col-md-2">
+        @Html.Label("Checkin PartySize")
+    </div>
+    <div class="col-md-2">
+       
+    </div>
+    <div class="col-md-1">
+
+    </div>
+</div>
+@if (Model != null)
+{
+    foreach (var booking in Model)
+    {
+        Html.RenderPartial("_AMissedCheckin", booking);
+    }
+}
+else
+{
+    <p>All expected guests have arrived. </p>
+}

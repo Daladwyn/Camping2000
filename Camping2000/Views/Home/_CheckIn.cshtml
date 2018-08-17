@@ -31,6 +31,6 @@
 {
     foreach (var reservation in Model)
     {
-        Html.RenderAction("ShowGuestArrivals", reservation);
+        Html.RenderPartial("ShowGuestArrivals", reservation);
     }
 }
