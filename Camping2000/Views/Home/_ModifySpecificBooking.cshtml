@@ -31,14 +31,12 @@
                 <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingStartDate.AddDays(365))" />
             </div>
             <div class="col-md-2">
-                @Html.Hidden("BookingId", Model.BookingId)
-                @Html.Hidden("GuestId", Model.GuestId)
-                @Html.Hidden("ItemId", Model.ItemId)
+                @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+                @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+                @Html.HiddenFor(c => c.ItemId, Model.ItemId)
                 <input type="submit" value="Change Arrivaldate" />
             </div>
-            <div class="col-md-4">
-
-            </div>
+            <div class="col-md-4"></div>
         }
     }
 </div>
@@ -52,8 +50,8 @@
     @using (Ajax.BeginForm("ChangeEndDate", "Home",
 ajaxOptions: new AjaxOptions
 {
-   UpdateTargetId = "ContentBody",
-   InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "ContentBody",
+    InsertionMode = InsertionMode.Replace,
 }))
     {
         @Html.AntiForgeryToken()
@@ -61,16 +59,9 @@ ajaxOptions: new AjaxOptions
             <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}",DateTime.Now)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingEndDate.AddDays(365))" />
         </div>
         <div class="col-md-2">
-            @*Html.Hidden("BookingId", Model.BookingId)
-        @Html.Hidden("GuestId", Model.GuestId)
-        @Html.Hidden("ItemId", Model.ItemId)
-            <input type="hidden" name="BookingId" value="@Model.BookingId" />
-            <input type="hidden" name="GuestId" value="@Model.GuestId" />
-            <input type="hidden" name="ItemId" value="@Model.ItemId" />*@
             @Html.HiddenFor(g => g.GuestId, Model.GuestId)
             @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-            @Html.HiddenFor(c=>c.ItemId, Model.ItemId
-           )
+            @Html.HiddenFor(c => c.ItemId, Model.ItemId)
             <input type="submit" value="Change Departuredate" />
         </div>
         <div class="col-md-4">
@@ -104,9 +95,9 @@ ajaxOptions: new AjaxOptions
            }))
         {
             @Html.AntiForgeryToken()
-            @Html.Hidden("BookingId", Model.BookingId)
-            @Html.Hidden("GuestId", Model.GuestId)
-            @Html.Hidden("ItemId", Model.ItemId)
+            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+            @Html.HiddenFor(c => c.ItemId, Model.ItemId)
             <input type="submit" value="Change Poweroutlet" />
 
         }
@@ -125,14 +116,14 @@ ajaxOptions: new AjaxOptions
     @using (Ajax.BeginForm("ChangePartySize", "Home",
 ajaxOptions: new AjaxOptions
 {
-   UpdateTargetId = "ContentBody",
-   InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "ContentBody",
+    InsertionMode = InsertionMode.Replace,
 }))
     {
         @Html.AntiForgeryToken()
-        @Html.Hidden("BookingId", Model.BookingId)
-        @Html.Hidden("GuestId", Model.GuestId)
-        @Html.Hidden("ItemId", Model.ItemId)
+        @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+        @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+        @Html.HiddenFor(c => c.ItemId, Model.ItemId)
         <div class="col-md-2">
             <input type="number" id="NumberOfGuests" name="NumberOfGuests" min="1" max="10" value="@Model.NumberOfGuests" />
         </div>
@@ -162,9 +153,9 @@ ajaxOptions: new AjaxOptions
        }))
         {
             @Html.AntiForgeryToken()
-            @Html.Hidden("BookingId", Model.BookingId)
-            @Html.Hidden("GuestId", Model.GuestId)
-            @Html.Hidden("ItemId", Model.ItemId)
+            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+            @Html.HiddenFor(c => c.ItemId, Model.ItemId)
             <input type="submit" value="Change campingspot" />
         }
     </div>
@@ -216,7 +207,7 @@ ajaxOptions: new AjaxOptions
                        InsertionMode = InsertionMode.Replace,
                    }))
         {
-            
+
             <input type="submit" value="Return to Bookings" />
         }
     </div>
@@ -228,10 +219,10 @@ ajaxOptions: new AjaxOptions
                        InsertionMode = InsertionMode.Replace,
                    }))
         {
-            
-            @Html.Hidden("BookingId", Model.BookingId)
-            @Html.Hidden("GuestId", Model.GuestId)
-            @Html.Hidden("ItemId", Model.ItemId)
+
+            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+            @Html.HiddenFor(c => c.ItemId, Model.ItemId)
             <input type="submit" value="Delete Reservation" />
         }
     </div>

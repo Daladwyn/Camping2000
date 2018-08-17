@@ -23,11 +23,11 @@
                 <input type="submit" value="Modify Booking" />
             </div>
             <div class="form-group">
-                @Html.Hidden("BookingId", Model.BookingId)
-                @Html.Hidden("ItemId",Model.ItemId)
-                @Html.Hidden("GuestId",Model.GuestId)
+                @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+                @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+                @Html.HiddenFor(c => c.ItemId, Model.ItemId)
             </div>
-            @*Ajax.ActionLink("Modify Booking Details", "ModifySpecificBooking", ajaxOptions: new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ContentBody" })*@
+           
         </div>
     </div>
 }

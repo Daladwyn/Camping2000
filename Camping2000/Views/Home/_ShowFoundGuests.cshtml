@@ -28,11 +28,12 @@
                 </div>
                 <div class="col-md-4">
                     <input type="submit" value="Modify Guests Details" />
-                 
+
                 </div>
             </div>
             <div>
                 @Html.Hidden("GuestId", guest.GuestId)
+                @*Html.HiddenFor(g => g.GuestId, guest.GuestId)*@
             </div>
         }
     }

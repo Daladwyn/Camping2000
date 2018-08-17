@@ -124,10 +124,6 @@ else
     <div class="form-group">
         @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
         @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-        @*Html.Hidden("BookingStartDate", Model.BookingStartDate)
-            @Html.Hidden("BookingEndDate", Model.BookingEndDate)
-            @Html.Hidden("BookingNeedsElectricity", Model.BookingNeedsElectricity)
-            @Html.Hidden("NumberOfGuests", Model.NumberOfGuests)*@
         <input type="submit" value="Reserve" class="btn btn-default" />
     </div>
 }

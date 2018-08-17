@@ -32,8 +32,8 @@ else
                     </select>
                 </div>
                 <div class="col-md-2">
-                    @Html.Hidden("BookingId", Model.BookingId)
-                    @Html.Hidden("GuestId", Model.GuestId)
+                    @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+                    @Html.HiddenFor(b => b.BookingId, Model.BookingId)
                     <input type="submit" value="Chosen Spot" />
                 </div>
                 <div class="col-md-6">
