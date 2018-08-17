@@ -927,6 +927,7 @@ namespace Camping2000.Controllers
                 return PartialView("_ChangeEndDate", bookingToModify);
             }
         }
+        [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangePowerOutlet([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
@@ -1219,32 +1220,32 @@ namespace Camping2000.Controllers
                             }
                         }
                     }
-                    aBookingView.ItemId = currentItem.ItemId;
-                    aBookingView.ItemName = currentItem.ItemName;
-                    aBookingView.BookingId = currentBooking.BookingId;
-                    aBookingView.GuestId = currentGuest.GuestId;
-                    aBookingView.BookingStartDate = currentBooking.BookingStartDate;
-                    aBookingView.BookingEndDate = currentBooking.BookingEndDate;
-                    aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
-                    aBookingView.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
+                    //aBookingView.ItemId = currentItem.ItemId;
+                    //aBookingView.ItemName = currentItem.ItemName;
+                    //aBookingView.BookingId = currentBooking.BookingId;
+                    //aBookingView.GuestId = currentGuest.GuestId;
+                    //aBookingView.BookingStartDate = currentBooking.BookingStartDate;
+                    //aBookingView.BookingEndDate = currentBooking.BookingEndDate;
+                    //aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
+                    //aBookingView.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
                     aBookingView.VacantSpots = availableSpots;
-                    return PartialView("_ChangeCampingSpot", aBookingView);
+                    //return PartialView("_ChangeCampingSpot", aBookingView);
                 }
                 else
                 {
                     //inform that change of spot is only doable after checkin.
-                    aBookingView.ItemId = currentItem.ItemId;
-                    aBookingView.ItemName = currentItem.ItemName;
-                    aBookingView.BookingId = currentBooking.BookingId;
-                    aBookingView.GuestId = currentGuest.GuestId;
-                    aBookingView.BookingStartDate = currentBooking.BookingStartDate;
-                    aBookingView.BookingEndDate = currentBooking.BookingEndDate;
-                    aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
-                    aBookingView.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
-                    //aBookingView.VacantSpots = availableSpots;
                     ViewBag.GuestHasCheckedIn = "false";
-                    return PartialView("_ChangeCampingSpot", aBookingView);
                 }
+                aBookingView.ItemId = currentItem.ItemId;
+                aBookingView.ItemName = currentItem.ItemName;
+                aBookingView.BookingId = currentBooking.BookingId;
+                aBookingView.GuestId = currentGuest.GuestId;
+                aBookingView.BookingStartDate = currentBooking.BookingStartDate;
+                aBookingView.BookingEndDate = currentBooking.BookingEndDate;
+                aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
+                aBookingView.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
+                return PartialView("_ChangeCampingSpot", aBookingView);
+
             }
             else
             {
