@@ -17,6 +17,6 @@ namespace Camping2000.Models
         [Range(1, 11)]
         public int ItemNumberOfPersons { get; set; }
         [Required]
-        public bool ItemIsBooked { get; set; }
+        public bool ItemIsOccupied { get; set; }
     }
 }
