@@ -32,8 +32,11 @@ namespace Camping2000.Models
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime BookingEndDate { get; set; }
+        [Required]
         public int ItemId { get; set; }
+        [Required]
         public decimal BookingPrice { get; set; }
+        [Required]
         public bool BookingNeedsElectricity { get; set; }
     }
 }
