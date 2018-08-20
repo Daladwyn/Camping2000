@@ -1,0 +1,56 @@
+﻿@model List<Camping2000.Models.GuestBookingViewModel>
+
+<h2>Guests that have checked in but not checked out.</h2>
+<hr />
+<div class="row">
+    <div class="col-md-2">
+        @Html.Label("Name")
+    </div>
+    <div class="col-md-1">
+        @Html.Label("BookinId")
+    </div>
+    <div class="col-md-3">
+        @Html.Label("Arrivaldate - Departuredate")
+    </div>
+    <div class="col-md-1">
+        @Html.Label("Partysize")
+    </div>
+    <div class="col-md-1">
+        @Html.Label("Power")
+    </div>
+    <div class="col-md-1">
+        @Html.Label("Price")
+    </div>
+    <div class="col-md-1">
+        @Html.Label("Mobile Number")
+    </div>
+    <div class="col-md-1">
+
+    </div>
+</div>
+@if (Model != null)
+{
+    foreach (var booking in Model)
+    {
+        Html.RenderPartial("_AMissedCheckOut", booking);
+    }
+}
+else
+{
+    <p>All checked in guests have checked out. </p>
+}
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("ModifyBooking", "Home",
+                  ajaxOptions: new AjaxOptions
+                  {
+                      UpdateTargetId = "ContentBody",
+                      InsertionMode = InsertionMode.Replace,
+                  }))
+        {
+
+            <input type="submit" value="Return to Bookings" />
+        }
+    </div>
+    <div class="col-md-10"></div>
+</div>

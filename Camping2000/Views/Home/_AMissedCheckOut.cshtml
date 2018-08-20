@@ -13,25 +13,33 @@
     <div class="col-md-1">
         @Model.NumberOfGuests
     </div>
-    <div class="col-md-2">
-        @Model.GuestPhoneNumber / @Model.GuestMobileNumber
+    <div class="col-md-1">
+        @if (Model.BookingNeedsElectricity == true)
+        {
+            <div>Yes</div>
+        }
+        else
+        {
+            <div>No</div>
+        }
+    </div>
+    <div class="col-md-1">
+        @Model.BookingPrice
+    </div>
+    <div class="col-md-1">
+        @Model.GuestMobileNumber
     </div>
     <div class="col-md-2">
-        @using (Ajax.BeginForm("CancelReservation", "Home",
+        @using (Ajax.BeginForm("CheckOutConfirmation", "Home",
           ajaxOptions: new AjaxOptions
           {
               UpdateTargetId = "ContentBody",
               InsertionMode = InsertionMode.Replace,
           }))
         {
-
-            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
             @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-            @Html.HiddenFor(c => c.ItemId, Model.ItemId)
-            <input type="submit" value="Delete Reservation" />
+            <input type="submit" value="Checkout Guest" />
         }
     </div>
-    <div class="col-md-1">
-
-    </div>
 </div>
+

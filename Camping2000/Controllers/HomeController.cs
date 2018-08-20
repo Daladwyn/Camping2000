@@ -296,6 +296,7 @@ namespace Camping2000.Controllers
             }
             return PartialView("_ArrivalsDepartures", arrivalsDepartures);
         }
+        [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult CheckInConfirmation(int BookingId, int NumberOfCheckInGuests)
         {
@@ -371,6 +372,7 @@ namespace Camping2000.Controllers
                 return PartialView("_Checkin", checkInBooking);
             }
         }
+        [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult CheckOutConfirmation([Bind(Include = "BookingId")]BookingGuestViewModel checkingOutGuest)
         {
@@ -406,11 +408,11 @@ namespace Camping2000.Controllers
                 departedGuestSpot.ItemIsOccupied = false;
             }
             int numberOfSaves = Db.SaveChanges();
-            if (numberOfSaves != 3)
-            {
-                ViewBag.Errormessage = "The check out did not succed.";
-                return PartialView("_CheckOut", checkingOutGuest);
-            }
+            //if (numberOfSaves != 3)
+            //{
+            //    ViewBag.Errormessage = "The check out did not succed.";
+            //    return PartialView("_CheckOut", checkingOutGuest);
+            //}
             departingGuestBooking.BookingId = departingBooking.BookingId;
             departingGuestBooking.GuestFirstName = departingGuest.GuestFirstName;
             departingGuestBooking.GuestLastName = departingGuest.GuestLastName;
@@ -1472,6 +1474,42 @@ namespace Camping2000.Controllers
                 allFailedBookings.Add(failedBooking);
             }
             return PartialView("_MissedCheckins", allFailedBookings);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Administrators, Receptionists")]
+        public ActionResult MissedCheckouts()
+        {
+            Camping2000Db Db = new Camping2000Db();
+            List<Booking> allBookings = Db.Bookings.ToList();
+            List<Booking> failedCheckouts = new List<Booking>();
+            Guest guestThatFailedToCheckOut = new Guest();
+            GuestBookingViewModel failedBooking = new GuestBookingViewModel();
+            List<GuestBookingViewModel> allFailedBookings = new List<GuestBookingViewModel>();
+            foreach (var booking in allBookings)//fetch the bookings that have not been checked in
+            {
+                if ((booking.GuestHasCheckedIn == true) && (booking.BookingEndDate < DateTime.Now.Date))
+                {
+                    failedCheckouts.Add(booking);
+                }
+            }
+            foreach (var booking in failedCheckouts)//populate the view with data from list of failedcheckins
+            {
+                guestThatFailedToCheckOut = Db.Guests.SingleOrDefault(g => g.GuestId == booking.GuestId);
+                failedBooking.BookingId = booking.BookingId;
+                failedBooking.BookingStartDate = booking.BookingStartDate;
+                failedBooking.BookingEndDate = booking.BookingEndDate;
+                failedBooking.NumberOfGuests = booking.NumberOfGuests;
+                failedBooking.GuestFirstName = guestThatFailedToCheckOut.GuestFirstName;
+                failedBooking.GuestLastName = guestThatFailedToCheckOut.GuestLastName;
+                failedBooking.GuestId = guestThatFailedToCheckOut.GuestId;
+                failedBooking.GuestMobileNumber = guestThatFailedToCheckOut.GuestMobileNumber;
+                failedBooking.GuestPhoneNumber = guestThatFailedToCheckOut.GuestPhoneNumber;
+                failedBooking.ItemId = booking.ItemId;
+                failedBooking.BookingNeedsElectricity = booking.BookingNeedsElectricity;
+                failedBooking.BookingPrice = booking.BookingPrice;
+                allFailedBookings.Add(failedBooking);
+            }
+            return PartialView("_MissedCheckOuts", allFailedBookings);
         }
         /// <summary>
         /// Function that collects Camping spots based upon if power is required
