@@ -29,9 +29,9 @@ namespace Camping2000.Models
         public string PostAdressStreet2 { get; set; }
         [MaxLength(100)]
         public string PostAdressStreet3 { get; set; }
-        [Range(0,99999)]
+        [Range(0, 99999)]
         public int PostAdressZipCode { get; set; }
         [MaxLength(100)]
-        public string PostAdressCity        { get; set; }
+        public string PostAdressCity { get; set; }
     }
 }
