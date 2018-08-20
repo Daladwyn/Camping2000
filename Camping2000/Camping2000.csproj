@@ -216,6 +216,7 @@
     <Compile Include="Models\LargeCabin.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LinkBooking.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ModifyBookingViewModel.cs" />
     <Compile Include="Models\Receptionist.cs" />
