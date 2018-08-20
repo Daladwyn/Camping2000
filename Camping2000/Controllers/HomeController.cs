@@ -1447,8 +1447,8 @@ namespace Camping2000.Controllers
             List<Booking> allBookings = Db.Bookings.ToList();
             List<Booking> failedCheckins = new List<Booking>();
             Guest guestThatFailedToCheckin = new Guest();
-            ModifyBookingViewModel failedBooking = new ModifyBookingViewModel();
-            List<ModifyBookingViewModel> allFailedBookings = new List<ModifyBookingViewModel>();
+            GuestBookingViewModel failedBooking = new GuestBookingViewModel();
+            List<GuestBookingViewModel> allFailedBookings = new List<GuestBookingViewModel>();
             foreach (var booking in allBookings)//fetch the bookings that have not been checked in
             {
                 if ((booking.GuestHasReserved == true) && (booking.BookingStartDate < DateTime.Now.Date))
@@ -1458,7 +1458,6 @@ namespace Camping2000.Controllers
             }
             foreach (var booking in failedCheckins)//populate the view with data from list of failedcheckins
             {
-                //Have to change failedbooking so that its not the adress to the data that is copied to the list. *struct*
                 guestThatFailedToCheckin = Db.Guests.SingleOrDefault(g => g.GuestId == booking.GuestId);
                 failedBooking.BookingId = booking.BookingId;
                 failedBooking.BookingStartDate = booking.BookingStartDate;
@@ -1467,8 +1466,10 @@ namespace Camping2000.Controllers
                 failedBooking.GuestFirstName = guestThatFailedToCheckin.GuestFirstName;
                 failedBooking.GuestLastName = guestThatFailedToCheckin.GuestLastName;
                 failedBooking.GuestId = guestThatFailedToCheckin.GuestId;
+                failedBooking.GuestMobileNumber = guestThatFailedToCheckin.GuestMobileNumber;
+                failedBooking.GuestPhoneNumber = guestThatFailedToCheckin.GuestPhoneNumber;
+                failedBooking.ItemId = booking.ItemId;
                 allFailedBookings.Add(failedBooking);
-                //failedBooking = null;
             }
             return PartialView("_MissedCheckins", allFailedBookings);
         }

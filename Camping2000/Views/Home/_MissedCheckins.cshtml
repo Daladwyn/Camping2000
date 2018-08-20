@@ -1,4 +1,4 @@
-﻿@model List<Camping2000.Models.ModifyBookingViewModel>
+﻿@model List<Camping2000.Models.GuestBookingViewModel>
 
 <h2>Guests that have made a reservation but not checked in.</h2>
 <hr />
@@ -16,7 +16,7 @@
         @Html.Label("Partysize")
     </div>
     <div class="col-md-2">
-        @Html.Label("Checkin PartySize")
+        @Html.Label("Home / Mobile Number")
     </div>
     <div class="col-md-2">
        
@@ -36,3 +36,17 @@ else
 {
     <p>All expected guests have arrived. </p>
 }
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("ModifyBooking", "Home",
+                  ajaxOptions: new AjaxOptions
+                  {
+                      UpdateTargetId = "ContentBody",
+                      InsertionMode = InsertionMode.Replace,
+                  }))
+        {
+
+            <input type="submit" value="Return to Bookings" />
+        }
+    </div>
+</div>
