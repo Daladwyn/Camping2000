@@ -3,8 +3,6 @@
 
 @if (Model != null)
 {
-
-
     <h2>Please confirm your reservation with booking id: @Model.BookingId.</h2>
     <hr />
     @ViewBag.Errormessage
@@ -26,7 +24,7 @@
     </div>
     <p>Your estimated price is: @Model.BookingPrice kr.</p>
 
-    @if (Request.IsAuthenticated)
+    if (Request.IsAuthenticated)
     {
         <div class="row">
             <div class="col-md-2">
@@ -118,5 +116,6 @@
 }
 else
 {
+    <h2>Something happend with your booking id: @Model.BookingId.</h2>
     @ViewBag.Errormessage
 }

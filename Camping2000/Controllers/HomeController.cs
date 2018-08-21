@@ -34,25 +34,25 @@ namespace Camping2000.Controllers
         {
             Camping2000Db Db = new Camping2000Db();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
-            if (currentBooking == null)
+            if (currentBooking == null)//check if fetched data is valid
             {
                 ViewBag.Errormessage = "Fetching data did not succeed. Please write down your bookingId before trying again.";
                 return PartialView("_SpaceForTent", newBooking);
             }
             currentBooking.GuestId = checkForNullReferenceException(newBooking.GuestId);
-            if (currentBooking.GuestId == "Invalidstring")
+            if (currentBooking.GuestId == "Invalidstring")//check if fetched data is valid
             {
                 ViewBag.Errormessage = "Sent data(GuestId) did not match. Please write down your bookingId before trying again.";
                 return PartialView("_SpaceForTent", newBooking);
             }
             Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
-            if (currentSpot == null)
+            if (currentSpot == null)//check if fetched data is valid
             {
                 ViewBag.Errormessage = "Fetching data did not succeed. Please write down your bookingId before trying again.";
                 return PartialView("_SpaceForTent", newBooking);
             }
             newBooking.BookingPrice = checkForNullReferenceException(currentSpot.CampingPrice);
-            if (newBooking.BookingPrice == 0)
+            if (newBooking.BookingPrice == 0)//check if fetched data is valid
             {
                 ViewBag.Errormessage = "Price for a campingspot could not be fetched. Please write down your bookingId before trying again.";
                 return PartialView("_SpaceForTent", currentBooking);
@@ -160,12 +160,12 @@ namespace Camping2000.Controllers
         {
             Camping2000Db Db = new Camping2000Db();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == acceptedBooking.BookingId);
-            if (currentBooking==null)
+            if (currentBooking == null)//check if fetched data is valid
             {
-                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
-                return PartialView("_ConfirmSpaceForTent",acceptedBooking);
+                ViewBag.Errormessage = "Fetching data did not succeed. Please write down your bookingId before you try again.";
+                return PartialView("_ConfirmSpaceForTent", acceptedBooking);
             }
-            currentBooking.GuestId = acceptedBooking.GuestId;
+            currentBooking.GuestId = checkForNullReferenceException(acceptedBooking.GuestId);
             currentBooking.GuestHasReserved = true;
             Db.SaveChanges();
             return PartialView("_ReservedConfirmation", acceptedBooking);
@@ -197,6 +197,7 @@ namespace Camping2000.Controllers
         //        return PartialView("_ConfirmSpaceForTent", newBooking);
         //    }
         //}
+        [HttpPost]
         public ActionResult PrintReservation()
         {
             return PartialView("Index");
@@ -211,11 +212,24 @@ namespace Camping2000.Controllers
             List<Camping> presentDaySpots = new List<Camping>();
             List<BookingGuestViewModel> presentDayBookings = new List<BookingGuestViewModel>();
             ViewBag.Errormessage = "";
+            if (allBookings == null)//check if fetched data is valid
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                return PartialView("_CheckIn");
+            }
             foreach (var booking in allBookings)//check for arrivals on present day
             {
                 if ((booking.BookingStartDate.ToShortDateString() == DateTime.Now.ToShortDateString()) && (booking.GuestHasReserved == true))
                 {
                     presentDayArrivals.Add(booking);
+                }
+            }
+            for (int i = 0; i < presentDayArrivals.Count(); i++) //Remove the Guests that already have checked in
+            {
+                if (presentDayArrivals[i].GuestHasCheckedIn == true)
+                {
+                    presentDayArrivals.Remove(presentDayArrivals[i]);
+                    i--;
                 }
             }
             if (presentDayArrivals.Count < 1) //if no arrivals is coming present day creata a message to user
@@ -228,15 +242,10 @@ namespace Camping2000.Controllers
                 presentDayGuests.Add(Db.Guests.Find(booking.GuestId));
                 presentDaySpots.Add(Db.Camping.Find(booking.ItemId));
             }
-            for (int i = 0; i < presentDayArrivals.Count(); i++) //Remove the Guest that already have checked in
+            if ((presentDayArrivals.Count != presentDayGuests.Count) || (presentDayArrivals.Count != presentDaySpots.Count))//check that matching data is present.
             {
-                if (presentDayArrivals[i].GuestHasCheckedIn == true)
-                {
-                    presentDayGuests.Remove(presentDayGuests[i]);
-                    presentDayArrivals.Remove(presentDayArrivals[i]);
-                    presentDaySpots.Remove(presentDaySpots[i]);
-                    i--;
-                }
+                ViewBag.Errormessage = "Fetching matched data did not succeeded. Please try again.";
+                return PartialView("_CheckIn");
             }
             for (int i = 0; i < presentDayArrivals.Count; i++) //join the data into a data viewmodel
             {
@@ -259,40 +268,50 @@ namespace Camping2000.Controllers
         {
             Camping2000Db Db = new Camping2000Db();
             List<Booking> allBookings = Db.Bookings.ToList();
-            List<Booking> departingGuestBooking = new List<Booking>();
-            List<Guest> departingGuest = new List<Guest>();
-            List<Camping> campingSpot = new List<Camping>();
+            List<Booking> departingGuestBookings = new List<Booking>();
+            List<Guest> departingGuests = new List<Guest>();
+            List<Camping> campingSpots = new List<Camping>();
             List<BookingGuestViewModel> presentDepartingBookings = new List<BookingGuestViewModel>();
             ViewBag.Errormessage = "";
+            if (allBookings == null)//check if fetched data is valid
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                return PartialView("_Checkout", presentDepartingBookings);
+            }
             foreach (var booking in allBookings)
             {
                 if ((booking.BookingEndDate.ToShortDateString() == DateTime.Now.ToShortDateString()) && (booking.GuestHasCheckedIn == true))
                 {
-                    departingGuestBooking.Add(booking);
+                    departingGuestBookings.Add(booking);
                 }
             }
-            if (departingGuestBooking.Count() < 1)
+            if (departingGuestBookings.Count() < 1)
             {
                 ViewBag.Errormessage = "No checkouts are planned to be made today or all departing guests have already checked out.";
-                return PartialView("_CheckOut", presentDepartingBookings);
+                return PartialView("_CheckOut");
             }
-            foreach (var booking in departingGuestBooking) //gather guestdata and spotdata from database in separate lists
+            foreach (var booking in departingGuestBookings) //gather guestdata and spotdata from database in separate lists
             {
-                departingGuest.Add(Db.Guests.Find(booking.GuestId));
-                campingSpot.Add(Db.Camping.Find(booking.ItemId));
+                departingGuests.Add(Db.Guests.Find(booking.GuestId));
+                campingSpots.Add(Db.Camping.Find(booking.ItemId));
             }
-            for (int i = 0; i < departingGuestBooking.Count; i++) //join the data into a data viewmodel
+            if ((departingGuestBookings.Count != departingGuests.Count) || (departingGuestBookings.Count != campingSpots.Count))
+            {
+                ViewBag.Errormessage = "Matching data was missing. Please try again.";
+                return PartialView("_CheckOut");
+            }
+            for (int i = 0; i < departingGuestBookings.Count; i++) //join the data into a data viewmodel
             {
                 presentDepartingBookings.Add(new BookingGuestViewModel
                 {
-                    BookingId = departingGuestBooking[i].BookingId,
-                    BookingPrice = departingGuestBooking[i].BookingPrice,
-                    ItemId = departingGuestBooking[i].ItemId,
-                    ItemName = campingSpot[i].ItemName,
-                    NumberOfGuests = departingGuestBooking[i].NumberOfGuests,
-                    GuestId = departingGuest[i].GuestId,
-                    GuestFirstName = departingGuest[i].GuestFirstName,
-                    GuestLastName = departingGuest[i].GuestLastName
+                    BookingId = departingGuestBookings[i].BookingId,
+                    BookingPrice = departingGuestBookings[i].BookingPrice,
+                    ItemId = departingGuestBookings[i].ItemId,
+                    ItemName = campingSpots[i].ItemName,
+                    NumberOfGuests = departingGuestBookings[i].NumberOfGuests,
+                    GuestId = departingGuests[i].GuestId,
+                    GuestFirstName = departingGuests[i].GuestFirstName,
+                    GuestLastName = departingGuests[i].GuestLastName
                 });
             }
             return PartialView("_CheckOut", presentDepartingBookings);
@@ -306,29 +325,37 @@ namespace Camping2000.Controllers
             Booking currentBooking = new Booking();
             Guest currentGuest = new Guest();
             Camping currentItem = new Camping();
+            if (allBookings == null)//check if fetched data is valid
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                return PartialView("_ArrivalsDepartures");
+            }
             foreach (var booking in allBookings)
             {
                 if ((booking.BookingStartDate.ToShortDateString() == DateTime.Now.ToShortDateString()) || (booking.BookingEndDate.ToShortDateString() == DateTime.Now.ToShortDateString()))
                 {
-                    if (booking.GuestId != null)
+                    if ((booking.GuestHasReserved == true) || (booking.GuestHasCheckedIn == true))
                     {
-                        currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId);
-                        currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId);
-                        arrivalsDepartures.Add(new ModifyBookingViewModel
+                        if ((booking.GuestId != null) && (booking.ItemId != 0))
                         {
-                            BookingId = booking.BookingId,
-                            BookingStartDate = booking.BookingStartDate,
-                            BookingEndDate = booking.BookingEndDate,
-                            GuestId = booking.GuestId,
-                            ItemId = booking.ItemId,
-                            ItemName = currentItem.ItemName,
-                            NumberOfGuests = booking.NumberOfGuests,
-                            BookingNeedsElectricity = booking.BookingNeedsElectricity,
-                            GuestFirstName = currentGuest.GuestFirstName,
-                            GuestLastName = currentGuest.GuestLastName,
-                            GuestHasCheckedIn = booking.GuestHasCheckedIn
-                        });
-                    };
+                            currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId);
+                            currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId);
+                            arrivalsDepartures.Add(new ModifyBookingViewModel
+                            {
+                                BookingId = booking.BookingId,
+                                BookingStartDate = booking.BookingStartDate,
+                                BookingEndDate = booking.BookingEndDate,
+                                GuestId = booking.GuestId,
+                                ItemId = booking.ItemId,
+                                ItemName = currentItem.ItemName,
+                                NumberOfGuests = booking.NumberOfGuests,
+                                BookingNeedsElectricity = booking.BookingNeedsElectricity,
+                                GuestFirstName = currentGuest.GuestFirstName,
+                                GuestLastName = currentGuest.GuestLastName,
+                                GuestHasCheckedIn = booking.GuestHasCheckedIn
+                            });
+                        }
+                    }
                 }
             }
             return PartialView("_ArrivalsDepartures", arrivalsDepartures);
@@ -340,46 +367,51 @@ namespace Camping2000.Controllers
             if (ModelState.IsValid)
             {
                 Camping2000Db Db = new Camping2000Db();
-                Booking booking = Db.Bookings.SingleOrDefault(i => i.BookingId == BookingId);
-                Camping spotThatIsReserved = Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId);
-                Guest guestThatHaveReserved = Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId);
+                Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == BookingId);
+                Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
+                Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == currentBooking.GuestId);
                 int numberOfDays = 0;
+                if ((currentBooking == null) || (currentSpot == null) || (currentGuest == null))//check if fetched data is valid
+                {
+                    ViewBag.Errormessage = "Fetching of data did not succeed. Please try again.";
+                    return PartialView("_Checkin");
+                }
                 BookingGuestViewModel checkInBooking = new BookingGuestViewModel
                 {
-                    BookingId = booking.BookingId,
-                    BookingPrice = booking.BookingPrice,
-                    GuestFirstName = guestThatHaveReserved.GuestFirstName,
-                    GuestLastName = guestThatHaveReserved.GuestLastName,
-                    GuestId = guestThatHaveReserved.GuestId,
-                    ItemId = spotThatIsReserved.ItemId,
-                    ItemName = spotThatIsReserved.ItemName,
-                    NumberOfGuests = booking.NumberOfGuests
+                    BookingId = currentBooking.BookingId,
+                    BookingPrice = currentBooking.BookingPrice,
+                    GuestFirstName = currentGuest.GuestFirstName,
+                    GuestLastName = currentGuest.GuestLastName,
+                    GuestId = currentGuest.GuestId,
+                    ItemId = currentSpot.ItemId,
+                    ItemName = currentSpot.ItemName,
+                    NumberOfGuests = currentBooking.NumberOfGuests
                 };
-                if (booking.NumberOfGuests != NumberOfCheckInGuests) //Check if PartySize differ from reservation
+                if (currentBooking.NumberOfGuests != NumberOfCheckInGuests) //Check if PartySize differ from reservation
                 {
-                    guestThatHaveReserved.GuestHasToPay = guestThatHaveReserved.GuestHasToPay - booking.BookingPrice;
-                    numberOfDays = CalculateNumberOfDays(booking.BookingStartDate, booking.BookingEndDate);
-                    booking.BookingPrice = spotThatIsReserved.CampingPrice * NumberOfCheckInGuests * numberOfDays;
-                    guestThatHaveReserved.GuestHasToPay = guestThatHaveReserved.GuestHasToPay + booking.BookingPrice;
-                    booking.GuestHasCheckedIn = true;
-                    booking.GuestHasReserved = false;
-                    booking.NumberOfGuests = NumberOfCheckInGuests;
-                    spotThatIsReserved.ItemIsOccupied = true;
+                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
+                    numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
+                    currentBooking.BookingPrice = currentSpot.CampingPrice * NumberOfCheckInGuests * numberOfDays;
+                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
+                    currentBooking.GuestHasCheckedIn = true;
+                    currentBooking.GuestHasReserved = false;
+                    currentBooking.NumberOfGuests = NumberOfCheckInGuests;
+                    currentSpot.ItemIsOccupied = true;
                     int numberOfSaves = Db.SaveChanges();
                     if (numberOfSaves != 3)
                     {
                         ViewBag.Errormessage = "The Checkin failed! Please check the number of checked in persons and the cost for the stay.";
                         return PartialView("_ShowGuestArrivals", checkInBooking);
                     }
-                    checkInBooking.BookingPrice = booking.BookingPrice;
+                    checkInBooking.BookingPrice = currentBooking.BookingPrice;
                     checkInBooking.NumberOfGuests = NumberOfCheckInGuests;
                     return PartialView("_CheckInConfirmation", checkInBooking);
                 }
                 else
                 {
-                    booking.GuestHasCheckedIn = true;
-                    booking.GuestHasReserved = false;
-                    spotThatIsReserved.ItemIsOccupied = true;
+                    currentBooking.GuestHasCheckedIn = true;
+                    currentBooking.GuestHasReserved = false;
+                    currentSpot.ItemIsOccupied = true;
                     int numberOfSaves = Db.SaveChanges();
                     if (numberOfSaves != 2)
                     {
@@ -392,19 +424,24 @@ namespace Camping2000.Controllers
             else
             {
                 Camping2000Db Db = new Camping2000Db();
-                Booking booking = Db.Bookings.SingleOrDefault(i => i.BookingId == BookingId);
-                Camping spotThatIsReserved = Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId);
-                Guest guestThatHaveReserved = Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId);
+                Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == BookingId);
+                Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
+                Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == currentBooking.GuestId);
+                if ((currentBooking == null) || (currentSpot == null) || (currentGuest == null))//check if fetched data is valid
+                {
+                    ViewBag.Errormessage = "Fetching of data did not succeed. Please try again.";
+                    return PartialView("_Checkin");
+                }
                 BookingGuestViewModel checkInBooking = new BookingGuestViewModel
                 {
-                    BookingId = booking.BookingId,
-                    BookingPrice = booking.BookingPrice,
-                    GuestFirstName = guestThatHaveReserved.GuestFirstName,
-                    GuestLastName = guestThatHaveReserved.GuestLastName,
-                    GuestId = guestThatHaveReserved.GuestId,
-                    ItemId = spotThatIsReserved.ItemId,
-                    ItemName = spotThatIsReserved.ItemName,
-                    NumberOfGuests = booking.NumberOfGuests
+                    BookingId = currentBooking.BookingId,
+                    BookingPrice = currentBooking.BookingPrice,
+                    GuestFirstName = currentGuest.GuestFirstName,
+                    GuestLastName = currentGuest.GuestLastName,
+                    GuestId = currentGuest.GuestId,
+                    ItemId = currentSpot.ItemId,
+                    ItemName = currentSpot.ItemName,
+                    NumberOfGuests = currentBooking.NumberOfGuests
                 };
                 return PartialView("_Checkin", checkInBooking);
             }
@@ -413,50 +450,69 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult CheckOutConfirmation([Bind(Include = "BookingId")]BookingGuestViewModel checkingOutGuest)
         {
-            Camping2000Db Db = new Camping2000Db();
-            Booking departingBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == checkingOutGuest.BookingId);
-            Guest departingGuest = Db.Guests.SingleOrDefault(i => i.GuestId == departingBooking.GuestId);
-            Camping departedGuestSpot = Db.Camping.SingleOrDefault(i => i.ItemId == departingBooking.ItemId);
-            List<Booking> allGuestBookings = new List<Booking>();
-            BookingGuestViewModel departingGuestBooking = new BookingGuestViewModel();
-            foreach (var booking in Db.Bookings) //collect any other bookings the guest have made
+            if (ModelState.IsValid)
             {
-                if ((booking.GuestId == departingGuest.GuestId) && (booking.GuestHasCheckedIn == true))
+                Camping2000Db Db = new Camping2000Db();
+                List<Booking> allBookings = Db.Bookings.ToList();
+                Booking departingBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == checkingOutGuest.BookingId);
+                Guest departingGuest = Db.Guests.SingleOrDefault(i => i.GuestId == departingBooking.GuestId);
+                Camping departedGuestSpot = Db.Camping.SingleOrDefault(i => i.ItemId == departingBooking.ItemId);
+                List<Booking> allGuestBookings = new List<Booking>();
+                BookingGuestViewModel departingGuestBooking = new BookingGuestViewModel();
+                if (allBookings==null) //check if fetched data is valid
                 {
-                    allGuestBookings.Add(booking);
+                    ViewBag.Errormessage = "Fetching of data did not succeed. Please try again.";
+                    return PartialView("_CheckOut");
                 }
+                if ((departingBooking == null) || (departedGuestSpot == null) || (departingGuest == null))//check if fetched data is valid
+                {
+                    ViewBag.Errormessage = "Fetching of data did not succeed. Please try again.";
+                    return PartialView("_CheckOut");
+                }
+                foreach (var booking in allBookings) //collect any other bookings the guest have made
+                {
+                    if ((booking.GuestId == departingGuest.GuestId) &&((booking.GuestHasCheckedIn == true)||booking.GuestHasReserved==true))
+                    {
+                        allGuestBookings.Add(booking);
+                    }
+                }
+                if (allGuestBookings.Count == 1)//if no other bookings exist
+                {
+                    departingGuest.GuestHasCheckedIn = false;
+                    departingGuest.GuestHasReserved = false;
+                    departingGuest.GuestHasPaid = departingGuest.GuestHasPaid + departingBooking.BookingPrice;
+                    departingGuest.GuestHasToPay = departingGuest.GuestHasToPay - departingBooking.BookingPrice;
+                    departingBooking.GuestHasCheckedIn = false;
+                    departingBooking.GuestHasReserved = false;
+                    departedGuestSpot.ItemIsOccupied = false;
+                }
+                else //if more bookings exist handle the specific booking.
+                {
+                    departingGuest.GuestHasPaid = departingGuest.GuestHasPaid + departingBooking.BookingPrice;
+                    departingGuest.GuestHasToPay = departingGuest.GuestHasToPay - departingBooking.BookingPrice;
+                    departingBooking.GuestHasCheckedIn = false;
+                    departingBooking.GuestHasReserved = false;
+                    departedGuestSpot.ItemIsOccupied = false;
+                }
+                int numberOfSaves = Db.SaveChanges();
+                if (numberOfSaves != 3)
+                {
+                    ViewBag.Errormessage = "The check out did partly succed.";
+                    return PartialView("_CheckOut", checkingOutGuest);
+                }
+                departingGuestBooking.BookingId = departingBooking.BookingId;
+                departingGuestBooking.GuestFirstName = departingGuest.GuestFirstName;
+                departingGuestBooking.GuestLastName = departingGuest.GuestLastName;
+                departingGuestBooking.BookingPrice = departingBooking.BookingPrice;
+                departingGuestBooking.NumberOfGuests = departingBooking.NumberOfGuests;
+                departingGuestBooking.ItemName = departedGuestSpot.ItemName;
+                return PartialView("_CheckOutConfirmation", departingGuestBooking);
             }
-            if (allGuestBookings.Count == 1)//if no other bookings exist
+            else
             {
-                departingGuest.GuestHasCheckedIn = false;
-                departingGuest.GuestHasReserved = false;
-                departingGuest.GuestHasPaid = departingGuest.GuestHasPaid + departingBooking.BookingPrice;
-                departingGuest.GuestHasToPay = departingGuest.GuestHasToPay - departingBooking.BookingPrice;
-                departingBooking.GuestHasCheckedIn = false;
-                departingBooking.GuestHasReserved = false;
-                departedGuestSpot.ItemIsOccupied = false;
+                ViewBag.Errormessage = "The check out did not succed.";
+                return PartialView("_CheckOut", checkingOutGuest);
             }
-            else //if more bookings exist handle the specific booking.
-            {
-                departingGuest.GuestHasPaid = departingGuest.GuestHasPaid + departingBooking.BookingPrice;
-                departingGuest.GuestHasToPay = departingGuest.GuestHasToPay - departingBooking.BookingPrice;
-                departingBooking.GuestHasCheckedIn = false;
-                departingBooking.GuestHasReserved = false;
-                departedGuestSpot.ItemIsOccupied = false;
-            }
-            int numberOfSaves = Db.SaveChanges();
-            //if (numberOfSaves != 3)
-            //{
-            //    ViewBag.Errormessage = "The check out did not succed.";
-            //    return PartialView("_CheckOut", checkingOutGuest);
-            //}
-            departingGuestBooking.BookingId = departingBooking.BookingId;
-            departingGuestBooking.GuestFirstName = departingGuest.GuestFirstName;
-            departingGuestBooking.GuestLastName = departingGuest.GuestLastName;
-            departingGuestBooking.BookingPrice = departingBooking.BookingPrice;
-            departingGuestBooking.NumberOfGuests = departingBooking.NumberOfGuests;
-            departingGuestBooking.ItemName = departedGuestSpot.ItemName;
-            return PartialView("_CheckOutConfirmation", departingGuestBooking);
         }
         public ActionResult GoToStart()
         {
