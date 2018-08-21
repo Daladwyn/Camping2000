@@ -19,11 +19,14 @@ namespace Camping2000.Controllers
         public ActionResult SpaceForTent([Bind(Include = "BookingNeedsElectricity")]Booking newBooking)
         {
             Camping2000Db Db = new Camping2000Db();
-            Camping campingSpot = Db.Camping.FirstOrDefault(i => i.CampingElectricity == newBooking.BookingNeedsElectricity);
-            //newBooking.BookingNeedsElectricity = newBooking.BookingNeedsElectricity;
+            Camping currentSpot = Db.Camping.FirstOrDefault(i => i.CampingElectricity == newBooking.BookingNeedsElectricity);
             newBooking.BookingStartDate = DateTime.Now;
             newBooking.BookingEndDate = DateTime.Now.AddDays(1);
-            newBooking.BookingPrice = campingSpot.CampingPrice;
+            newBooking.BookingPrice = checkForNullReferenceException(currentSpot.CampingPrice);
+            if (newBooking.BookingPrice == 0)
+            {
+                ViewBag.Errormessage = "Price for a campingspot could not be fetched. Please try again.";
+            }
             return PartialView("_SpaceForTent", newBooking);
         }
         [HttpPost]
@@ -33,7 +36,11 @@ namespace Camping2000.Controllers
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
             currentBooking.GuestId = newBooking.GuestId;
             Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
-            currentBooking.BookingPrice = currentSpot.CampingPrice;
+            newBooking.BookingPrice = checkForNullReferenceException(currentSpot.CampingPrice);
+            if (newBooking.BookingPrice == 0)
+            {
+                ViewBag.Errormessage = "Price for a campingspot could not be fetched. Please write down your bookingId before trying again.";
+            }
             Db.SaveChanges();
             return PartialView("_SpaceForTent", currentBooking);
         }
@@ -1510,6 +1517,12 @@ namespace Camping2000.Controllers
                 allFailedBookings.Add(failedBooking);
             }
             return PartialView("_MissedCheckOuts", allFailedBookings);
+        }
+        static decimal checkForNullReferenceException(decimal campingPrice)
+        {
+            decimal checkedPrice;
+            try { checkedPrice = campingPrice; } catch (NullReferenceException) { checkedPrice = 0; }
+            return checkedPrice;
         }
         /// <summary>
         /// Function that collects Camping spots based upon if power is required
