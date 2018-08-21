@@ -391,10 +391,10 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_MenuList.cshtml" />
     <Content Include="Views\Home\_SpaceForTent.cshtml" />
-    <Content Include="Views\Home\_SpaceForCaravan.cshtml" />
+    <Content Include="Views\Home\_SpaceForCaravan%28OLD%29.cshtml" />
     <Content Include="Views\Home\_ReservedConfirmation.cshtml" />
     <Content Include="Views\Home\_ConfirmSpaceForTent.cshtml" />
-    <Content Include="Views\Home\_ConfirmSpaceForCaravan.cshtml" />
+    <Content Include="Views\Home\_ConfirmSpaceForCaravan%28OLD%29.cshtml" />
     <Content Include="Views\Home\_CheckIn.cshtml" />
     <Content Include="Views\Home\_CheckOut.cshtml" />
     <Content Include="Views\Home\_ArrivalsDepartures.cshtml" />

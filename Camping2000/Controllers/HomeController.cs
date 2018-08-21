@@ -34,17 +34,33 @@ namespace Camping2000.Controllers
         {
             Camping2000Db Db = new Camping2000Db();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
-            currentBooking.GuestId = newBooking.GuestId;
+            if (currentBooking == null)
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please write down your bookingId before trying again.";
+                return PartialView("_SpaceForTent", newBooking);
+            }
+            currentBooking.GuestId = checkForNullReferenceException(newBooking.GuestId);
+            if (currentBooking.GuestId == "Invalidstring")
+            {
+                ViewBag.Errormessage = "Sent data(GuestId) did not match. Please write down your bookingId before trying again.";
+                return PartialView("_SpaceForTent", newBooking);
+            }
             Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
+            if (currentSpot == null)
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please write down your bookingId before trying again.";
+                return PartialView("_SpaceForTent", newBooking);
+            }
             newBooking.BookingPrice = checkForNullReferenceException(currentSpot.CampingPrice);
             if (newBooking.BookingPrice == 0)
             {
                 ViewBag.Errormessage = "Price for a campingspot could not be fetched. Please write down your bookingId before trying again.";
+                return PartialView("_SpaceForTent", currentBooking);
             }
             Db.SaveChanges();
             return PartialView("_SpaceForTent", currentBooking);
         }
-        public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,BookingNeedsElectricity,BookingId,GuestId")]Booking newBooking)//missing data ItemId, GuestId, Price, Bookingid
+        public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,BookingNeedsElectricity,BookingId,GuestId")]Booking newBooking)
         {
             if (ModelState.IsValid)
             {
@@ -55,6 +71,11 @@ namespace Camping2000.Controllers
                 List<Camping> ListOfSpots = new List<Camping>();//list of valid spots
                 Booking updatedBooking = new Booking();
                 ViewBag.Errormessage = "";
+                if (currentBookings == null)
+                {
+                    ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                    return PartialView("_SpaceForTent", newBooking);
+                }
                 if (newBooking.BookingId != 0)//a reservation readjustment have to exclude its own reservation
                 {
                     for (int i = currentBookings.Count - 1; i >= 0; i--)
@@ -67,7 +88,11 @@ namespace Camping2000.Controllers
                     }
                 }
                 ListOfSpots = FetchCampingSpots(newBooking.BookingNeedsElectricity);
-
+                if (ListOfSpots[0].CampingSpot == "NoData")
+                {
+                    ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
+                    return PartialView("_SpaceForTent", newBooking);
+                }
                 if (newBooking.BookingStartDate >= newBooking.BookingEndDate)//check the start and end dates so start is before end.
                 {
                     ViewBag.Errormessage = "You must arrive before you can depart. Please choose another start and/or end date.";
@@ -135,38 +160,43 @@ namespace Camping2000.Controllers
         {
             Camping2000Db Db = new Camping2000Db();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == acceptedBooking.BookingId);
+            if (currentBooking==null)
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                return PartialView("_ConfirmSpaceForTent",acceptedBooking);
+            }
             currentBooking.GuestId = acceptedBooking.GuestId;
             currentBooking.GuestHasReserved = true;
             Db.SaveChanges();
             return PartialView("_ReservedConfirmation", acceptedBooking);
         }
-        [HttpGet]
-        public ActionResult ConfirmSpaceForTent([Bind(Include = "BookingId,GuestId")]Booking newBooking)
-        {
-            if (ModelState.IsValid)
-            {
-                Camping2000Db Db = new Camping2000Db();
-                ViewBag.Errormessage = "";
-                Booking inCompleteBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
-                Guest presentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == newBooking.GuestId);
-                inCompleteBooking.GuestId = presentGuest.GuestId;
-                presentGuest.GuestHasToPay = presentGuest.GuestHasToPay + inCompleteBooking.BookingPrice;
-                inCompleteBooking.GuestHasReserved = true;
-                inCompleteBooking.GuestHasCheckedIn = false;
-                int checkDbSave = Db.SaveChanges();
-                if (checkDbSave < 2)
-                {
-                    ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
-                    return PartialView("_ConfirmSpaceForTent", newBooking);
-                }
-                return PartialView("_ReservedConfirmation", newBooking);
-            }
-            else
-            {
-                ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
-                return PartialView("_ConfirmSpaceForTent", newBooking);
-            }
-        }
+        //[HttpGet]
+        //public ActionResult ConfirmSpaceForTent([Bind(Include = "BookingId,GuestId")]Booking newBooking)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Camping2000Db Db = new Camping2000Db();
+        //        ViewBag.Errormessage = "";
+        //        Booking inCompleteBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
+        //        Guest presentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == newBooking.GuestId);
+        //        inCompleteBooking.GuestId = presentGuest.GuestId;
+        //        presentGuest.GuestHasToPay = presentGuest.GuestHasToPay + inCompleteBooking.BookingPrice;
+        //        inCompleteBooking.GuestHasReserved = true;
+        //        inCompleteBooking.GuestHasCheckedIn = false;
+        //        int checkDbSave = Db.SaveChanges();
+        //        if (checkDbSave < 2)
+        //        {
+        //            ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
+        //            return PartialView("_ConfirmSpaceForTent", newBooking);
+        //        }
+        //        return PartialView("_ReservedConfirmation", newBooking);
+        //    }
+        //    else
+        //    {
+        //        ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
+        //        return PartialView("_ConfirmSpaceForTent", newBooking);
+        //    }
+        //}
         public ActionResult PrintReservation()
         {
             return PartialView("Index");
@@ -844,6 +874,11 @@ namespace Camping2000.Controllers
                 }
                 disAllowableBookings.Sort();
                 ListOfSpots = FetchCampingSpots(currentBooking.BookingNeedsElectricity);
+                if (ListOfSpots[0].CampingSpot == "NoData")
+                {
+                    ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
+                    return PartialView("_FailedChangeStartDate", currentBooking);
+                }
                 ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings);
 
                 if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
@@ -913,6 +948,11 @@ namespace Camping2000.Controllers
                 }
                 disAllowableBookings.Sort();
                 ListOfSpots = FetchCampingSpots(currentBooking.BookingNeedsElectricity);//Fetch campingspots based on power needs
+                if (ListOfSpots[0].CampingSpot == "NoData")
+                {
+                    ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
+                    return PartialView("_FailedChangeEndDate", currentBooking);
+                }
                 ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings); //remove spots that are already occupied
 
                 if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
@@ -967,6 +1007,11 @@ namespace Camping2000.Controllers
                     }
                     disAllowableBookings.Sort();
                     ListOfSpots = FetchCampingSpots(currentBooking.BookingNeedsElectricity);
+                    if (ListOfSpots[0].CampingSpot == "NoData")
+                    {
+                        ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
+                        return PartialView("_FailedChangePowerOutlet", currentBooking);
+                    }
                     if (disAllowableBookings.Count < 1)//if no collision is detected and the guest is not checked in, change spot
                     {
                         currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
@@ -977,7 +1022,7 @@ namespace Camping2000.Controllers
                         Db.SaveChanges();
                         lb.Add(currentBooking);
                         ViewBag.Message = "The change of poweroutlet succeded. See details below.";
-                        return PartialView("_ChangeStartDate", lb);
+                        return PartialView("_ChangePowerOutlet", lb);
                     }
                     ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings);
 
@@ -1032,6 +1077,11 @@ namespace Camping2000.Controllers
                     }
                     disAllowableBookings.Sort();
                     ListOfSpots = FetchCampingSpots(bookingToModify.BookingNeedsElectricity);
+                    if (ListOfSpots[0].CampingSpot == "NoData")
+                    {
+                        ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
+                        return PartialView("_FailedChangePowerOutlet", currentBooking);
+                    }
                     ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings);
 
                     if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
@@ -1518,10 +1568,37 @@ namespace Camping2000.Controllers
             }
             return PartialView("_MissedCheckOuts", allFailedBookings);
         }
-        static decimal checkForNullReferenceException(decimal campingPrice)
+        /// <summary>
+        /// A function that checks if a valid sting have been fetched
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns>Returns a valid string. If not valid "Invalidstring" will be returned.</returns>
+        static string checkForNullReferenceException(string Id)
+        {
+            string checkedId;
+            try { checkedId = Id; } catch (NullReferenceException) { checkedId = "Invalidstring"; }
+            return checkedId;
+        }
+        /// <summary>
+        /// A function that checks a Int if it is null
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        static int checkForNullReferenceException(int Id)
+        {
+            int checkedId;
+            try { checkedId = Id; } catch (NullReferenceException) { checkedId = 0; }
+            return checkedId;
+        }
+        /// <summary>
+        /// Function that checks a decimal type if it is null
+        /// </summary>
+        /// <param name="Price"></param>
+        /// <returns>A value that is not null but 0</returns>
+        static decimal checkForNullReferenceException(decimal Price)
         {
             decimal checkedPrice;
-            try { checkedPrice = campingPrice; } catch (NullReferenceException) { checkedPrice = 0; }
+            try { checkedPrice = Price; } catch (NullReferenceException) { checkedPrice = 0; }
             return checkedPrice;
         }
         /// <summary>
@@ -1533,6 +1610,11 @@ namespace Camping2000.Controllers
         {
             Camping2000Db Db = new Camping2000Db();
             List<Camping> allSpots = Db.Camping.ToList();
+            if (allSpots == null)
+            {
+                allSpots[0].CampingSpot = "NoData";
+                return allSpots;
+            }
             List<Camping> ListOfSpots = new List<Camping>();
             foreach (var spot in allSpots)
             {
