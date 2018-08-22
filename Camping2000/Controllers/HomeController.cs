@@ -177,33 +177,6 @@ namespace Camping2000.Controllers
             Db.SaveChanges();
             return PartialView("_ReservedConfirmation", acceptedBooking);
         }
-        //[HttpGet]
-        //public ActionResult ConfirmSpaceForTent([Bind(Include = "BookingId,GuestId")]Booking newBooking)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        Camping2000Db Db = new Camping2000Db();
-        //        ViewBag.Errormessage = "";
-        //        Booking inCompleteBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
-        //        Guest presentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == newBooking.GuestId);
-        //        inCompleteBooking.GuestId = presentGuest.GuestId;
-        //        presentGuest.GuestHasToPay = presentGuest.GuestHasToPay + inCompleteBooking.BookingPrice;
-        //        inCompleteBooking.GuestHasReserved = true;
-        //        inCompleteBooking.GuestHasCheckedIn = false;
-        //        int checkDbSave = Db.SaveChanges();
-        //        if (checkDbSave < 2)
-        //        {
-        //            ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
-        //            return PartialView("_ConfirmSpaceForTent", newBooking);
-        //        }
-        //        return PartialView("_ReservedConfirmation", newBooking);
-        //    }
-        //    else
-        //    {
-        //        ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
-        //        return PartialView("_ConfirmSpaceForTent", newBooking);
-        //    }
-        //}
         [HttpPost]
         public ActionResult PrintReservation()
         {

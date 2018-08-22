@@ -36,8 +36,8 @@
                 }))
                 {
                     <div class="form-group">
-                        @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
-                        @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+                        <input type="hidden" name="GuestId" value="@User.Identity.GetUserId()" />
+                        <input type="hidden" name="BookingId" value="@Model.BookingId" />
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Make Adjustments" class="btn btn-default" />
@@ -54,8 +54,8 @@
                 {
 
                     <div class="form-group">
-                        @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
-                        @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+                        <input type="hidden" name="GuestId" value="@User.Identity.GetUserId()" />
+                        <input type="hidden" name="BookingId" value="@Model.BookingId" />
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Accept reservation" class="btn btn-default" />

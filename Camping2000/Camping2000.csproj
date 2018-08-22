@@ -237,8 +237,6 @@
     <Content Include="ProjectFiles\camping2000DbCommands.txt" />
     <Content Include="ProjectFiles\Camping2000ERD.png" />
     <Content Include="ProjectFiles\Wireframe.png" />
-    <Content Include="Scripts\bootstrap-datepicker.js" />
-    <Content Include="Scripts\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
