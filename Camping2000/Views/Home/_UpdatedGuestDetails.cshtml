@@ -272,7 +272,13 @@
     <div class="col-md-4">
     </div>
 </div>
-@Ajax.ActionLink("Done", "GoToStart", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })
-@*Ajax.ActionLink("Accept Changes", "UpdatedGuestDetails", ajaxOptions: new AjaxOptions { UpdateTargetId = "ContentBody", InsertionMode = InsertionMode.Replace })*@
-
-
+@using (Ajax.BeginForm("GoToStart", "Home", new AjaxOptions
+{
+    UpdateTargetId = "ContentBody",
+    InsertionMode = InsertionMode.Replace,
+}))
+{
+    <div>
+    <input type="submit" value="Done" />
+    </div>
+}

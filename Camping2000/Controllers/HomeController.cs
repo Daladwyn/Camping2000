@@ -12,10 +12,15 @@ namespace Camping2000.Controllers
 {
     public class HomeController : Controller
     {
+        public ActionResult GoToStart()
+        {
+            return PartialView("Index");
+        }
         public ActionResult Index()
         {
             return View();
         }
+        //flow for making a reservation
         public ActionResult SpaceForTent([Bind(Include = "BookingNeedsElectricity")]Booking newBooking)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -30,36 +35,6 @@ namespace Camping2000.Controllers
             return PartialView("_SpaceForTent", newBooking);
         }
         [HttpPost]
-        public ActionResult SpaceAdjustments([Bind(Include = "BookingId,GuestId")]Booking newBooking)
-        {
-            Camping2000Db Db = new Camping2000Db();
-            Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
-            if (currentBooking == null)//check if fetched data is valid
-            {
-                ViewBag.Errormessage = "Fetching data did not succeed. Please write down your bookingId before trying again.";
-                return PartialView("_SpaceForTent", newBooking);
-            }
-            currentBooking.GuestId = checkForNullReferenceException(newBooking.GuestId);
-            if (currentBooking.GuestId == "Invalidstring")//check if fetched data is valid
-            {
-                ViewBag.Errormessage = "Sent data(GuestId) did not match. Please write down your bookingId before trying again.";
-                return PartialView("_SpaceForTent", newBooking);
-            }
-            Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
-            if (currentSpot == null)//check if fetched data is valid
-            {
-                ViewBag.Errormessage = "Fetching data did not succeed. Please write down your bookingId before trying again.";
-                return PartialView("_SpaceForTent", newBooking);
-            }
-            newBooking.BookingPrice = checkForNullReferenceException(currentSpot.CampingPrice);
-            if (newBooking.BookingPrice == 0)//check if fetched data is valid
-            {
-                ViewBag.Errormessage = "Price for a campingspot could not be fetched. Please write down your bookingId before trying again.";
-                return PartialView("_SpaceForTent", currentBooking);
-            }
-            Db.SaveChanges();
-            return PartialView("_SpaceForTent", currentBooking);
-        }
         public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,BookingNeedsElectricity,BookingId,GuestId")]Booking newBooking)
         {
             if (ModelState.IsValid)
@@ -152,8 +127,40 @@ namespace Camping2000.Controllers
             }
             else
             {
+                ViewBag.Errormessage = "Some of your submited values were incorrect. Please try again later.";
                 return PartialView("_SpaceForTent", newBooking);//return previous view as indata is invalid
             }
+        }
+        [HttpPost]
+        public ActionResult SpaceAdjustments([Bind(Include = "BookingId,GuestId")]Booking newBooking)
+        {
+            Camping2000Db Db = new Camping2000Db();
+            Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
+            if (currentBooking == null)//check if fetched data is valid
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please write down your bookingId before trying again.";
+                return PartialView("_SpaceForTent", newBooking);
+            }
+            currentBooking.GuestId = checkForNullReferenceException(newBooking.GuestId);
+            if (currentBooking.GuestId == "Invalidstring")//check if fetched data is valid
+            {
+                ViewBag.Errormessage = "Sent data(GuestId) did not match. Please write down your bookingId before trying again.";
+                return PartialView("_SpaceForTent", newBooking);
+            }
+            Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
+            if (currentSpot == null)//check if fetched data is valid
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please write down your bookingId before trying again.";
+                return PartialView("_SpaceForTent", newBooking);
+            }
+            newBooking.BookingPrice = checkForNullReferenceException(currentSpot.CampingPrice);
+            if (newBooking.BookingPrice == 0)//check if fetched data is valid
+            {
+                ViewBag.Errormessage = "Price for a campingspot could not be fetched. Please write down your bookingId before trying again.";
+                return PartialView("_SpaceForTent", currentBooking);
+            }
+            Db.SaveChanges();
+            return PartialView("_SpaceForTent", currentBooking);
         }
         [HttpPost]
         public ActionResult ConfirmSpace([Bind(Include = "BookingId,GuestId")]Booking acceptedBooking)
@@ -202,6 +209,8 @@ namespace Camping2000.Controllers
         {
             return PartialView("Index");
         }
+        //End of reservation flow
+        //Start of Checkin flow
         [Authorize(Roles = "Administrators,Receptionists")]
         public ActionResult CheckIn()
         {
@@ -262,103 +271,6 @@ namespace Camping2000.Controllers
                 });
             }
             return PartialView("_CheckIn", presentDayBookings);
-        }
-        [Authorize(Roles = "Administrators, Receptionists")]
-        public ActionResult CheckOut()
-        {
-            Camping2000Db Db = new Camping2000Db();
-            List<Booking> allBookings = Db.Bookings.ToList();
-            List<Booking> departingGuestBookings = new List<Booking>();
-            List<Guest> departingGuests = new List<Guest>();
-            List<Camping> campingSpots = new List<Camping>();
-            List<BookingGuestViewModel> presentDepartingBookings = new List<BookingGuestViewModel>();
-            ViewBag.Errormessage = "";
-            if (allBookings == null)//check if fetched data is valid
-            {
-                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
-                return PartialView("_Checkout", presentDepartingBookings);
-            }
-            foreach (var booking in allBookings)
-            {
-                if ((booking.BookingEndDate.ToShortDateString() == DateTime.Now.ToShortDateString()) && (booking.GuestHasCheckedIn == true))
-                {
-                    departingGuestBookings.Add(booking);
-                }
-            }
-            if (departingGuestBookings.Count() < 1)
-            {
-                ViewBag.Errormessage = "No checkouts are planned to be made today or all departing guests have already checked out.";
-                return PartialView("_CheckOut");
-            }
-            foreach (var booking in departingGuestBookings) //gather guestdata and spotdata from database in separate lists
-            {
-                departingGuests.Add(Db.Guests.Find(booking.GuestId));
-                campingSpots.Add(Db.Camping.Find(booking.ItemId));
-            }
-            if ((departingGuestBookings.Count != departingGuests.Count) || (departingGuestBookings.Count != campingSpots.Count))
-            {
-                ViewBag.Errormessage = "Matching data was missing. Please try again.";
-                return PartialView("_CheckOut");
-            }
-            for (int i = 0; i < departingGuestBookings.Count; i++) //join the data into a data viewmodel
-            {
-                presentDepartingBookings.Add(new BookingGuestViewModel
-                {
-                    BookingId = departingGuestBookings[i].BookingId,
-                    BookingPrice = departingGuestBookings[i].BookingPrice,
-                    ItemId = departingGuestBookings[i].ItemId,
-                    ItemName = campingSpots[i].ItemName,
-                    NumberOfGuests = departingGuestBookings[i].NumberOfGuests,
-                    GuestId = departingGuests[i].GuestId,
-                    GuestFirstName = departingGuests[i].GuestFirstName,
-                    GuestLastName = departingGuests[i].GuestLastName
-                });
-            }
-            return PartialView("_CheckOut", presentDepartingBookings);
-        }
-        [Authorize(Roles = "Administrators, Receptionists")]
-        public ActionResult ArrivalsDepartures()
-        {
-            Camping2000Db Db = new Camping2000Db();
-            List<ModifyBookingViewModel> arrivalsDepartures = new List<ModifyBookingViewModel>();
-            List<Booking> allBookings = Db.Bookings.ToList();
-            Booking currentBooking = new Booking();
-            Guest currentGuest = new Guest();
-            Camping currentItem = new Camping();
-            if (allBookings == null)//check if fetched data is valid
-            {
-                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
-                return PartialView("_ArrivalsDepartures");
-            }
-            foreach (var booking in allBookings)
-            {
-                if ((booking.BookingStartDate.ToShortDateString() == DateTime.Now.ToShortDateString()) || (booking.BookingEndDate.ToShortDateString() == DateTime.Now.ToShortDateString()))
-                {
-                    if ((booking.GuestHasReserved == true) || (booking.GuestHasCheckedIn == true))
-                    {
-                        if ((booking.GuestId != null) && (booking.ItemId != 0))
-                        {
-                            currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId);
-                            currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId);
-                            arrivalsDepartures.Add(new ModifyBookingViewModel
-                            {
-                                BookingId = booking.BookingId,
-                                BookingStartDate = booking.BookingStartDate,
-                                BookingEndDate = booking.BookingEndDate,
-                                GuestId = booking.GuestId,
-                                ItemId = booking.ItemId,
-                                ItemName = currentItem.ItemName,
-                                NumberOfGuests = booking.NumberOfGuests,
-                                BookingNeedsElectricity = booking.BookingNeedsElectricity,
-                                GuestFirstName = currentGuest.GuestFirstName,
-                                GuestLastName = currentGuest.GuestLastName,
-                                GuestHasCheckedIn = booking.GuestHasCheckedIn
-                            });
-                        }
-                    }
-                }
-            }
-            return PartialView("_ArrivalsDepartures", arrivalsDepartures);
         }
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
@@ -446,6 +358,61 @@ namespace Camping2000.Controllers
                 return PartialView("_Checkin", checkInBooking);
             }
         }
+        //End of checkin flow
+        //Start of checkout flow
+        [Authorize(Roles = "Administrators, Receptionists")]
+        public ActionResult CheckOut()
+        {
+            Camping2000Db Db = new Camping2000Db();
+            List<Booking> allBookings = Db.Bookings.ToList();
+            List<Booking> departingGuestBookings = new List<Booking>();
+            List<Guest> departingGuests = new List<Guest>();
+            List<Camping> campingSpots = new List<Camping>();
+            List<BookingGuestViewModel> presentDepartingBookings = new List<BookingGuestViewModel>();
+            ViewBag.Errormessage = "";
+            if (allBookings == null)//check if fetched data is valid
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                return PartialView("_Checkout", presentDepartingBookings);
+            }
+            foreach (var booking in allBookings)
+            {
+                if ((booking.BookingEndDate.ToShortDateString() == DateTime.Now.ToShortDateString()) && (booking.GuestHasCheckedIn == true))
+                {
+                    departingGuestBookings.Add(booking);
+                }
+            }
+            if (departingGuestBookings.Count() < 1)
+            {
+                ViewBag.Errormessage = "No checkouts are planned to be made today or all departing guests have already checked out.";
+                return PartialView("_CheckOut");
+            }
+            foreach (var booking in departingGuestBookings) //gather guestdata and spotdata from database in separate lists
+            {
+                departingGuests.Add(Db.Guests.Find(booking.GuestId));
+                campingSpots.Add(Db.Camping.Find(booking.ItemId));
+            }
+            if ((departingGuestBookings.Count != departingGuests.Count) || (departingGuestBookings.Count != campingSpots.Count))
+            {
+                ViewBag.Errormessage = "Matching data was missing. Please try again.";
+                return PartialView("_CheckOut");
+            }
+            for (int i = 0; i < departingGuestBookings.Count; i++) //join the data into a data viewmodel
+            {
+                presentDepartingBookings.Add(new BookingGuestViewModel
+                {
+                    BookingId = departingGuestBookings[i].BookingId,
+                    BookingPrice = departingGuestBookings[i].BookingPrice,
+                    ItemId = departingGuestBookings[i].ItemId,
+                    ItemName = campingSpots[i].ItemName,
+                    NumberOfGuests = departingGuestBookings[i].NumberOfGuests,
+                    GuestId = departingGuests[i].GuestId,
+                    GuestFirstName = departingGuests[i].GuestFirstName,
+                    GuestLastName = departingGuests[i].GuestLastName
+                });
+            }
+            return PartialView("_CheckOut", presentDepartingBookings);
+        }
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult CheckOutConfirmation([Bind(Include = "BookingId")]BookingGuestViewModel checkingOutGuest)
@@ -459,7 +426,7 @@ namespace Camping2000.Controllers
                 Camping departedGuestSpot = Db.Camping.SingleOrDefault(i => i.ItemId == departingBooking.ItemId);
                 List<Booking> allGuestBookings = new List<Booking>();
                 BookingGuestViewModel departingGuestBooking = new BookingGuestViewModel();
-                if (allBookings==null) //check if fetched data is valid
+                if (allBookings == null) //check if fetched data is valid
                 {
                     ViewBag.Errormessage = "Fetching of data did not succeed. Please try again.";
                     return PartialView("_CheckOut");
@@ -471,7 +438,7 @@ namespace Camping2000.Controllers
                 }
                 foreach (var booking in allBookings) //collect any other bookings the guest have made
                 {
-                    if ((booking.GuestId == departingGuest.GuestId) &&((booking.GuestHasCheckedIn == true)||booking.GuestHasReserved==true))
+                    if ((booking.GuestId == departingGuest.GuestId) && ((booking.GuestHasCheckedIn == true) || booking.GuestHasReserved == true))
                     {
                         allGuestBookings.Add(booking);
                     }
@@ -514,9 +481,51 @@ namespace Camping2000.Controllers
                 return PartialView("_CheckOut", checkingOutGuest);
             }
         }
-        public ActionResult GoToStart()
+        //End of checkout flow
+        //Start of Arrival/departures daily flow
+        [Authorize(Roles = "Administrators, Receptionists")]
+        public ActionResult ArrivalsDepartures()
         {
-            return PartialView("Index");
+            Camping2000Db Db = new Camping2000Db();
+            List<ModifyBookingViewModel> arrivalsDepartures = new List<ModifyBookingViewModel>();
+            List<Booking> allBookings = Db.Bookings.ToList();
+            Booking currentBooking = new Booking();
+            Guest currentGuest = new Guest();
+            Camping currentItem = new Camping();
+            if (allBookings == null)//check if fetched data is valid
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                return PartialView("_ArrivalsDepartures");
+            }
+            foreach (var booking in allBookings)
+            {
+                if ((booking.BookingStartDate.ToShortDateString() == DateTime.Now.ToShortDateString()) || (booking.BookingEndDate.ToShortDateString() == DateTime.Now.ToShortDateString()))
+                {
+                    if ((booking.GuestHasReserved == true) || (booking.GuestHasCheckedIn == true))
+                    {
+                        if ((booking.GuestId != null) && (booking.ItemId != 0))
+                        {
+                            currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId);
+                            currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId);
+                            arrivalsDepartures.Add(new ModifyBookingViewModel
+                            {
+                                BookingId = booking.BookingId,
+                                BookingStartDate = booking.BookingStartDate,
+                                BookingEndDate = booking.BookingEndDate,
+                                GuestId = booking.GuestId,
+                                ItemId = booking.ItemId,
+                                ItemName = currentItem.ItemName,
+                                NumberOfGuests = booking.NumberOfGuests,
+                                BookingNeedsElectricity = booking.BookingNeedsElectricity,
+                                GuestFirstName = currentGuest.GuestFirstName,
+                                GuestLastName = currentGuest.GuestLastName,
+                                GuestHasCheckedIn = booking.GuestHasCheckedIn
+                            });
+                        }
+                    }
+                }
+            }
+            return PartialView("_ArrivalsDepartures", arrivalsDepartures);
         }
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ShowGuestArrivals(BookingGuestViewModel arrivals)
@@ -528,110 +537,12 @@ namespace Camping2000.Controllers
         {
             return PartialView("_ShowGuestDepartures", departures);
         }
-        [Authorize(Roles = "Administrators, Receptionists")]
-        public ActionResult ModifyBooking()
-        {
-            Camping2000Db Db = new Camping2000Db();
-            List<Booking> allBookings = Db.Bookings.ToList();
-            List<BookingGuestViewModel> presentGuestBookings = new List<BookingGuestViewModel>();
-            List<Booking> presentBookings = new List<Booking>();
-            List<Guest> presentGuests = new List<Guest>();
-            List<Camping> presentSpots = new List<Camping>();
-            ViewBag.Errormessage = "";
-            if (allBookings == null)
-            {
-                presentGuestBookings = null;
-                ViewBag.Errormessage = "No bookings at all are available to modify.";
-                return PartialView("_ModifyBooking", presentGuestBookings);
-            }
-            for (int i = 0; i < allBookings.Count; i++)
-            {
-                if ((allBookings[i].BookingEndDate >= DateTime.Now.Date) && ((allBookings[i].GuestHasReserved == true) || (allBookings[i].GuestHasCheckedIn == true)))
-                {
-                    presentBookings.Add(allBookings[i]);
-                }
-            }
-            if (presentBookings.Count < 1)
-            {
-                presentGuestBookings = null;
-                ViewBag.Errormessage = "No current bookings are available to modify.";
-                return PartialView("_ModifyBooking", presentGuestBookings);
-            }
-            foreach (var booking in presentBookings)
-            {
-                presentGuests.Add(Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId));
-                presentSpots.Add(Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId));
-            }
-            for (int i = 0; i < presentBookings.Count; i++)
-            {
-                presentGuestBookings.Add(new BookingGuestViewModel
-                {
-                    BookingId = presentBookings[i].BookingId,
-                    BookingPrice = presentBookings[i].BookingPrice,
-                    GuestFirstName = presentGuests[i].GuestFirstName,
-                    GuestLastName = presentGuests[i].GuestLastName,
-                    GuestId = presentGuests[i].GuestId,
-                    ItemId = presentSpots[i].ItemId,
-                    ItemName = presentSpots[i].ItemName,
-                    NumberOfGuests = presentBookings[i].NumberOfGuests
-                });
-            }
-            return PartialView("_ModifyBooking", presentGuestBookings);
-        }
+        //End of Arrival/departures daily flow
+        //Start of Editing GuestDeatils flow
         [Authorize(Roles = "Administrators")]
         public ActionResult ModifyGuestDetails()
         {
             return PartialView("_ModifyGuestDetails");
-        }
-        [Authorize(Roles = "Administrators, Receptionists")]
-        public ActionResult ListPresentBookings(BookingGuestViewModel AGuestBooking)
-        {
-            return PartialView("_PresentBooking", AGuestBooking);
-        }
-        [Authorize(Roles = "Administrators, Receptionists")]
-        public ActionResult ModifySpecificBooking([Bind(Include = "BookingId,ItemId,GuestId")] ModifyBookingViewModel aBookingToModify)
-        {
-            if (ModelState.IsValid)
-            {
-                Camping2000Db Db = new Camping2000Db();
-                Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == aBookingToModify.BookingId);
-                Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == currentBooking.GuestId);
-                Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
-                List<Camping> allSpots = Db.Camping.ToList();
-                List<Camping> freeSpots = new List<Camping>();
-                foreach (var spot in allSpots)
-                {
-                    if (spot.ItemIsOccupied == false)
-                    {
-                        freeSpots.Add(spot);
-                    }
-                }
-                if (freeSpots.Count < 1)
-                {
-                    freeSpots = null;
-                }
-                ModifyBookingViewModel bookingToModify = new ModifyBookingViewModel
-                {
-                    BookingId = currentBooking.BookingId,
-                    GuestId = currentGuest.GuestId,
-                    GuestFirstName = currentGuest.GuestFirstName,
-                    GuestLastName = currentGuest.GuestLastName,
-                    GuestHasCheckedIn = currentBooking.GuestHasCheckedIn,
-                    ItemId = currentSpot.ItemId,
-                    ItemName = currentSpot.ItemName,
-                    BookingStartDate = currentBooking.BookingStartDate,
-                    BookingEndDate = currentBooking.BookingEndDate,
-                    NumberOfGuests = currentBooking.NumberOfGuests,
-                    BookingPrice = currentBooking.BookingPrice,
-                    BookingNeedsElectricity = currentBooking.BookingNeedsElectricity,
-                    VacantSpots = freeSpots
-                };
-                return PartialView("_ModifySpecificBooking", bookingToModify);
-            }
-            else
-            {
-                return RedirectToAction("ModifySpecificBooking", aBookingToModify);
-            }
         }
         [Authorize(Roles = "Administrators")]
         public ActionResult SearchForGuest(string firstName, string lastName)
@@ -713,162 +624,106 @@ namespace Camping2000.Controllers
 
             return PartialView("_UpdatedGuestDetails", newGuestData);
         }
-        public ActionResult ShowVacantFullsign()
+        //End of Editing GuestDeatils flow
+        //Start of modifying Booking flow
+        [Authorize(Roles = "Administrators, Receptionists")]
+        public ActionResult ModifyBooking()
         {
-            return PartialView("ShowVacantFullSign");
+            Camping2000Db Db = new Camping2000Db();
+            List<Booking> allBookings = Db.Bookings.ToList();
+            List<BookingGuestViewModel> presentGuestBookings = new List<BookingGuestViewModel>();
+            List<Booking> presentBookings = new List<Booking>();
+            List<Guest> presentGuests = new List<Guest>();
+            List<Camping> presentSpots = new List<Camping>();
+            ViewBag.Errormessage = "";
+            if (allBookings == null)
+            {
+                presentGuestBookings = null;
+                ViewBag.Errormessage = "No bookings at all are available to modify.";
+                return PartialView("_ModifyBooking", presentGuestBookings);
+            }
+            for (int i = 0; i < allBookings.Count; i++)
+            {
+                if ((allBookings[i].BookingEndDate >= DateTime.Now.Date) && ((allBookings[i].GuestHasReserved == true) || (allBookings[i].GuestHasCheckedIn == true)))
+                {
+                    presentBookings.Add(allBookings[i]);
+                }
+            }
+            if (presentBookings.Count < 1)
+            {
+                presentGuestBookings = null;
+                ViewBag.Errormessage = "No current bookings are available to modify.";
+                return PartialView("_ModifyBooking", presentGuestBookings);
+            }
+            foreach (var booking in presentBookings)
+            {
+                presentGuests.Add(Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId));
+                presentSpots.Add(Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId));
+            }
+            for (int i = 0; i < presentBookings.Count; i++)
+            {
+                presentGuestBookings.Add(new BookingGuestViewModel
+                {
+                    BookingId = presentBookings[i].BookingId,
+                    BookingPrice = presentBookings[i].BookingPrice,
+                    GuestFirstName = presentGuests[i].GuestFirstName,
+                    GuestLastName = presentGuests[i].GuestLastName,
+                    GuestId = presentGuests[i].GuestId,
+                    ItemId = presentSpots[i].ItemId,
+                    ItemName = presentSpots[i].ItemName,
+                    NumberOfGuests = presentBookings[i].NumberOfGuests
+                });
+            }
+            return PartialView("_ModifyBooking", presentGuestBookings);
         }
-        [Authorize(Roles = "Administrators")]
-        public ActionResult ShowVacantSpots()
+        [Authorize(Roles = "Administrators, Receptionists")]
+        public ActionResult ListPresentBookings(BookingGuestViewModel AGuestBooking)
         {
-            List<Camping> vacantSpots = new List<Camping>();
-            using (var context = new Camping2000Db())
-            {
-                foreach (var spot in context.Camping)
-                {
-                    if (spot.ItemIsOccupied == false)
-                    {
-                        vacantSpots.Add(spot);
-                    }
-                }
-            }
-            if (vacantSpots == null)
-            {
-                return PartialView("_NoAvailableSpotToChangeTo");
-            }
-            return PartialView("_ShowVacantSpots", vacantSpots);
+            return PartialView("_PresentBooking", AGuestBooking);
         }
-        [AllowAnonymous]
-        public ActionResult GuestData()
-        {
-            Camping2000Db CampingDb = new Camping2000Db();
-            ApplicationDbContext Db = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(Db);
-            var userManager = new UserManager<ApplicationUser>(userStore);
-
-            List<string> listOfAppGuests = new List<string>();
-            List<string> listOfCampingGuests = new List<string>();
-            GuestDataViewModel newGuest = new GuestDataViewModel();
-            foreach (var guest in Db.Users)
-            {
-                if (guest.Email != "admin@camping.com")
-                {
-                    listOfAppGuests.Add(guest.Id);
-                }
-            }
-            foreach (var guest in CampingDb.Guests)
-            {
-                listOfCampingGuests.Add(guest.GuestId);
-            }
-            listOfAppGuests.Sort();
-            listOfCampingGuests.Sort();
-            for (int i = 0; i < listOfAppGuests.Count; i++)
-            {
-                if ((listOfCampingGuests.Count < 1) && (listOfAppGuests.Count == listOfCampingGuests.Count + 1))
-                {
-                    newGuest.GuestId = listOfAppGuests[0];
-                    return PartialView("_GuestData", newGuest);
-                }
-                if (listOfAppGuests[i] != listOfCampingGuests[i])
-                {
-                    newGuest.GuestId = listOfAppGuests[i];
-                    return PartialView("_GuestData", newGuest);
-                }
-                else
-                {
-                    listOfAppGuests.Remove(listOfAppGuests[i]);
-                    listOfCampingGuests.Remove(listOfCampingGuests[i]);
-                    i--;
-                }
-            }
-            return PartialView("_GuestData", newGuest);
-        }
-        [HttpPost]
-        public ActionResult SaveGuestData([Bind(Include = "GuestFirstName,GuestLastName,GuestNationality,GuestPhoneNumber,GuestMobileNumber," +
-            "GuestId,PostAdressStreet1,PostAdressStreet2,PostAdressStreet3,PostAdressZipCode,PostAdressCity," +
-            "LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity")]GuestDataViewModel newGuest)
+        [Authorize(Roles = "Administrators, Receptionists")]
+        public ActionResult ModifySpecificBooking([Bind(Include = "BookingId,ItemId,GuestId")] ModifyBookingViewModel aBookingToModify)
         {
             if (ModelState.IsValid)
             {
                 Camping2000Db Db = new Camping2000Db();
-                Guest guestData = new Guest();
-                Adress guestAdress = new Adress();
-
-                Camping2000.Models.ApplicationDbContext context = new ApplicationDbContext();
-                var userStore = new UserStore<ApplicationUser>(context);
-                var userManager = new UserManager<ApplicationUser>(userStore);
-                var user = userManager.FindById(newGuest.GuestId); //find the new guest by the Id
-                userManager.AddToRole(user.Id, "Guests");//add the guest to the role of "Guests"
-                context.SaveChanges();
-
-                guestData.GuestId = newGuest.GuestId;
-                guestData.GuestFirstName = newGuest.GuestFirstName;
-                guestData.GuestLastName = newGuest.GuestLastName;
-                guestData.GuestNationality = newGuest.GuestNationality;
-                guestData.GuestPhoneNumber = newGuest.GuestPhoneNumber;
-                guestData.GuestMobileNumber = newGuest.GuestMobileNumber;
-                guestData.GuestHasReserved = false;
-                guestData.GuestHasCheckedIn = false;
-                guestData.GuestHasPaid = 0;
-                guestData.GuestHasToPay = 0;
-                guestAdress.GuestId = newGuest.GuestId;
-                guestAdress.LivingAdressStreet1 = newGuest.LivingAdressStreet1;
-                guestAdress.LivingAdressStreet2 = newGuest.LivingAdressStreet2;
-                guestAdress.LivingAdressStreet3 = newGuest.LivingAdressStreet3;
-                guestAdress.LivingAdressZipCode = newGuest.LivingAdressZipCode;
-                guestAdress.LivingAdressCity = newGuest.LivingAdressCity;
-                guestAdress.PostAdressStreet1 = newGuest.PostAdressStreet1;
-                guestAdress.PostAdressStreet2 = newGuest.PostAdressStreet2;
-                guestAdress.PostAdressStreet3 = newGuest.PostAdressStreet3;
-                guestAdress.PostAdressZipCode = newGuest.PostAdressZipCode;
-                guestAdress.PostAdressCity = newGuest.PostAdressCity;
-                Db.Guests.Add(guestData);
-                Db.Adresses.Add(guestAdress);
-                int numberOfSaves = Db.SaveChanges();
-                if (numberOfSaves < 2)
+                Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == aBookingToModify.BookingId);
+                Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == currentBooking.GuestId);
+                Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
+                List<Camping> allSpots = Db.Camping.ToList();
+                List<Camping> freeSpots = new List<Camping>();
+                foreach (var spot in allSpots)
                 {
-                    ViewBag.Errormessage = "The registration did not complete. please try again in a while.";
-                    return PartialView("_GuestData", newGuest);
+                    if (spot.ItemIsOccupied == false)
+                    {
+                        freeSpots.Add(spot);
+                    }
                 }
-                return PartialView("_RegistrationComplete");
-            }
-            else
-            {
-                return PartialView("_GuestData", newGuest);
-            }
-        }
-        public ActionResult GuestDetails(string GuestId)
-        {
-            Camping2000Db Db = new Camping2000Db();
-            Guest foundGuest = Db.Guests.SingleOrDefault(i => i.GuestId == GuestId);
-            if (foundGuest == null)
-            {
-                ViewBag.Errormessage = "No user data was found. Are you the admin or receptionist?";
-                return PartialView("_FailedGuestDetails");
-            }
-            else
-            {
-                Adress foundAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == GuestId);
-                GuestAdressViewModel completeGuestDetails = new GuestAdressViewModel
+                if (freeSpots.Count < 1)
                 {
-                    GuestId = foundGuest.GuestId,
-                    GuestFirstName = foundGuest.GuestFirstName,
-                    GuestLastName = foundGuest.GuestLastName,
-                    GuestNationality = foundGuest.GuestNationality,
-                    GuestMobileNumber = foundGuest.GuestMobileNumber,
-                    GuestPhoneNumber = foundGuest.GuestPhoneNumber,
-                    AdressId = foundAdress.AdressId,
-                    PostAdressCity = foundAdress.PostAdressCity,
-                    PostAdressStreet1 = foundAdress.PostAdressStreet1,
-                    PostAdressStreet2 = foundAdress.PostAdressStreet2,
-                    PostAdressStreet3 = foundAdress.PostAdressStreet3,
-                    PostAdressZipCode = foundAdress.PostAdressZipCode,
-                    LivingAdressCity = foundAdress.LivingAdressCity,
-                    LivingAdressStreet1 = foundAdress.LivingAdressStreet1,
-                    LivingAdressStreet2 = foundAdress.LivingAdressStreet2,
-                    LivingAdressStreet3 = foundAdress.LivingAdressStreet3,
-                    LivingAdressZipCode = foundAdress.LivingAdressZipCode
+                    freeSpots = null;
+                }
+                ModifyBookingViewModel bookingToModify = new ModifyBookingViewModel
+                {
+                    BookingId = currentBooking.BookingId,
+                    GuestId = currentGuest.GuestId,
+                    GuestFirstName = currentGuest.GuestFirstName,
+                    GuestLastName = currentGuest.GuestLastName,
+                    GuestHasCheckedIn = currentBooking.GuestHasCheckedIn,
+                    ItemId = currentSpot.ItemId,
+                    ItemName = currentSpot.ItemName,
+                    BookingStartDate = currentBooking.BookingStartDate,
+                    BookingEndDate = currentBooking.BookingEndDate,
+                    NumberOfGuests = currentBooking.NumberOfGuests,
+                    BookingPrice = currentBooking.BookingPrice,
+                    BookingNeedsElectricity = currentBooking.BookingNeedsElectricity,
+                    VacantSpots = freeSpots
                 };
-                return PartialView("_GuestDetails", completeGuestDetails);
+                return PartialView("_ModifySpecificBooking", bookingToModify);
+            }
+            else
+            {
+                return RedirectToAction("ModifySpecificBooking", aBookingToModify);
             }
         }
         [HttpPost]
@@ -957,7 +812,6 @@ namespace Camping2000.Controllers
                 return PartialView("_ChangeStartDate", bookingToModify);
             }
         }
-        [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ChangeEndDate([Bind(Include = "BookingId,GuestId,ItemId,BookingEndDate")] ModifyBookingViewModel bookingToModify)
         {
@@ -1368,6 +1222,37 @@ namespace Camping2000.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "Administrators, Receptionists")]
+        public ActionResult ChangeChooseCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
+        {
+            Camping2000Db Db = new Camping2000Db();
+            ModifyBookingViewModel aBookingView = new ModifyBookingViewModel();
+            Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
+            Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
+            Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
+            Camping oldItem = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
+            if (ModelState.IsValid)
+            {
+                oldItem.ItemIsOccupied = false;
+                Db.SaveChanges();
+                currentItem.ItemIsOccupied = true;
+                currentBooking.ItemId = currentItem.ItemId;
+                Db.SaveChanges();
+                aBookingView = bookingToModify;
+                aBookingView.BookingStartDate = currentBooking.BookingStartDate;
+                aBookingView.BookingEndDate = currentBooking.BookingEndDate;
+                aBookingView.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
+                aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
+                aBookingView.ItemName = currentItem.ItemName;
+
+                return PartialView("_ChangeConfirmationCampingSpot", aBookingView);
+            }
+            else
+            {
+                return RedirectToAction("ModifySpecificBooking", bookingToModify);
+            }
+        }
+        [HttpPost]
         [Authorize(Roles = "Administrators")]
         public ActionResult CancelReservation([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
@@ -1416,41 +1301,147 @@ namespace Camping2000.Controllers
                 return PartialView("_FailedCancelReservation", bookingToModify); //check this returnstatment....
             }
         }
-        [HttpPost]
-        [Authorize(Roles = "Administrators, Receptionists")]
-        public ActionResult ChangeChooseCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
+        //End of modifying Booking flow
+        //Start of guest registration flow
+        [AllowAnonymous]
+        public ActionResult GuestData()
         {
-            Camping2000Db Db = new Camping2000Db();
-            ModifyBookingViewModel aBookingView = new ModifyBookingViewModel();
-            Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
-            Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
-            Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
-            Camping oldItem = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
+            Camping2000Db CampingDb = new Camping2000Db();
+            ApplicationDbContext Db = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(Db);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
+            List<string> listOfAppGuests = new List<string>();
+            List<string> listOfCampingGuests = new List<string>();
+            GuestDataViewModel newGuest = new GuestDataViewModel();
+            foreach (var guest in Db.Users)
+            {
+                if (guest.Email != "admin@camping.com")
+                {
+                    listOfAppGuests.Add(guest.Id);
+                }
+            }
+            foreach (var guest in CampingDb.Guests)
+            {
+                listOfCampingGuests.Add(guest.GuestId);
+            }
+            listOfAppGuests.Sort();
+            listOfCampingGuests.Sort();
+            for (int i = 0; i < listOfAppGuests.Count; i++)
+            {
+                if ((listOfCampingGuests.Count < 1) && (listOfAppGuests.Count == listOfCampingGuests.Count + 1))
+                {
+                    newGuest.GuestId = listOfAppGuests[0];
+                    return PartialView("_GuestData", newGuest);
+                }
+                if (listOfAppGuests[i] != listOfCampingGuests[i])
+                {
+                    newGuest.GuestId = listOfAppGuests[i];
+                    return PartialView("_GuestData", newGuest);
+                }
+                else
+                {
+                    listOfAppGuests.Remove(listOfAppGuests[i]);
+                    listOfCampingGuests.Remove(listOfCampingGuests[i]);
+                    i--;
+                }
+            }
+            return PartialView("_GuestData", newGuest);
+        }
+        [HttpPost]
+        public ActionResult SaveGuestData([Bind(Include = "GuestFirstName,GuestLastName,GuestNationality,GuestPhoneNumber,GuestMobileNumber," +
+            "GuestId,PostAdressStreet1,PostAdressStreet2,PostAdressStreet3,PostAdressZipCode,PostAdressCity," +
+            "LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity")]GuestDataViewModel newGuest)
+        {
             if (ModelState.IsValid)
             {
-                oldItem.ItemIsOccupied = false;
-                Db.SaveChanges();
-                currentItem.ItemIsOccupied = true;
-                currentBooking.ItemId = currentItem.ItemId;
-                Db.SaveChanges();
-                aBookingView = bookingToModify;
-                aBookingView.BookingStartDate = currentBooking.BookingStartDate;
-                aBookingView.BookingEndDate = currentBooking.BookingEndDate;
-                aBookingView.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
-                aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
-                aBookingView.ItemName = currentItem.ItemName;
+                Camping2000Db Db = new Camping2000Db();
+                Guest guestData = new Guest();
+                Adress guestAdress = new Adress();
 
-                return PartialView("_ChangeConfirmationCampingSpot", aBookingView);
+                Camping2000.Models.ApplicationDbContext context = new ApplicationDbContext();
+                var userStore = new UserStore<ApplicationUser>(context);
+                var userManager = new UserManager<ApplicationUser>(userStore);
+                var user = userManager.FindById(newGuest.GuestId); //find the new guest by the Id
+                userManager.AddToRole(user.Id, "Guests");//add the guest to the role of "Guests"
+                context.SaveChanges();
+
+                guestData.GuestId = newGuest.GuestId;
+                guestData.GuestFirstName = newGuest.GuestFirstName;
+                guestData.GuestLastName = newGuest.GuestLastName;
+                guestData.GuestNationality = newGuest.GuestNationality;
+                guestData.GuestPhoneNumber = newGuest.GuestPhoneNumber;
+                guestData.GuestMobileNumber = newGuest.GuestMobileNumber;
+                guestData.GuestHasReserved = false;
+                guestData.GuestHasCheckedIn = false;
+                guestData.GuestHasPaid = 0;
+                guestData.GuestHasToPay = 0;
+                guestAdress.GuestId = newGuest.GuestId;
+                guestAdress.LivingAdressStreet1 = newGuest.LivingAdressStreet1;
+                guestAdress.LivingAdressStreet2 = newGuest.LivingAdressStreet2;
+                guestAdress.LivingAdressStreet3 = newGuest.LivingAdressStreet3;
+                guestAdress.LivingAdressZipCode = newGuest.LivingAdressZipCode;
+                guestAdress.LivingAdressCity = newGuest.LivingAdressCity;
+                guestAdress.PostAdressStreet1 = newGuest.PostAdressStreet1;
+                guestAdress.PostAdressStreet2 = newGuest.PostAdressStreet2;
+                guestAdress.PostAdressStreet3 = newGuest.PostAdressStreet3;
+                guestAdress.PostAdressZipCode = newGuest.PostAdressZipCode;
+                guestAdress.PostAdressCity = newGuest.PostAdressCity;
+                Db.Guests.Add(guestData);
+                Db.Adresses.Add(guestAdress);
+                int numberOfSaves = Db.SaveChanges();
+                if (numberOfSaves < 2)
+                {
+                    ViewBag.Errormessage = "The registration did not complete. please try again in a while.";
+                    return PartialView("_GuestData", newGuest);
+                }
+                return PartialView("_RegistrationComplete");
             }
             else
             {
-                return RedirectToAction("ModifySpecificBooking", bookingToModify);
+                ViewBag.Errormessage = "Some of your submitted values were not correct. Please try again.";
+                return PartialView("_GuestData", newGuest);
             }
         }
-        public ActionResult Logoff()
+        //End of guest registration flow
+        //Start of modify guest data flow
+        public ActionResult GuestDetails(string GuestId)
         {
-            return RedirectToAction("Logoff", "Account");
+            Camping2000Db Db = new Camping2000Db();
+            Guest foundGuest = Db.Guests.SingleOrDefault(i => i.GuestId == GuestId);
+            if (foundGuest == null)
+            {
+                ViewBag.Errormessage = "No user data was found. Are you the admin?";
+                return PartialView("_FailedGuestDetails");
+            }
+            else
+            {
+                Adress foundAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == GuestId);
+                GuestAdressViewModel completeGuestDetails = new GuestAdressViewModel
+                {
+                    GuestId = foundGuest.GuestId,
+                    GuestFirstName = foundGuest.GuestFirstName,
+                    GuestLastName = foundGuest.GuestLastName,
+                    GuestNationality = foundGuest.GuestNationality,
+                    GuestMobileNumber = foundGuest.GuestMobileNumber,
+                    GuestPhoneNumber = foundGuest.GuestPhoneNumber,
+                    AdressId = foundAdress.AdressId,
+                    PostAdressCity = foundAdress.PostAdressCity,
+                    PostAdressStreet1 = foundAdress.PostAdressStreet1,
+                    PostAdressStreet2 = foundAdress.PostAdressStreet2,
+                    PostAdressStreet3 = foundAdress.PostAdressStreet3,
+                    PostAdressZipCode = foundAdress.PostAdressZipCode,
+                    LivingAdressCity = foundAdress.LivingAdressCity,
+                    LivingAdressStreet1 = foundAdress.LivingAdressStreet1,
+                    LivingAdressStreet2 = foundAdress.LivingAdressStreet2,
+                    LivingAdressStreet3 = foundAdress.LivingAdressStreet3,
+                    LivingAdressZipCode = foundAdress.LivingAdressZipCode
+                };
+                return PartialView("_GuestDetails", completeGuestDetails);
+            }
         }
+        //End of modify guest data flow
+        //Start of manage receptionist rights
         [Authorize(Roles = "Administrators")]
         public ActionResult ManageReceptionists()
         {
@@ -1554,6 +1545,8 @@ namespace Camping2000.Controllers
             }
             return PartialView("_ListReceptionist", receptionistData);
         }
+        //End of manage receptionist rights
+        //Start of bookinglist that turns up forgotten bookings 
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult MissedCheckins()
@@ -1624,6 +1617,38 @@ namespace Camping2000.Controllers
             }
             return PartialView("_MissedCheckOuts", allFailedBookings);
         }
+        //End of bookinglist that turns up forgotten bookings
+
+        [HttpPost]
+        public ActionResult ShowVacantFullsign()
+        {
+            return PartialView("ShowVacantFullSign");
+        }
+        [Authorize(Roles = "Administrators")]
+        public ActionResult ShowVacantSpots()
+        {
+            List<Camping> vacantSpots = new List<Camping>();
+            using (var context = new Camping2000Db())
+            {
+                foreach (var spot in context.Camping)
+                {
+                    if (spot.ItemIsOccupied == false)
+                    {
+                        vacantSpots.Add(spot);
+                    }
+                }
+            }
+            if (vacantSpots == null)
+            {
+                return PartialView("_NoAvailableSpotToChangeTo");
+            }
+            return PartialView("_ShowVacantSpots", vacantSpots);
+        }
+        public ActionResult Logoff()
+        {
+            return RedirectToAction("Logoff", "Account");
+        }
+        [Authorize(Roles = "Administrators")]
         /// <summary>
         /// A function that checks if a valid sting have been fetched
         /// </summary>
