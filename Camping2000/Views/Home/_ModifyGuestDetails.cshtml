@@ -1,6 +1,13 @@
 ﻿
 <h2>Which guest have outdated info:</h2>
 
+@if (ViewBag.Errormessage!=null)
+{
+    <p>
+    @ViewBag.Errormessage
+    </p>
+}
+<div>
 @Html.Partial("_searchbar")
-
+</div>
     <div id="EndOfFoundGuests"></div>

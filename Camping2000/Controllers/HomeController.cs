@@ -522,18 +522,18 @@ namespace Camping2000.Controllers
         {
             List<Guest> foundGuests = new List<Guest>();
             string errormessage = "";
-            if ((firstName == "") && (lastName == ""))
+            if ((firstName == "") && (lastName == ""))//If only empty spaces are supplied as search strings
             {
                 ViewBag.Errormessage = "Please specify the guests name before searching.";
                 return PartialView("_ShowFoundGuests", foundGuests);
             }
             foundGuests = SearchForPeople(firstName, lastName);
-            if ((firstName != "") && (foundGuests.Count < 1))
+            if ((firstName != "") && (foundGuests.Count < 1)) //if first name dont exist as a guests first name
             {
                 errormessage = $"A guest with the name of {firstName} was not found. Please try again.";
                 ViewBag.Errormessage = errormessage;
             }
-            else if ((lastName != "") && (foundGuests.Count < 1))
+            else if ((lastName != "") && (foundGuests.Count < 1))//if last name dont exist as a guests last name
             {
                 errormessage = $"A guest with the name of {lastName} was not found. Please try again.";
                 ViewBag.Errormessage = errormessage;
@@ -547,6 +547,11 @@ namespace Camping2000.Controllers
             Camping2000Db Db = new Camping2000Db();
             Guest foundGuest = Db.Guests.SingleOrDefault(i => i.GuestId == searchedGuest.GuestId);
             Adress foundAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == searchedGuest.GuestId);
+            if ((foundGuest == null) || (foundAdress == null)) //if no data was fetched, alert guest
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                return PartialView("_ModifyGuestDetails");
+            }
             GuestAdressViewModel completeGuestDetails = new GuestAdressViewModel
             {
                 GuestId = foundGuest.GuestId,
@@ -575,27 +580,39 @@ namespace Camping2000.Controllers
             "GuestId,LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity," +
             "PostAdressStreet1,PostAdressStreet2,PostAdressStreet3,PostAdressZipCode,PostAdressCity")] GuestAdressViewModel newGuestData)
         {
-            Camping2000Db Db = new Camping2000Db();
-            Guest oldGuestData = Db.Guests.SingleOrDefault(i => i.GuestId == newGuestData.GuestId);
-            Adress oldGuestAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == newGuestData.GuestId);
-            oldGuestData.GuestFirstName = newGuestData.GuestFirstName;
-            oldGuestData.GuestLastName = newGuestData.GuestLastName;
-            oldGuestData.GuestNationality = newGuestData.GuestNationality;
-            oldGuestData.GuestPhoneNumber = newGuestData.GuestPhoneNumber;
-            oldGuestData.GuestMobileNumber = newGuestData.GuestMobileNumber;
-            oldGuestAdress.LivingAdressStreet1 = newGuestData.LivingAdressStreet1;
-            oldGuestAdress.LivingAdressStreet2 = newGuestData.LivingAdressStreet2;
-            oldGuestAdress.LivingAdressStreet3 = newGuestData.LivingAdressStreet3;
-            oldGuestAdress.LivingAdressZipCode = newGuestData.LivingAdressZipCode;
-            oldGuestAdress.LivingAdressCity = newGuestData.LivingAdressCity;
-            oldGuestAdress.PostAdressStreet1 = newGuestData.PostAdressStreet1;
-            oldGuestAdress.PostAdressStreet2 = newGuestData.PostAdressStreet2;
-            oldGuestAdress.PostAdressStreet3 = newGuestData.PostAdressStreet3;
-            oldGuestAdress.PostAdressZipCode = newGuestData.PostAdressZipCode;
-            oldGuestAdress.PostAdressCity = newGuestData.PostAdressCity;
-            Db.SaveChanges();
-
-            return PartialView("_UpdatedGuestDetails", newGuestData);
+            if (ModelState.IsValid)
+            {
+                Camping2000Db Db = new Camping2000Db();
+                Guest oldGuestData = Db.Guests.SingleOrDefault(i => i.GuestId == newGuestData.GuestId);
+                Adress oldGuestAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == newGuestData.GuestId);
+                if ((oldGuestData == null) || (oldGuestAdress == null))
+                {
+                    ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                    return PartialView("_ModifyGuestDetails");
+                }
+                oldGuestData.GuestFirstName = newGuestData.GuestFirstName;
+                oldGuestData.GuestLastName = newGuestData.GuestLastName;
+                oldGuestData.GuestNationality = newGuestData.GuestNationality;
+                oldGuestData.GuestPhoneNumber = newGuestData.GuestPhoneNumber;
+                oldGuestData.GuestMobileNumber = newGuestData.GuestMobileNumber;
+                oldGuestAdress.LivingAdressStreet1 = newGuestData.LivingAdressStreet1;
+                oldGuestAdress.LivingAdressStreet2 = newGuestData.LivingAdressStreet2;
+                oldGuestAdress.LivingAdressStreet3 = newGuestData.LivingAdressStreet3;
+                oldGuestAdress.LivingAdressZipCode = newGuestData.LivingAdressZipCode;
+                oldGuestAdress.LivingAdressCity = newGuestData.LivingAdressCity;
+                oldGuestAdress.PostAdressStreet1 = newGuestData.PostAdressStreet1;
+                oldGuestAdress.PostAdressStreet2 = newGuestData.PostAdressStreet2;
+                oldGuestAdress.PostAdressStreet3 = newGuestData.PostAdressStreet3;
+                oldGuestAdress.PostAdressZipCode = newGuestData.PostAdressZipCode;
+                oldGuestAdress.PostAdressCity = newGuestData.PostAdressCity;
+                Db.SaveChanges();
+                return PartialView("_UpdatedGuestDetails", newGuestData);
+            }
+            else
+            {
+                ViewBag.Errormessage = "Some of the supplied values were incorrect. Please try again, with other possible values.";
+                return PartialView("_GuestDetails", newGuestData);
+            }
         }
         //End of Editing GuestDeatils flow
         //Start of modifying Booking flow
