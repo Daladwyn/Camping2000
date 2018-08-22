@@ -226,14 +226,6 @@
     <Compile Include="Models\Guest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-datepicker.css" />
-    <Content Include="Content\bootstrap-datepicker.min.css" />
-    <Content Include="Content\bootstrap-datepicker.standalone.css" />
-    <Content Include="Content\bootstrap-datepicker.standalone.min.css" />
-    <Content Include="Content\bootstrap-datepicker3.css" />
-    <Content Include="Content\bootstrap-datepicker3.min.css" />
-    <Content Include="Content\bootstrap-datepicker3.standalone.css" />
-    <Content Include="Content\bootstrap-datepicker3.standalone.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -255,10 +247,6 @@
     <Content Include="Models\camping2000ERD.cd" />
     <Content Include="ProjectFiles\Booking System for a Camping.docx" />
     <Content Include="ProjectFiles\Timeplan.xlsx" />
-    <Content Include="Content\bootstrap-datepicker3.standalone.css.map" />
-    <Content Include="Content\bootstrap-datepicker3.css.map" />
-    <Content Include="Content\bootstrap-datepicker.standalone.css.map" />
-    <Content Include="Content\bootstrap-datepicker.css.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
