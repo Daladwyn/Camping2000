@@ -1,10 +1,8 @@
 ﻿@model Camping2000.Models.ModifyBookingViewModel
 
-<h2>Success!!</h2>
-
-
 @if (@Model != null)
 {
+<h2>Success!!</h2>
 <div class="row">
     <div class="col-md-4">
         The change succeded. See below for details:
@@ -24,7 +22,8 @@
 else
 {
     <div class="row">
-        <p>Something happend. Please check the booking again and try again if nessesary.</p>
+        <h2>Something happend and the change did not succed.</h2>
+        <p>@ViewBag.Errormessage</p>
     </div>
 }
 

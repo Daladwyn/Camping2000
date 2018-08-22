@@ -1,191 +1,191 @@
 ﻿@model Camping2000.Models.ModifyBookingViewModel
 
-<h2>@Model.GuestFirstName @Model.GuestLastName booking details for bookingId:@Model.BookingId:</h2>
-<hr />
-@ViewBag.Errormessage
-@ViewBag.ElectricMessage
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Arrival date:")
-    </div>
-    <div class="col-md-2">
-        @Model.BookingStartDate.ToShortDateString()
-    </div>
-    @if ((Model.BookingStartDate < DateTime.Now.Date) || (Model.GuestHasCheckedIn == true))
+@if (ViewBag.Errormessage == "")
+{
+    <h2>@Model.GuestFirstName @Model.GuestLastName booking details for bookingId:@Model.BookingId:</h2>
+    <hr />
+    @if (ViewBag.ElectricMessage != "")
     {
-        <div class="col-md-8">
-            <p>Have already checked in</p>
-        </div>
+        @ViewBag.ElectricMessage
     }
-    else
-    {
-        using (Ajax.BeginForm("ChangeStartDate", "Home",
-        ajaxOptions: new AjaxOptions
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Arrival date:")
+        </div>
+        <div class="col-md-2">
+            @Model.BookingStartDate.ToShortDateString()
+        </div>
+        @if ((Model.BookingStartDate < DateTime.Now.Date) || (Model.GuestHasCheckedIn == true))
         {
-            UpdateTargetId = "ContentBody",
-            InsertionMode = InsertionMode.Replace,
-        }))
+            <div class="col-md-8">
+                <p>Have already checked in</p>
+            </div>
+        }
+        else
+        {
+            using (Ajax.BeginForm("ChangeStartDate", "Home",
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="col-md-2">
+                    <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingStartDate.AddDays(365))" />
+                </div>
+                <div class="col-md-2">
+                    @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+                    @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+                    @Html.HiddenFor(c => c.ItemId, Model.ItemId)
+                    <input type="submit" value="Change Arrivaldate" />
+                </div>
+                <div class="col-md-4"></div>
+            }
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Departure date:")
+        </div>
+        <div class="col-md-2">
+            @Model.BookingEndDate.ToShortDateString()
+        </div>
+        @using (Ajax.BeginForm("ChangeEndDate", "Home",
+    ajaxOptions: new AjaxOptions
+    {
+        UpdateTargetId = "ContentBody",
+        InsertionMode = InsertionMode.Replace,
+    }))
         {
             @Html.AntiForgeryToken()
             <div class="col-md-2">
-                <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingStartDate.AddDays(365))" />
+                <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}",DateTime.Now)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingEndDate.AddDays(365))" />
             </div>
             <div class="col-md-2">
                 @Html.HiddenFor(g => g.GuestId, Model.GuestId)
                 @Html.HiddenFor(b => b.BookingId, Model.BookingId)
                 @Html.HiddenFor(c => c.ItemId, Model.ItemId)
-                <input type="submit" value="Change Arrivaldate" />
+                <input type="submit" value="Change Departuredate" />
             </div>
-            <div class="col-md-4"></div>
+            <div class="col-md-4">
+
+            </div>
         }
-    }
-</div>
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Departure date:")
     </div>
-    <div class="col-md-2">
-        @Model.BookingEndDate.ToShortDateString()
-    </div>
-    @using (Ajax.BeginForm("ChangeEndDate", "Home",
-ajaxOptions: new AjaxOptions
-{
-    UpdateTargetId = "ContentBody",
-    InsertionMode = InsertionMode.Replace,
-}))
-    {
-        @Html.AntiForgeryToken()
+    <div class="row">
         <div class="col-md-2">
-            <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}",DateTime.Now)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingEndDate.AddDays(365))" />
+            @Html.Label("Power outlet:")
         </div>
         <div class="col-md-2">
-            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
-            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-            @Html.HiddenFor(c => c.ItemId, Model.ItemId)
-            <input type="submit" value="Change Departuredate" />
+            @if (Model.BookingNeedsElectricity == true)
+            {
+                <div>Yes</div>
+            }
+            else
+            {
+                <div>No</div>
+            }
+        </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-2">
+            @using (Ajax.BeginForm("ChangePowerOutlet", "Home",
+               ajaxOptions: new AjaxOptions
+               {
+                   UpdateTargetId = "ContentBody",
+                   InsertionMode = InsertionMode.Replace,
+               }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+                @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+                @Html.HiddenFor(c => c.ItemId, Model.ItemId)
+                <input type="submit" value="Change Poweroutlet" />
+
+            }
         </div>
         <div class="col-md-4">
 
         </div>
-    }
-</div>
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Power outlet:")
     </div>
-    <div class="col-md-2">
-        @if (Model.BookingNeedsElectricity == true)
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Partysize:")
+        </div>
+        <div class="col-md-2">
+            @Model.NumberOfGuests
+        </div>
+        @using (Ajax.BeginForm("ChangePartySize", "Home",
+    ajaxOptions: new AjaxOptions
+    {
+        UpdateTargetId = "ContentBody",
+        InsertionMode = InsertionMode.Replace,
+    }))
         {
-            <div>Yes</div>
-        }
-        else
-        {
-            <div>No</div>
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+            @Html.HiddenFor(c => c.ItemId, Model.ItemId)
+            <div class="col-md-2">
+                <input type="number" id="NumberOfGuests" name="NumberOfGuests" min="1" max="10" value="@Model.NumberOfGuests" />
+            </div>
+            <div class="col-md-2">
+                <input type="submit" value="Change partysize" />
+            </div>
+            <div class="col-md-4">
+            </div>
         }
     </div>
-    <div class="col-md-2">
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Camping spot:")
+        </div>
+        <div class="col-md-2">
+            @Model.ItemName
+        </div>
+        <div class="col-md-2">
 
-    </div>
-    <div class="col-md-2">
-        @using (Ajax.BeginForm("ChangePowerOutlet", "Home",
+        </div>
+        <div class="col-md-2">
+            @using (Ajax.BeginForm("ChangeCampingSpot", "Home",
            ajaxOptions: new AjaxOptions
            {
                UpdateTargetId = "ContentBody",
                InsertionMode = InsertionMode.Replace,
            }))
-        {
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
-            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-            @Html.HiddenFor(c => c.ItemId, Model.ItemId)
-            <input type="submit" value="Change Poweroutlet" />
-
-        }
-    </div>
-    <div class="col-md-4">
-
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Partysize:")
-    </div>
-    <div class="col-md-2">
-        @Model.NumberOfGuests
-    </div>
-    @using (Ajax.BeginForm("ChangePartySize", "Home",
-ajaxOptions: new AjaxOptions
-{
-    UpdateTargetId = "ContentBody",
-    InsertionMode = InsertionMode.Replace,
-}))
-    {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(g => g.GuestId, Model.GuestId)
-        @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-        @Html.HiddenFor(c => c.ItemId, Model.ItemId)
-        <div class="col-md-2">
-            <input type="number" id="NumberOfGuests" name="NumberOfGuests" min="1" max="10" value="@Model.NumberOfGuests" />
-        </div>
-        <div class="col-md-2">
-            <input type="submit" value="Change partysize" />
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+                @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+                @Html.HiddenFor(c => c.ItemId, Model.ItemId)
+                <input type="submit" value="Change campingspot" />
+            }
         </div>
         <div class="col-md-4">
+
         </div>
-    }
-</div>
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Camping spot:")
     </div>
-    <div class="col-md-2">
-        @Model.ItemName
-    </div>
-    <div class="col-md-2">
-
-    </div>
-    <div class="col-md-2">
-        @using (Ajax.BeginForm("ChangeCampingSpot", "Home",
-       ajaxOptions: new AjaxOptions
-       {
-           UpdateTargetId = "ContentBody",
-           InsertionMode = InsertionMode.Replace,
-       }))
-        {
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
-            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-            @Html.HiddenFor(c => c.ItemId, Model.ItemId)
-            <input type="submit" value="Change campingspot" />
-        }
-    </div>
-    <div class="col-md-4">
-
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        @Html.Label("Present Cost:")
-    </div>
-    <div class="col-md-2">
-        @Model.BookingPrice
-    </div>
-    <div class="col-md-2">
-    </div>
-    <div class="col-md-6">
-    </div>
-</div>
-<hr />
-<div class="row">
-    <div class="col-md-2">
-    </div>
-    <div class="col-md-2">
-    </div>
-    <div class="col-md-2">
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Present Cost:")
+        </div>
+        <div class="col-md-2">
+            @Model.BookingPrice
+        </div>
+        <div class="col-md-2">
+        </div>
         <div class="col-md-6">
         </div>
     </div>
-</div>
+    <hr />
+}
+else
+{
+    <h2>Ops! Something have happend with the booking.</h2>
+    @ViewBag.Errormessage
+}
 <div class="row">
     <div class="col-md-2">
         @using (Ajax.BeginForm("GoToStart", "Home",

@@ -629,12 +629,12 @@ namespace Camping2000.Controllers
             if (allBookings == null)
             {
                 presentGuestBookings = null;
-                ViewBag.Errormessage = "No bookings at all are available to modify.";
+                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
                 return PartialView("_ModifyBooking", presentGuestBookings);
             }
             for (int i = 0; i < allBookings.Count; i++)
             {
-                if ((allBookings[i].BookingEndDate >= DateTime.Now.Date) && ((allBookings[i].GuestHasReserved == true) || (allBookings[i].GuestHasCheckedIn == true)))
+                if ((allBookings[i].GuestHasReserved == true) || (allBookings[i].GuestHasCheckedIn == true))
                 {
                     presentBookings.Add(allBookings[i]);
                 }
@@ -642,13 +642,19 @@ namespace Camping2000.Controllers
             if (presentBookings.Count < 1)
             {
                 presentGuestBookings = null;
-                ViewBag.Errormessage = "No current bookings are available to modify.";
+                ViewBag.Errormessage = "No bookings are available to modify.";
                 return PartialView("_ModifyBooking", presentGuestBookings);
             }
             foreach (var booking in presentBookings)
             {
                 presentGuests.Add(Db.Guests.SingleOrDefault(i => i.GuestId == booking.GuestId));
                 presentSpots.Add(Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId));
+            }
+            if ((presentBookings.Count != presentGuests.Count) && (presentBookings.Count != presentGuests.Count))
+            {
+                ViewBag.Errormessage = "Preparation of data did not succeed. Please try again.";
+                presentGuestBookings = null;
+                return PartialView("_ModifyBooking", presentGuestBookings);
             }
             for (int i = 0; i < presentBookings.Count; i++)
             {
@@ -682,6 +688,11 @@ namespace Camping2000.Controllers
                 Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
                 List<Camping> allSpots = Db.Camping.ToList();
                 List<Camping> freeSpots = new List<Camping>();
+                if ((currentBooking == null) || (currentGuest == null) || (currentSpot == null) || (allSpots == null))
+                {
+                    ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                    return RedirectToAction("ModifySpecificBooking", aBookingToModify);
+                }
                 foreach (var spot in allSpots)
                 {
                     if (spot.ItemIsOccupied == false)
@@ -689,10 +700,10 @@ namespace Camping2000.Controllers
                         freeSpots.Add(spot);
                     }
                 }
-                if (freeSpots.Count < 1)
-                {
-                    freeSpots = null;
-                }
+                //if (freeSpots.Count < 1)
+                //{
+                //    freeSpots = null;
+                //}
                 ModifyBookingViewModel bookingToModify = new ModifyBookingViewModel
                 {
                     BookingId = currentBooking.BookingId,
@@ -713,7 +724,8 @@ namespace Camping2000.Controllers
             }
             else
             {
-                return RedirectToAction("ModifySpecificBooking", aBookingToModify);
+                ViewBag.Errormessage = "Some of the submitted values were incorrect. Please try again.";
+                return PartialView("_ModifySpecificBooking", aBookingToModify);
             }
         }
         [HttpPost]
@@ -725,7 +737,7 @@ namespace Camping2000.Controllers
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
             Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
             Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
-
+            List<Booking> allBookings = Db.Bookings.ToList();
             List<Booking> bookingsWSCSpot = new List<Booking>(); //bookingsWithSameCampingSpot 
             List<Booking> bookingsWSCSECB = new List<Booking>(); //bookingsWithSameCampingSpotExcludingCurrentBooking 
 
@@ -733,8 +745,12 @@ namespace Camping2000.Controllers
             List<int> disAllowableBookings = new List<int>();
             List<Camping> ListOfSpots = new List<Camping>();
             int numberOfDays = 0;
-            //decimal estimatedPrice = 0;
-            foreach (var booking in Db.Bookings) //gather all bookings that have the same Itemid as the present one 
+            if ((currentBooking == null) || (currentGuest == null) || (currentItem == null) || (allBookings == null))
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                return PartialView("_FailedChangeStartDate", currentBooking);
+            }
+            foreach (var booking in allBookings) //gather all bookings that have the same Itemid as the present one 
             {
                 if ((booking.ItemId == currentItem.ItemId) && (booking.BookingEndDate > bookingToModify.BookingStartDate) && (booking.BookingStartDate < bookingToModify.BookingStartDate))
                 {
@@ -815,6 +831,11 @@ namespace Camping2000.Controllers
             List<Camping> allSpots = Db.Camping.ToList();
             List<Camping> ListOfSpots = new List<Camping>();
             int numberOfDays = 0;
+            if ((currentBooking == null) || (currentGuest == null) || (currentItem == null) || (allBookings == null))
+            {
+                ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                return PartialView("_FailedChangeEndDate", currentBooking);
+            }
             foreach (var booking in allBookings)//check for bookings at same spot that start before the new end data 
             {
                 if ((booking.ItemId == currentItem.ItemId) && ((booking.BookingStartDate < bookingToModify.BookingEndDate) && (booking.BookingStartDate > currentBooking.BookingEndDate)))
@@ -895,6 +916,11 @@ namespace Camping2000.Controllers
                 List<Camping> ListOfSpots = new List<Camping>();
                 int numberOfDays = 0;
                 List<Booking> lb = new List<Booking>();
+                if ((currentBooking == null) || (currentGuest == null) || (currentItem == null) || (allBookings == null))
+                {
+                    ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                    return PartialView("_FailedChangePowerOutlet", currentBooking);
+                }
                 if (currentBooking.GuestHasCheckedIn == false)
                 {
                     currentBooking.BookingNeedsElectricity = (currentBooking.BookingNeedsElectricity == false) ? currentBooking.BookingNeedsElectricity = true : currentBooking.BookingNeedsElectricity = false; //switch the electrical needs of the booking.
@@ -1060,6 +1086,12 @@ namespace Camping2000.Controllers
                 Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
                 Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
                 int numberOfDays = 0;
+                if ((currentBooking == null) || (currentGuest == null) || (currentItem == null))
+                {
+                    ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                    lb = null;
+                    return PartialView("_ChangePartySize", lb);
+                }
                 if (currentBooking.GuestHasCheckedIn == false)
                 {
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
@@ -1141,10 +1173,15 @@ namespace Camping2000.Controllers
                 Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
                 Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
                 List<Camping> allSpots = Db.Camping.ToList();
-                List<Camping> availableSpots = new List<Camping>();
                 List<Booking> allBookings = Db.Bookings.ToList();
+                List<Camping> availableSpots = new List<Camping>();
                 List<Booking> collidingBookings = new List<Booking>();
                 List<Booking> collidingBookingsWPN = new List<Booking>();//collidingBookingsWithPowerNeed
+                if ((currentBooking == null) || (currentGuest == null) || (currentItem == null) || (allSpots == null) || (allBookings == null))
+                {
+                    ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                    return PartialView("_ChangeCampingSpot");
+                }
                 if (currentBooking.GuestHasCheckedIn == true)
                 {
                     foreach (var spot in allSpots)
@@ -1223,6 +1260,11 @@ namespace Camping2000.Controllers
             Camping oldItem = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
             if (ModelState.IsValid)
             {
+                if ((currentBooking == null) || (currentGuest == null) || (currentItem == null) || (oldItem == null))
+                {
+                    ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
+                    return PartialView("_ChangeConfirmationCampingSpot");
+                }
                 oldItem.ItemIsOccupied = false;
                 Db.SaveChanges();
                 currentItem.ItemIsOccupied = true;

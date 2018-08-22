@@ -2,93 +2,94 @@
 
 <h2>Change of partysize.</h2>
 <p>@ViewBag.Errormessage</p>
-@if (Model.Count < 2)
+@if (Model != null)
 {
-    <p>
-        The change has been made to the booking. The new partysize is @Model[0].NumberOfGuests and the new booking price is
-        @Model[0].BookingPrice.
-    </p>
-}
-else
-{
-    <div class="row">
-        <div class="col-md-12">
-            <p>
-                The change of partysize in combination with the guest being checked in have resulted that the present
-                booking been limitied to present days date and a new booking have been created with present days date and the
-                limited bookings end date. A summary is shown below:
-            </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-1">
-            @Html.Label("BookingId")
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Start Date")
-        </div>
-        <div class="col-md-2">
-            @Html.Label("End Date")
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Party size")
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Price")
-        </div>
-        <div class="col-md-3">
-
-        </div>
-    </div>
-
-    foreach (var booking in Model)
+    if (Model.Count < 2)
+    {
+        <p>
+            The change has been made to the booking. The new partysize is @Model[0].NumberOfGuests and the new booking price is
+            @Model[0].BookingPrice.
+        </p>
+    }
+    else
     {
         <div class="row">
+            <div class="col-md-12">
+                <p>
+                    The change of partysize in combination with the guest being checked in have resulted that the present
+                    booking been limitied to present days date and a new booking have been created with present days date and the
+                    limited bookings end date. A summary is shown below:
+                </p>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-1">
-                @booking.BookingId
+                @Html.Label("BookingId")
             </div>
             <div class="col-md-2">
-                @booking.BookingStartDate.ToShortDateString()
+                @Html.Label("Start Date")
             </div>
             <div class="col-md-2">
-                @booking.BookingEndDate.ToShortDateString()
+                @Html.Label("End Date")
             </div>
             <div class="col-md-2">
-                @booking.NumberOfGuests
+                @Html.Label("Party size")
             </div>
             <div class="col-md-2">
-                @booking.BookingPrice
+                @Html.Label("Price")
             </div>
             <div class="col-md-3">
 
             </div>
         </div>
+        foreach (var booking in Model)
+        {
+            <div class="row">
+                <div class="col-md-1">
+                    @booking.BookingId
+                </div>
+                <div class="col-md-2">
+                    @booking.BookingStartDate.ToShortDateString()
+                </div>
+                <div class="col-md-2">
+                    @booking.BookingEndDate.ToShortDateString()
+                </div>
+                <div class="col-md-2">
+                    @booking.NumberOfGuests
+                </div>
+                <div class="col-md-2">
+                    @booking.BookingPrice
+                </div>
+                <div class="col-md-3">
+
+                </div>
+            </div>
+        }
     }
 }
 <hr />
-        <div class="row">
-            <div class="col-md-2">
-                @using (Ajax.BeginForm("GoToStart", "Home",
-                           ajaxOptions: new AjaxOptions
-                           {
-                               UpdateTargetId = "ContentBody",
-                               InsertionMode = InsertionMode.Replace,
-                           }))
-                {
-
-                    <input type="submit" value="Done" />
-                }
-            </div>
-            <div class="col-md-2">
-                @using (Ajax.BeginForm("ModifyBooking", "Home",
-                           ajaxOptions: new AjaxOptions
-                           {
-                               UpdateTargetId = "ContentBody",
-                               InsertionMode = InsertionMode.Replace,
-                           }))
-                {
-                    <input type="submit" value="Return to Bookings" />
-                }
-            </div>
-            <div class="col-md-8"></div>
-        </div>
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+            <input type="submit" value="Done" />
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("ModifyBooking", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+            <input type="submit" value="Return to Bookings" />
+        }
+    </div>
+    <div class="col-md-8"></div>
+</div>
