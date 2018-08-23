@@ -37,7 +37,14 @@
 }
 else
 {
+    if (ViewBag.Errormessage=="")
+    {
     <p>All checked in guests have checked out. </p>
+    }
+    else
+    {
+        <p>@ViewBag.Errormessage</p>
+    }
 }
 <div class="row">
     <div class="col-md-2">

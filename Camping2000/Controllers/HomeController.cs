@@ -1644,6 +1644,11 @@ namespace Camping2000.Controllers
             Guest guestThatFailedToCheckin = new Guest();
             GuestBookingViewModel failedBooking = new GuestBookingViewModel();
             List<GuestBookingViewModel> allFailedBookings = new List<GuestBookingViewModel>();
+            if (allBookings==null)
+            {
+                ViewBag.Errormessage = "Fetching data did not succed. Please try again.";
+                return PartialView("_MissedCheckins");
+            }
             foreach (var booking in allBookings)//fetch the bookings that have not been checked in
             {
                 if ((booking.GuestHasReserved == true) && (booking.BookingStartDate < DateTime.Now.Date))
@@ -1678,6 +1683,11 @@ namespace Camping2000.Controllers
             Guest guestThatFailedToCheckOut = new Guest();
             GuestBookingViewModel failedBooking = new GuestBookingViewModel();
             List<GuestBookingViewModel> allFailedBookings = new List<GuestBookingViewModel>();
+            if (allBookings==null)
+            {
+                ViewBag.Errormessage = "Fetching data did not succed. Please try again.";
+                return PartialView("_MissedCheckOuts");
+            }
             foreach (var booking in allBookings)//fetch the bookings that have not been checked in
             {
                 if ((booking.GuestHasCheckedIn == true) && (booking.BookingEndDate < DateTime.Now.Date))
