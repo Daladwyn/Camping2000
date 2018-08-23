@@ -1342,10 +1342,15 @@ namespace Camping2000.Controllers
             ApplicationDbContext Db = new ApplicationDbContext();
             var userStore = new UserStore<ApplicationUser>(Db);
             var userManager = new UserManager<ApplicationUser>(userStore);
-
             List<string> listOfAppGuests = new List<string>();
             List<string> listOfCampingGuests = new List<string>();
             GuestDataViewModel newGuest = new GuestDataViewModel();
+            List<Guest> campingGuest = CampingDb.Guests.ToList();
+            if (campingGuest == null)
+            {
+                ViewBag.Errormessage = "Fetching data did not succed. Please notify the camping staff at: info@camping.com";
+                return PartialView("_GuestData");
+            }
             foreach (var guest in Db.Users)
             {
                 if (guest.Email != "admin@camping.com")
@@ -1390,14 +1395,21 @@ namespace Camping2000.Controllers
                 Camping2000Db Db = new Camping2000Db();
                 Guest guestData = new Guest();
                 Adress guestAdress = new Adress();
-
-                Camping2000.Models.ApplicationDbContext context = new ApplicationDbContext();
+                ApplicationDbContext context = new ApplicationDbContext();
                 var userStore = new UserStore<ApplicationUser>(context);
                 var userManager = new UserManager<ApplicationUser>(userStore);
                 var user = userManager.FindById(newGuest.GuestId); //find the new guest by the Id
+                if (user == null)
+                {
+                    ViewBag.Errormessage = "No user with that Id was found. Please try again.";
+                    return PartialView("_GuestData", newGuest);
+                }
                 userManager.AddToRole(user.Id, "Guests");//add the guest to the role of "Guests"
-                context.SaveChanges();
-
+                if (context.SaveChanges() != 1)
+                {
+                    ViewBag.Errormessage = "Saving guestdata did not succed. Please try again.";
+                    return PartialView("_GuestData", newGuest);
+                };
                 guestData.GuestId = newGuest.GuestId;
                 guestData.GuestFirstName = newGuest.GuestFirstName;
                 guestData.GuestLastName = newGuest.GuestLastName;
@@ -1421,8 +1433,7 @@ namespace Camping2000.Controllers
                 guestAdress.PostAdressCity = newGuest.PostAdressCity;
                 Db.Guests.Add(guestData);
                 Db.Adresses.Add(guestAdress);
-                int numberOfSaves = Db.SaveChanges();
-                if (numberOfSaves < 2)
+                if (Db.SaveChanges() < 2)
                 {
                     ViewBag.Errormessage = "The registration did not complete. please try again in a while.";
                     return PartialView("_GuestData", newGuest);

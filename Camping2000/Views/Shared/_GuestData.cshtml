@@ -2,193 +2,193 @@
 
 <h2>Please complete the registration below:</h2>
 @ViewBag.Errormessage
-@using (Ajax.BeginForm("SaveGuestData", "Home",
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "ContentBody",
-                InsertionMode = InsertionMode.Replace,
-            }))
+@if (Model != null)
 {
 
-    <div class="form-group">
-        <div class="row">
+    using (Ajax.BeginForm("SaveGuestData", "Home",
+                ajaxOptions: new AjaxOptions
+                {
+                    UpdateTargetId = "ContentBody",
+                    InsertionMode = InsertionMode.Replace,
+                }))
+    {
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("First Name")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("GuestFirstName")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("Last Name")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("GuestLastName")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("Nationality")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("GuestNationality")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("Phone Number")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("GuestPhoneNumber")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("Mobile Number")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("GuestMobileNumber")
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("PostAdress Street")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("PostAdressStreet1")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("PostAdress Street")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("PostAdressStreet2")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("PostAdress Street")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("PostAdressStreet3")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("PostAdress ZipCode")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("PostAdressZipCode")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("PostAdress City")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("PostAdressCity")
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div>
+            <div class="row">
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-10">
+                    <input type="button" onclick="" value="Copy Livingadress to Postadress" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("LivingAdress Street")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("LivingAdressStreet1")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("LivingAdress Street")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("LivingAdressStreet2")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("LivingAdress Street")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("LivingAdressStreet3")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("LivingAdress ZipCode")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("LivingAdressZipCode")
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("LivingAdress City")
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBox("LivingAdressCity")
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div>
             <div class="col-md-2">
-                @Html.Label("First Name")
             </div>
             <div class="col-md-10">
-                @Html.TextBox("GuestFirstName")
+                <div class="form-group">
+                    <input type="submit" value="Complete Registration" class="btn btn-default" />
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("Last Name")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("GuestLastName")
-            </div>
+        <div class="form-group">
+            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
         </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("Nationality")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("GuestNationality")
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("Phone Number")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("GuestPhoneNumber")
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("Mobile Number")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("GuestMobileNumber")
-            </div>
-        </div>
-    </div>
-
-    <hr />
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("PostAdress Street")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("PostAdressStreet1")
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("PostAdress Street")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("PostAdressStreet2")
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("PostAdress Street")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("PostAdressStreet3")
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("PostAdress ZipCode")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("PostAdressZipCode")
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("PostAdress City")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("PostAdressCity")
-            </div>
-        </div>
-    </div>
-    <hr />
-    <div>
-        <div class="row">
-            <div class="col-md-2">
-
-            </div>
-            <div class="col-md-10">
-                <input type="button" onclick="" value="Copy Livingadress to Postadress" class="btn btn-default" />
-
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("LivingAdress Street")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("LivingAdressStreet1")
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("LivingAdress Street")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("LivingAdressStreet2")
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("LivingAdress Street")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("LivingAdressStreet3")
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("LivingAdress ZipCode")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("LivingAdressZipCode")
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("LivingAdress City")
-            </div>
-            <div class="col-md-10">
-                @Html.TextBox("LivingAdressCity")
-            </div>
-        </div>
-    </div>
-
-    <hr />
-    <div>
-        <div class="col-md-2">
-
-        </div>
-        <div class="col-md-10">
-            <div class="form-group">
-                <input type="submit" value="Complete Registration" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.HiddenFor(g => g.GuestId, Model.GuestId)
-    </div>
-
+    }
+}
+else
+{
+        <p>Please try @Html.ActionLink("registering", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) again.</p>
 }
