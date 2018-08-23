@@ -31,6 +31,7 @@
     </div>
     <div class="form-group">
         @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+        @Html.HiddenFor(n=>n.NumberOfGuests,Model.NumberOfGuests)
     </div>
 }
 @ViewBag.Errormessage

@@ -7,9 +7,7 @@
 }
 @if (Model != null)
 {
-
-
-    @if (ViewBag.GuestHasCheckedIn == "false")
+    if (ViewBag.GuestHasCheckedIn == "false")
     {
         <p>The guest have to checkin before a change of spot is possible.</p>
     }

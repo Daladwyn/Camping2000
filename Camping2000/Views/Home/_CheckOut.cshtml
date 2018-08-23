@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    @foreach (var booking in Model)
+    foreach (var booking in Model)
     {
         Html.RenderAction("ShowGuestDepartures", booking);
     }
@@ -34,5 +34,5 @@
 else
 {
     <h2>Checking Out.</h2>
-    <p>Something went wrong: @ViewBag.Errormessage</p>
+    <p>@ViewBag.Errormessage</p>
 }

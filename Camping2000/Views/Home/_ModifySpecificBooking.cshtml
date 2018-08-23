@@ -1,10 +1,10 @@
 ﻿@model Camping2000.Models.ModifyBookingViewModel
 
-@if (ViewBag.Errormessage == "")
+@if (ViewBag.Errormessage != "")
 {
     <h2>@Model.GuestFirstName @Model.GuestLastName booking details for bookingId:@Model.BookingId:</h2>
     <hr />
-    @if (ViewBag.ElectricMessage != "")
+    if (ViewBag.ElectricMessage != "")
     {
         @ViewBag.ElectricMessage
     }
