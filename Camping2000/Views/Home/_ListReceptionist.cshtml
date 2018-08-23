@@ -32,11 +32,9 @@
                     UpdateTargetId = "ContentBody"
                 }))
                 {
-                <div>
-                    @Html.Hidden("GuestId", receptionist.GuestId)
-                    @*Html.HiddenFor(Model => Model.GuestId, receptionist.GuestId)*@
-                   
-                </div>
+                    <div>
+                        @Html.Hidden("GuestId", receptionist.GuestId)
+                    </div>
                     <input type="submit" value="Remove Receptionist Rights" />
                 }
             </div>
@@ -51,8 +49,8 @@ else
 }
 @using (Ajax.BeginForm("ManageReceptionists", "Home", new AjaxOptions
 {
-    UpdateTargetId="ContentBody",
-    InsertionMode=InsertionMode.Replace,
+    UpdateTargetId = "ContentBody",
+    InsertionMode = InsertionMode.Replace,
 }))
 {
     <input type="submit" value="Back to Receptionist" />

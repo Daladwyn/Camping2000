@@ -1448,6 +1448,7 @@ namespace Camping2000.Controllers
         }
         //End of guest registration flow
         //Start of modify guest data flow
+        [Authorize(Roles = "Administrators")]
         public ActionResult GuestDetails(string GuestId)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -1460,6 +1461,11 @@ namespace Camping2000.Controllers
             else
             {
                 Adress foundAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == GuestId);
+                if (foundAdress == null)
+                {
+                    ViewBag.Errormessage = "No adress was fetchable. Please try again.";
+                    return PartialView("_FailedGuestDetails");
+                }
                 GuestAdressViewModel completeGuestDetails = new GuestAdressViewModel
                 {
                     GuestId = foundGuest.GuestId,
@@ -1531,11 +1537,25 @@ namespace Camping2000.Controllers
                 return PartialView("_ConfirmReceptionistRights");
             }
             Db.Receptionists.Add(newCoWorker); //Add the new coworker to receptionists list
-            Db.SaveChanges();
+            if (Db.SaveChanges() != 1)
+            {
+                ViewBag.RightsMessage = "Saving data did not succed. Please try again.";
+                return PartialView("_ConfirmReceptionistRights");
+            };
             var user = userManager.FindById(GuestId); //find the new coWorker by Id
+            if (user == null)
+            {
+                ViewBag.RightsMessage = "User have to exist in 2 userdatabases, but are currently not doing so.";
+                return PartialView("_ConfirmReceptionistRights");
+            }
             userManager.AddToRole(user.Id, "Receptionists");//add new coWorker to the role of "Receptionists"
             userManager.RemoveFromRole(user.Id, "Guests");//Remove the role of "Guest" from new coworker 
-            ApplicationDb.SaveChanges();
+            ;
+            if (ApplicationDb.SaveChanges() != 1)
+            {
+                ViewBag.RightsMessage = "Saving data did not succed. Please try again.";
+                return PartialView("_ConfirmReceptionistRights");
+            }
             ViewBag.RightsMessage = "The new coworker have now rights as a receptionist";
             return PartialView("_ConfirmReceptionistRights");
         }
@@ -1548,6 +1568,11 @@ namespace Camping2000.Controllers
             Camping2000Db Db = new Camping2000Db(); //Save the removal of old coworkers ID in the receptionists table
             List<Receptionist> allReceptionists = Db.Receptionists.ToList();//fetch all present receptionists
             Receptionist oldCoWorker = Db.Receptionists.SingleOrDefault(g => g.GuestId == GuestId);
+            if (allReceptionists == null)
+            {
+                ViewBag.RightsMessage = "Fetching data did not succed. Please try again.";
+                return PartialView("_ConfirmReceptionistRights");
+            }
             if (oldCoWorker == null)
             {
                 ViewBag.RightsMessage = "The former coworkers receptionist rights is already removed.";
@@ -1560,11 +1585,24 @@ namespace Camping2000.Controllers
                     Db.Receptionists.Remove(oldCoWorker);
                 }
             }
-            Db.SaveChanges();
-            var user = userManager.FindById(GuestId); //find the new coWorker by the Id
+            if (Db.SaveChanges() != 1)
+            {
+                ViewBag.RightsMessage = "Saving data did not succed. Please try again.";
+                return PartialView("_ConfirmReceptionistRights");
+            };
+            var user = userManager.FindById(GuestId); //find the former coWorker by Id
+            if (user == null)
+            {
+                ViewBag.RightsMessage = "Did not find the former coworker. Are rights already removed?.";
+                return PartialView("_ConfirmReceptionistRights");
+            }
             userManager.AddToRole(user.Id, "Guests");//add former coWorker to the role of "Guest"
             userManager.RemoveFromRole(user.Id, "Receptionists");//Remove the role of "Receptionists" from former coworker 
-            ApplicationDb.SaveChanges();
+            if (ApplicationDb.SaveChanges() != 1)
+            {
+                ViewBag.RightsMessage = "Saving data did not succed. Please try again.";
+                return PartialView("_ConfirmReceptionistRights");
+            }
             ViewBag.RightsMessage = "The former coworker is no longer receptionist.";
             return PartialView("_ConfirmReceptionistRights");
         }
@@ -1576,7 +1614,8 @@ namespace Camping2000.Controllers
             List<Guest> receptionistData = new List<Guest>();
             if (currentReceptionists == null)
             {
-                ViewBag.NumberOfReceptionists = "There is none that have receptionist rights.";
+                ViewBag.NumberOfReceptionists = "There is none that have receptionist rights or data was not fetched.";
+                return PartialView("_ListReceptionist");
             }
             else
             {
@@ -1585,6 +1624,11 @@ namespace Camping2000.Controllers
                     receptionistData.Add(Db.Guests.SingleOrDefault(g => g.GuestId == receptionist.GuestId));
                 }
                 ViewBag.NumberOfReceptionists = "The following " + currentReceptionists.Count() + " have receptionist rights.";
+            }
+            if (currentReceptionists.Count!=receptionistData.Count)
+            {
+                ViewBag.NumberOfReceptionists = "Matching data was not fetched. Please try again.";
+                return PartialView("_ListReceptionist");
             }
             return PartialView("_ListReceptionist", receptionistData);
         }
@@ -1691,7 +1735,7 @@ namespace Camping2000.Controllers
         {
             return RedirectToAction("Logoff", "Account");
         }
-        [Authorize(Roles = "Administrators")]
+
         /// <summary>
         /// A function that checks if a valid sting have been fetched
         /// </summary>
