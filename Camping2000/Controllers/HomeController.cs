@@ -46,6 +46,7 @@ namespace Camping2000.Controllers
                 List<Camping> ListOfSpots = new List<Camping>();//list of valid spots
                 Booking updatedBooking = new Booking();
                 ViewBag.Errormessage = "";
+                HttpCookie campingCookie = new HttpCookie("CampingCookie");
                 if (currentBookings == null)
                 {
                     ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
@@ -114,7 +115,6 @@ namespace Camping2000.Controllers
                     updatedBooking.BookingNeedsElectricity = newBooking.BookingNeedsElectricity;
                     updatedBooking.BookingPrice = newBooking.BookingPrice;
                     updatedBooking.ItemId = newBooking.ItemId;
-
                     Db.SaveChanges();
                 }
                 int checkDbSave = Db.SaveChanges();
@@ -123,6 +123,10 @@ namespace Camping2000.Controllers
                     ViewBag.Errormessage = "Your booking could not be processed. Please try again later.";
                     return PartialView("_SpaceForTent", newBooking);
                 }
+                //cookiedetails is set here
+                campingCookie["BookingId"] = Convert.ToString(newBooking.BookingId);
+                campingCookie.Expires = DateTime.Now.AddHours(1);
+                Response.Cookies.Add(campingCookie);
                 return PartialView("_ConfirmSpaceForTent", newBooking);
             }
             else
@@ -1196,7 +1200,7 @@ namespace Camping2000.Controllers
                             availableSpots.Add(spot);
                         }
                     }
-                    if (availableSpots.Count==0)
+                    if (availableSpots.Count == 0)
                     {
                         ViewBag.Errormessage = "No spots are vacant, preventing a change of spot.";
                         return PartialView("_ChangeCampingSpot");
