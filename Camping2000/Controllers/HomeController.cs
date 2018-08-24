@@ -1111,7 +1111,7 @@ namespace Camping2000.Controllers
                     linkedBooking.PreBooking = currentBooking.BookingId;
                     linkedBooking.PostBooking = newBooking.BookingId;
                     Db.LinkBookings.Add(linkedBooking);
-                    if (Db.SaveChanges()!=1)
+                    if (Db.SaveChanges() != 1)
                     {
                         string message = "The link between booking " + currentBooking.BookingId + " and booking " + newBooking.BookingId + " could not be saved.";
                         ViewBag.Errormessage = message;
@@ -1136,9 +1136,10 @@ namespace Camping2000.Controllers
                 Camping2000Db Db = new Camping2000Db();
                 List<ModifyBookingViewModel> currentBookingView = new List<ModifyBookingViewModel>();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
-                List<Booking> lb = new List<Booking>();
                 Guest currentGuest = Db.Guests.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
                 Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
+                List<Booking> lb = new List<Booking>();
+                LinkBooking linkedBooking = new LinkBooking();
                 int numberOfDays = 0;
                 if ((currentBooking == null) || (currentGuest == null) || (currentItem == null))
                 {
@@ -1168,16 +1169,17 @@ namespace Camping2000.Controllers
                     newBooking.NumberOfGuests = bookingToModify.NumberOfGuests;
                     Db.Bookings.Add(newBooking);
                     Db.SaveChanges();
+                    //add a controll of saved data
                     bookingToModify.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
                     newBooking.BookingNeedsElectricity = bookingToModify.BookingNeedsElectricity;
                     newBooking.BookingPrice = 0;
                     newBooking.GuestId = bookingToModify.GuestId;
                     newBooking.ItemId = bookingToModify.ItemId;
-                    //newBooking.NumberOfGuests = bookingToModify.NumberOfGuests;
                     Db.SaveChanges();
+                    //add a controll of saved data
                     currentBooking.BookingEndDate = DateTime.Now;   //change end date for present booking
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice; //subtract the present bookingprice for the guest to pay 
-                    numberOfDays = CalculateNumberOfDays(newBooking.BookingStartDate, newBooking.BookingEndDate); //calculate number of days the present stay was
+                    numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate); //calculate number of days the present stay was
                     if (numberOfDays == 0)
                     {
                         currentBooking.BookingPrice = 0; //if guest changes number of persons before first night but after checkin
@@ -1190,15 +1192,27 @@ namespace Camping2000.Controllers
                     numberOfDays = CalculateNumberOfDays(newBooking.BookingStartDate, newBooking.BookingEndDate);  //calculate the days in the new booking
                     if (numberOfDays != 0)
                     {
-                        newBooking.BookingPrice = numberOfDays * bookingToModify.NumberOfGuests * currentItem.CampingPrice;   //calculate the new bookings price
+                        newBooking.BookingPrice = numberOfDays * newBooking.NumberOfGuests * currentItem.CampingPrice;   //calculate the new bookings price
                     }
                     else
                     {
                         ViewBag.Errormessage = "Guest can not change partysize last booked day.";
+                        //return PartialView("_ChangePartySize");
                     }
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice + newBooking.BookingPrice; //update the amount the guest have to pay 
                     lb.Add(newBooking);
+                    Db.Bookings.Add(newBooking);// is this neccesary?
                     Db.SaveChanges();
+                    //Adding controll to check saved data
+                    linkedBooking.PreBooking = currentBooking.BookingId;
+                    linkedBooking.PostBooking = newBooking.BookingId;
+                    Db.LinkBookings.Add(linkedBooking);
+                    if (Db.SaveChanges() != 1)
+                    {
+                        string message = "The link between booking " + currentBooking.BookingId + " and booking " + newBooking.BookingId + " could not be saved.";
+                        ViewBag.Errormessage = message;
+                        return PartialView("_ChangePartySize");
+                    }
                     return PartialView("_ChangePartySize", lb);
                 }
             }
