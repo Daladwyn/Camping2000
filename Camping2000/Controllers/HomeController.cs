@@ -418,7 +418,8 @@ namespace Camping2000.Controllers
                 Camping departedGuestSpot = Db.Camping.SingleOrDefault(i => i.ItemId == departingBooking.ItemId);
                 List<Booking> allGuestBookings = new List<Booking>();
                 BookingGuestViewModel departingGuestBooking = new BookingGuestViewModel();
-                if (allBookings == null) //check if fetched data is valid
+                List<LinkBooking> allLinkBookings = Db.LinkBookings.ToList();
+                if ((allBookings == null) || (allLinkBookings == null)) //check if fetched data is valid
                 {
                     ViewBag.Errormessage = "Fetching of data did not succeed. Please try again.";
                     return PartialView("_CheckOut");
@@ -1340,9 +1341,11 @@ namespace Camping2000.Controllers
                 }
                 oldItem.ItemIsOccupied = false;
                 Db.SaveChanges();
+                //add controll of saved data
                 currentItem.ItemIsOccupied = true;
                 currentBooking.ItemId = currentItem.ItemId;
                 Db.SaveChanges();
+                //add controll of saved data
                 aBookingView = bookingToModify;
                 aBookingView.BookingStartDate = currentBooking.BookingStartDate;
                 aBookingView.BookingEndDate = currentBooking.BookingEndDate;
