@@ -904,7 +904,7 @@ namespace Camping2000.Controllers
                     ViewBag.Errormessage = "No spots are available for the new end date. Please choose another departuredate.";
                     return PartialView("_FailedChangeEndDate");
                 }
-                currentBooking.ItemId = ListOfSpots[0].ItemId;
+                currentBooking.ItemId = ListOfSpots[0].ItemId;//make the swith to new spot
                 currentItem.ItemIsOccupied = false;
                 currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
                 currentItem.ItemIsOccupied = true;
@@ -940,29 +940,30 @@ namespace Camping2000.Controllers
                 List<Camping> ListOfSpots = new List<Camping>();
                 int numberOfDays = 0;
                 List<Booking> lb = new List<Booking>();
-                if ((currentBooking == null) || (currentGuest == null) || (currentItem == null) || (allBookings == null))
+                LinkBooking linkedBooking = new LinkBooking();
+                if ((currentBooking == null) || (currentGuest == null) || (currentItem == null) || (allBookings == null))//validate the data to be legit
                 {
                     ViewBag.Errormessage = "Fetching data did not succeed. Please try again.";
-                    return PartialView("_FailedChangePowerOutlet", currentBooking);
+                    return PartialView("_FailedChangePowerOutlet");//, currentBooking
                 }
-                if (currentBooking.GuestHasCheckedIn == false)
+                if (currentBooking.GuestHasCheckedIn == false) //If guest have not checked in, then no new booking is necesary
                 {
                     currentBooking.BookingNeedsElectricity = (currentBooking.BookingNeedsElectricity == false) ? currentBooking.BookingNeedsElectricity = true : currentBooking.BookingNeedsElectricity = false; //switch the electrical needs of the booking.
                     foreach (var booking in Db.Bookings)//see if any bookings exits that collide with the current booking
                     {
                         if ((booking.BookingNeedsElectricity == currentBooking.BookingNeedsElectricity) && (((booking.BookingEndDate > currentBooking.BookingStartDate) && (booking.BookingEndDate <= currentBooking.BookingEndDate)) || ((booking.BookingStartDate < currentBooking.BookingEndDate) && (booking.BookingStartDate >= currentBooking.BookingStartDate))))
                         {
-                            disAllowableBookings.Add(booking.ItemId);
+                            disAllowableBookings.Add(booking.ItemId); //gather all bookings that have dates that collide 
                         }
                     }
                     disAllowableBookings.Sort();
-                    ListOfSpots = FetchCampingSpots(currentBooking.BookingNeedsElectricity);
+                    ListOfSpots = FetchCampingSpots(currentBooking.BookingNeedsElectricity); //get all spots based on power needs
                     if (ListOfSpots[0].CampingSpot == "NoData")
                     {
                         ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
-                        return PartialView("_FailedChangePowerOutlet", currentBooking);
+                        return PartialView("_FailedChangePowerOutlet");//, currentBooking
                     }
-                    if (disAllowableBookings.Count < 1)//if no collision is detected and the guest is not checked in, change spot
+                    if (disAllowableBookings.Count < 1)//if no collision is detected and the guest is not checked in, change spot and calculate new cost
                     {
                         currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
                         numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate); ;
@@ -970,24 +971,33 @@ namespace Camping2000.Controllers
                         currentBooking.ItemId = currentItem.ItemId;
                         currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;
                         Db.SaveChanges();
+                        //a controll of the save data should be here.
                         lb.Add(currentBooking);
                         ViewBag.Message = "The change of poweroutlet succeded. See details below.";
                         return PartialView("_ChangePowerOutlet", lb);
                     }
-                    ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings);
+                    ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings); //remove spots that have colliding bookings
 
                     if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
                     {
                         ViewBag.Errormessage = "There are no available spots that matches your need for electricity.";
-                        return PartialView("_FailedChangePowerOutlet", currentBooking);
+                        return PartialView("_FailedChangePowerOutlet");//, currentBooking
                     }
-                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
+                    currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice; //remove the present bookingprice
                     numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
-                    currentBooking.ItemId = ListOfSpots[0].ItemId;
-                    currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
-                    currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;
+                    currentItem.ItemIsOccupied = false; //release the "old" spot
+                    currentBooking.ItemId = ListOfSpots[0].ItemId; //assign the new spot
+                    currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId); //fetch the new spots data
+                    if (currentItem == null)
+                    {
+                        ViewBag.Errormessage = "Fetching data of new spot did not succed.";
+                        return PartialView("_FailedChangePowerOutlet");//, currentBooking
+                    }
+                    currentItem.ItemIsOccupied = true;
+                    currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;//Calculate the new price
                     Db.SaveChanges();
-                    aBookingView.BookingEndDate = currentBooking.BookingEndDate;
+                    //a controll of the save data should be here.
+                    aBookingView.BookingEndDate = currentBooking.BookingEndDate; //prepare data for the view
                     aBookingView.BookingStartDate = currentBooking.BookingStartDate;
                     aBookingView.ItemName = currentItem.ItemName;
                     aBookingView.BookingPrice = currentBooking.BookingPrice;
@@ -1003,7 +1013,7 @@ namespace Camping2000.Controllers
                 else
                 {
                     bookingToModify.BookingNeedsElectricity = (currentBooking.BookingNeedsElectricity == false) ? bookingToModify.BookingNeedsElectricity = true : bookingToModify.BookingNeedsElectricity = false; //switch the electrical needs of the booking.
-                    bookingToModify.BookingEndDate = currentBooking.BookingEndDate;
+                    bookingToModify.BookingEndDate = currentBooking.BookingEndDate;//transfer values to a new instance of the variable
                     bookingToModify.NumberOfGuests = currentBooking.NumberOfGuests;
                     currentBooking.BookingEndDate = DateTime.Now;
                     Booking newBooking = new Booking(); ;//initialize a new booking with the values of the present booking
@@ -1014,11 +1024,13 @@ namespace Camping2000.Controllers
                     newBooking.NumberOfGuests = bookingToModify.NumberOfGuests;
                     Db.Bookings.Add(newBooking);
                     Db.SaveChanges();
+                    //a controll of save data should be here
                     newBooking.BookingNeedsElectricity = bookingToModify.BookingNeedsElectricity;
                     newBooking.BookingPrice = 0;
                     newBooking.GuestId = bookingToModify.GuestId;
                     Db.SaveChanges();
-                    foreach (var booking in Db.Bookings)//see if any bookings exits that collide with the current booking
+                    //a controll of save data should be here
+                    foreach (var booking in allBookings)//see if any bookings exits that collide with the current booking
                     {
                         if ((booking.BookingNeedsElectricity == currentBooking.BookingNeedsElectricity) && ((booking.BookingEndDate > currentBooking.BookingStartDate) || (booking.BookingStartDate < currentBooking.BookingEndDate)))
                         {
@@ -1026,27 +1038,35 @@ namespace Camping2000.Controllers
                         }
                     }
                     disAllowableBookings.Sort();
-                    ListOfSpots = FetchCampingSpots(bookingToModify.BookingNeedsElectricity);
+                    ListOfSpots = FetchCampingSpots(bookingToModify.BookingNeedsElectricity); //fetch spots based on powerneeds
                     if (ListOfSpots[0].CampingSpot == "NoData")
                     {
                         ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
-                        return PartialView("_FailedChangePowerOutlet", currentBooking);
+                        return PartialView("_FailedChangePowerOutlet");//, currentBooking
                     }
-                    ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings);
+                    ListOfSpots = RemoveOccupiedSpots(ListOfSpots, disAllowableBookings); //remove the spots that have colliding bookings
 
                     if (ListOfSpots.Count == 0) //if no spots remains send a message to user that camping is full
                     {
                         ViewBag.Errormessage = "There are no available spots that matches your need for electricity.";
-                        return PartialView("_FailedChangePowerOutlet", lb);
+                        return PartialView("_FailedChangePowerOutlet");//, lb
                     }
                     newBooking.ItemId = ListOfSpots[0].ItemId;
                     currentItem.ItemIsOccupied = false;
+                    currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId); //fetch the new spots data
+                    if (currentItem == null)
+                    {
+                        ViewBag.Errormessage = "Fetching data of new spot did not succed.";
+                        return PartialView("_FailedChangePowerOutlet");//, currentBooking
+                    }
+                    currentItem.ItemIsOccupied = true;
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
                     numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
                     if (numberOfDays == 0)
                     {
                         ViewBag.Errormessage = "The change of poweroutlet is on the same day as checkin day.";
                         currentBooking.BookingPrice = 0;
+                        //may need to redirect to 
                     }
                     else
                     {
@@ -1054,7 +1074,8 @@ namespace Camping2000.Controllers
                     }
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
                     Db.SaveChanges();
-                    aBookingView.BookingEndDate = currentBooking.BookingEndDate;
+                    //Add a controll that checks saved data
+                    aBookingView.BookingEndDate = currentBooking.BookingEndDate; //prepare data to the view
                     aBookingView.BookingStartDate = currentBooking.BookingStartDate;
                     aBookingView.ItemName = currentItem.ItemName;
                     aBookingView.BookingPrice = currentBooking.BookingPrice;
@@ -1064,8 +1085,6 @@ namespace Camping2000.Controllers
                     aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
                     aBookingView.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
                     currentBookingView.Add(aBookingView);
-                    currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == newBooking.ItemId);
-                    currentItem.ItemIsOccupied = true;
                     numberOfDays = CalculateNumberOfDays(newBooking.BookingStartDate, newBooking.BookingEndDate);
                     if (numberOfDays == 0)
                     {
@@ -1078,7 +1097,8 @@ namespace Camping2000.Controllers
                     }
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + newBooking.BookingPrice;
                     Db.SaveChanges();
-                    anotherBookingView.BookingEndDate = newBooking.BookingEndDate;
+                    //a controller to check saved data
+                    anotherBookingView.BookingEndDate = newBooking.BookingEndDate;//prepare the data for the view
                     anotherBookingView.BookingStartDate = newBooking.BookingStartDate;
                     anotherBookingView.ItemName = currentItem.ItemName;
                     anotherBookingView.BookingPrice = newBooking.BookingPrice;
@@ -1088,6 +1108,16 @@ namespace Camping2000.Controllers
                     anotherBookingView.NumberOfGuests = newBooking.NumberOfGuests;
                     anotherBookingView.BookingNeedsElectricity = newBooking.BookingNeedsElectricity;
                     currentBookingView.Add(anotherBookingView);
+                    linkedBooking.PreBooking = currentBooking.BookingId;
+                    linkedBooking.PostBooking = newBooking.BookingId;
+                    Db.LinkBookings.Add(linkedBooking);
+                    if (Db.SaveChanges()!=1)
+                    {
+                        string message = "The link between booking " + currentBooking.BookingId + " and booking " + newBooking.BookingId + " could not be saved.";
+                        ViewBag.Errormessage = message;
+                        return PartialView("_FailedChangePowerOutlet");
+                    }
+
                     ViewBag.Message = "The change of poweroutlet succeded. See details below.";
                     return PartialView("_ChangePowerOutlet", currentBookingView);
                 }
