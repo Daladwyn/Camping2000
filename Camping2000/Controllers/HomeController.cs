@@ -18,7 +18,22 @@ namespace Camping2000.Controllers
         }
         public ActionResult Index()
         {
-            return View();
+            HttpCookie campingCookie = Request.Cookies["CampingCookie"];
+            string cookieBookingId = "";
+            Booking ambigiousBooking = new Booking
+            {
+                BookingId = 0
+            };
+            if (campingCookie != null)
+            {
+                cookieBookingId = campingCookie["BookingId"];
+                Response.Cookies["CampingCookie"].Expires = DateTime.Now.AddDays(-1);
+            }
+            if (cookieBookingId != "")
+            {
+                ambigiousBooking.BookingId = Convert.ToInt32(cookieBookingId);
+            }
+            return View("Index", ambigiousBooking);
         }
         //flow for making a reservation
         public ActionResult SpaceForTent([Bind(Include = "BookingNeedsElectricity")]Booking newBooking)
@@ -125,7 +140,7 @@ namespace Camping2000.Controllers
                 }
                 //cookiedetails is set here
                 campingCookie["BookingId"] = Convert.ToString(newBooking.BookingId);
-                campingCookie.Expires = DateTime.Now.AddHours(1);
+                campingCookie.Expires = DateTime.Now.AddDays(30);
                 Response.Cookies.Add(campingCookie);
                 return PartialView("_ConfirmSpaceForTent", newBooking);
             }
@@ -1412,6 +1427,10 @@ namespace Camping2000.Controllers
                 ApplicationDbContext context = new ApplicationDbContext();
                 var userStore = new UserStore<ApplicationUser>(context);
                 var userManager = new UserManager<ApplicationUser>(userStore);
+                Booking guestBooking = new Booking();
+                HttpCookie campingCookie = Request.Cookies["CampingCookie"];
+                string cookieBookingId = "";
+                Response.Cookies["CampingCookie"].Expires = DateTime.Now.AddDays(-1);
                 var user = userManager.FindById(newGuest.GuestId); //find the new guest by the Id
                 if (user == null)
                 {
@@ -1419,7 +1438,7 @@ namespace Camping2000.Controllers
                     return PartialView("_GuestData", newGuest);
                 }
                 userManager.AddToRole(user.Id, "Guests");//add the guest to the role of "Guests"
-                if (context.SaveChanges() != 1)
+                if (context.SaveChanges() != 0)
                 {
                     ViewBag.Errormessage = "Saving guestdata did not succed. Please try again.";
                     return PartialView("_GuestData", newGuest);
@@ -1452,7 +1471,16 @@ namespace Camping2000.Controllers
                     ViewBag.Errormessage = "The registration did not complete. please try again in a while.";
                     return PartialView("_GuestData", newGuest);
                 }
-                return PartialView("_RegistrationComplete");
+                if (campingCookie != null)
+                {
+                    cookieBookingId = campingCookie["BookingId"];
+                    Response.Cookies["CampingCookie"].Expires = DateTime.Now.AddDays(-1);
+                }
+                if (cookieBookingId != "")
+                {
+                    guestBooking.BookingId = Convert.ToInt32(cookieBookingId);
+                }
+                return PartialView("_RegistrationComplete", guestBooking);
             }
             else
             {

@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity
+@model Camping2000.Models.Booking
+
+@{
     ViewBag.Title = "Booking Page";
 }
 @if (Request.IsAuthenticated)
@@ -6,10 +9,31 @@
     <div>
         <h2> Instructions:</h2>
         <p>
-            Please choose in the left hand meny what you would like to do. 
+            Please choose in the left hand meny what you would like to do.
         </p>
     </div>
-
+    if (Model != null)
+    {
+        if (Model.BookingId != 0)
+        {
+            <hr />
+            <div class="row">
+                <div class="col-md-2">
+                    @using (Ajax.BeginForm("SpaceAdjustments", "Home", new AjaxOptions
+                    {
+                        InsertionMode = InsertionMode.Replace,
+                        UpdateTargetId = "ContentBody"
+                    }))
+                    {
+                        <input type="submit" value="Continue reservation" />
+                        @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+                        <input type="hidden" name="GuestId" value="@User.Identity.GetUserId()" />
+                    }
+                </div>
+                <div class="col-md-8"></div>
+            </div>
+        }
+    }
 
 
 

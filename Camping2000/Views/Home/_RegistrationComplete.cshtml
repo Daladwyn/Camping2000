@@ -1,16 +1,41 @@
-﻿
+﻿@using Microsoft.AspNet.Identity
+@model Camping2000.Models.Booking
 <h2>Registration is complete!</h2>
 
 <p>You can view your details when you are logged in as well as change your password.</p>
 
 <p>If you come across some missinformation in your details, please contact us so we can amend your details.</p>
 
-@using(Ajax.BeginForm("GoToStart", "Home",
-    ajaxOptions:new AjaxOptions
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+            ajaxOptions: new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "ContentBody"
+            }))
+        {
+            <input type="submit" value="Back to Start" />
+        }
+    </div>
+    @if (Model.BookingId != 0)
     {
-        InsertionMode= InsertionMode.Replace,
-        UpdateTargetId="ContentBody"
-    }))
-{
-    <input type="submit" value="Back to Start" />
-}
+        <div class="col-md-2">
+            @using (Ajax.BeginForm("SpaceAdjustments", "Home", new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "ContentBody"
+            }))
+            {
+                <input type="submit" value="Continue reservation" />
+                @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+                @Html.HiddenFor(g=>g.GuestId,User.Identity.GetUserId())
+            }
+        </div>
+        <div class="col-md-8"></div>
+    }
+    else
+    {
+        <div class="col-md-10"></div>
+    }
+</div>
