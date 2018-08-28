@@ -10,7 +10,7 @@ namespace Camping2000.Models
     {
         public Camping2000Db(): base("Camping2000Db")
         {
-
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<Camping2000Db, Migrations.Camping2000Db.Configuration>());
         }
         public DbSet<Camping> Camping { get; set; }
         public DbSet<Guest> Guests { get; set; }

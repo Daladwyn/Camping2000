@@ -1,12 +1,12 @@
 namespace Camping2000.Migrations.Camping2000Db
 {
     using Camping2000.Models;
+    using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Camping2000Db>
+    internal sealed class Configuration : DbMigrationsConfiguration<Camping2000.Models.Camping2000Db>
     {
         public Configuration()
         {
@@ -14,7 +14,7 @@ namespace Camping2000.Migrations.Camping2000Db
             MigrationsDirectory = @"Migrations\Camping2000Db";
         }
 
-        protected override void Seed(Camping2000Db context)
+        protected override void Seed(Camping2000.Models.Camping2000Db context)
         {
             //  This method will be called after migrating to the latest version.
 

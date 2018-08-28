@@ -10,3 +10,11 @@ Update-Database -ConfigurationTypeName Camping2000.Migrations.Camping2000Db.Conf
 
 //For Updating the Application Users
 Update-Database -ConfigurationTypeName Camping2000.Migrations.ApplicationDbContext.Configuration
+
+//first time initialize the Azure database use for Camping
+Add-Migration InitialCreate -ConfigurationTypeName Camping2000.Migrations.Camping2000Db.Configuration -ConnectionStringName Camping2000Db 
+
+
+
+//First time initialize the Azure database use for Application users
+Add-Migration InitialCreate -ConfigurationTypeName Camping2000.Migrations.ApplicationDbContext.Configuration -ConnectionStringName Camping2000AppUsers

@@ -1,12 +1,12 @@
 namespace Camping2000.Migrations.Camping2000Db
 {
     using Camping2000.Models;
+    using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Camping2000Db>
+    internal sealed class Configuration : DbMigrationsConfiguration<Camping2000.Models.Camping2000Db>
     {
         public Configuration()
         {
@@ -14,7 +14,7 @@ namespace Camping2000.Migrations.Camping2000Db
             MigrationsDirectory = @"Migrations\Camping2000Db";
         }
 
-        protected override void Seed(Camping2000Db context)
+        protected override void Seed(Camping2000.Models.Camping2000Db context)
         {
             //  This method will be called after migrating to the latest version.
 
@@ -40,9 +40,9 @@ namespace Camping2000.Migrations.Camping2000Db
                  new Camping { ItemName = "Trailer Spot4", ItemIsOccupied = false, ItemNumberOfPersons = 10, CampingSpot = "14", CampingPrice = 100, CampingElectricity = true },
                  new Camping { ItemName = "Trailer Spot5", ItemIsOccupied = false, ItemNumberOfPersons = 10, CampingSpot = "15", CampingPrice = 100, CampingElectricity = true });
             context.SaveChanges();
-            //context.Guests.AddOrUpdate(n => n.GuestFirstName,
-            //    new Guest { GuestFirstName = "Christian", GuestLastName = "Levin", GuestNationality = "Swedish", GuestHasCheckedIn = false, GuestHasPaid = 0, GuestHasReserved = false, GuestHasToPay = 0, GuestMobileNumber = "0704242136", GuestId = "70dad621-3717-417a-8567-39d9914c1304" });
-            //context.SaveChanges();
+            context.Guests.AddOrUpdate(n => n.GuestFirstName,
+                new Guest { GuestFirstName = "Christian", GuestLastName = "Levin", GuestNationality = "Swedish", GuestHasCheckedIn = false, GuestHasPaid = 0, GuestHasReserved = false, GuestHasToPay = 0, GuestMobileNumber = "0704242136", GuestId = "70dad621-3717-417a-8567-39d9914c1304" });
+            context.SaveChanges();
         }
     }
 }
