@@ -8,7 +8,7 @@ namespace Camping2000.Migrations.ApplicationDbContext
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Camping2000.Models.ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
         public Configuration()
         {
@@ -16,13 +16,13 @@ namespace Camping2000.Migrations.ApplicationDbContext
             MigrationsDirectory = @"Migrations\ApplicationDbContext";
         }
 
-        protected override void Seed(Camping2000.Models.ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
-            var db = new ApplicationDbContext();
+            var db = new Camping2000.Models.ApplicationDbContext();
             var store = new RoleStore<IdentityRole>(db);
             var roleManager = new RoleManager<IdentityRole>(store);
 
