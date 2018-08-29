@@ -30,7 +30,7 @@ namespace Camping2000.Models
             return new Camping2000Db();
         }
 
-        public DbSet<Camping> Campings { get; set; }
+        public DbSet<Camping> Camping { get; set; }
         public DbSet<Guest> Guests { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Adress> Adresses { get; set; }
