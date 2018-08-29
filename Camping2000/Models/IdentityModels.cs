@@ -20,13 +20,13 @@ namespace Camping2000.Models
 
     public class Camping2000Db : IdentityDbContext<ApplicationUser>
     {
-        public Camping2000Db() : base("Camping2000AppUsers", throwIfV1Schema: false)
+        public Camping2000Db() : base("Camping2000Db", throwIfV1Schema: false)
         {
         }
 
         public static Camping2000Db Create()
         {
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<Camping2000Db, Migrations.Camping2000Db.Configuration>());
+           // Database.SetInitializer(new MigrateDatabaseToLatestVersion<Camping2000Db, Migrations.Configuration>());
             return new Camping2000Db();
         }
 
