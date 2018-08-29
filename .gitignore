@@ -261,4 +261,4 @@ __pycache__/
 *.pyc
 
 #Secret settings as connectionstrings
-connectionString.config
+connectionStrings.config
