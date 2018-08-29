@@ -18,20 +18,23 @@ namespace Camping2000.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class Camping2000Db : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+        public Camping2000Db() : base("Camping2000AppUsers", throwIfV1Schema: false)
         {
         }
 
-        public static ApplicationDbContext Create()
+        public static Camping2000Db Create()
         {
-            return new ApplicationDbContext();
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<Camping2000Db, Migrations.Camping2000Db.Configuration>());
+            return new Camping2000Db();
         }
 
-        public System.Data.Entity.DbSet<Camping2000.Models.Camping> Campings { get; set; }
-
-        public System.Data.Entity.DbSet<Camping2000.Models.Guest> Guests { get; set; }
+        public DbSet<Camping> Campings { get; set; }
+        public DbSet<Guest> Guests { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Adress> Adresses { get; set; }
+        public DbSet<Receptionist> Receptionists { get; set; }
+        public DbSet<LinkBooking> LinkBookings { get; set; }
     }
 }
