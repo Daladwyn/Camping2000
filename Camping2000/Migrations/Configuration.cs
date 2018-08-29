@@ -9,7 +9,7 @@ namespace Camping2000.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(Camping2000.Models.Camping2000Db context)

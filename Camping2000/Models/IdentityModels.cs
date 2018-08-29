@@ -26,7 +26,7 @@ namespace Camping2000.Models
 
         public static Camping2000Db Create()
         {
-           // Database.SetInitializer(new MigrateDatabaseToLatestVersion<Camping2000Db, Migrations.Configuration>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<Camping2000Db, Migrations.Configuration>());
             return new Camping2000Db();
         }
 
