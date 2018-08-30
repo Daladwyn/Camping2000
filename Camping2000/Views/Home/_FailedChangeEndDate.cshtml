@@ -3,21 +3,28 @@
 
 @ViewBag.Errormessage
 <hr />
-@using (Ajax.BeginForm("GoToStart", "Home",
-           ajaxOptions: new AjaxOptions
-           {
-               UpdateTargetId = "ContentBody",
-               InsertionMode = InsertionMode.Replace,
-           }))
-{
-    <input type="submit" value="Done" />
-}
-@using (Ajax.BeginForm("ModifyBooking", "Home",
-           ajaxOptions: new AjaxOptions
-           {
-               UpdateTargetId = "ContentBody",
-               InsertionMode = InsertionMode.Replace,
-           }))
-{
-    <input type="submit" value="Return to Bookings" />
-}
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+            <input type="submit" value="Done" />
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("ModifyBooking", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+            <input type="submit" value="Return to Bookings" />
+        }
+    </div>
+    <div class="col-md-8"></div>
+</div>

@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -9,6 +10,33 @@ namespace Camping2000.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        [Key]
+        public string GuestId { get; set; } //needs to be string to match identitys format for userId
+        [Required]
+        [MaxLength(80)]
+        //[RegularExpression("^[<>.!@#%/]+$", ErrorMessage = "First name is invalid.")]
+        public string GuestFirstName { get; set; }
+        [Required]
+        [MaxLength(80)]
+        //[RegularExpression("^[<>.!@#%/]+$", ErrorMessage = "Last name is invalid.")]
+        public string GuestLastName { get; set; }
+        [Required]
+        [MaxLength(40)]
+        //[RegularExpression("^[<>.!@#%/]+$", ErrorMessage = "Nationality is invalid.")]
+        public string GuestNationality { get; set; }
+        [Required]
+        public bool GuestHasReserved { get; set; }
+        [Required]
+        public bool GuestHasCheckedIn { get; set; }
+        public decimal GuestHasToPay { get; set; } //this property is used for gathering the amount the guest have to pay.
+        public decimal GuestHasPaid { get; set; }// This property is used as a checker if the guest have paid.
+        [MaxLength(20)]
+        //[RegularExpression("^[<>.!@#%/]+$", ErrorMessage = "Phone number is invalid.")]
+        public string GuestPhoneNumber { get; set; }
+        [MaxLength(20)]
+        //[RegularExpression("^[<>.!@#%/]+$", ErrorMessage = "Mobile number is invalid.")]
+        public string GuestMobileNumber { get; set; }// public int UserTelephoneNr { get; set; } Is located in ManageViewModel as PhoneNumber
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

@@ -198,6 +198,10 @@
     <Compile Include="Migrations\201808291356189_camping2000.Designer.cs">
       <DependentUpon>201808291356189_camping2000.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808301411349_identityAsGuestDataProvider.cs" />
+    <Compile Include="Migrations\201808301411349_identityAsGuestDataProvider.Designer.cs">
+      <DependentUpon>201808301411349_identityAsGuestDataProvider.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Adress.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -228,7 +232,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\SmallCabin.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Models\Guest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -250,7 +253,6 @@
     <Content Include="Models\camping2000ERD.cd" />
     <Content Include="ProjectFiles\Booking System for a Camping.docx" />
     <Content Include="ProjectFiles\Timeplan.xlsx" />
-    <None Include="Properties\PublishProfiles\Camping2000 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -434,6 +436,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -453,6 +456,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201808291356189_camping2000.resx">
       <DependentUpon>201808291356189_camping2000.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808301411349_identityAsGuestDataProvider.resx">
+      <DependentUpon>201808301411349_identityAsGuestDataProvider.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -71,42 +71,42 @@
 
         <div class="row">
             <div class="col-md-1">
-                @using (Ajax.BeginForm("Register", "Account", htmlAttributes: new { id = "registerLink" }, routeValues: null,
-                ajaxOptions: new AjaxOptions
-                {
-                    UpdateTargetId = "ContentBody",
-                    InsertionMode = InsertionMode.Replace,
-                }))
-                {
-                    <div class="form-group">
-                        @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
-                        @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Register" class="btn btn-default" />
-                    </div>
-                }
+                @* @using (Ajax.BeginForm("Register", "Account", htmlAttributes: new { id = "registerLink" }, routeValues: null,
+        ajaxOptions: new AjaxOptions
+        {
+            UpdateTargetId = "ContentBody",
+            InsertionMode = InsertionMode.Replace,
+        }))
+        {
+            <div class="form-group">
+                @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
+                @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-default" />
+            </div>
+        }*@
             </div>
         </div>
         <div class="col-md-1">
             @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
         </div>
         <div class="col-md-1">
-            @using (Ajax.BeginForm("Login", "Account", htmlAttributes: new { id = "loginLink" }, routeValues: null,
-                   ajaxOptions: new AjaxOptions
-                   {
-                       UpdateTargetId = "ContentBody",
-                       InsertionMode = InsertionMode.Replace,
-                   }))
-            {
-                <div class="form-group">
-                    @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
-                    @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Log in" class="btn btn-default" />
-                </div>
-            }
+            @* @using (Ajax.BeginForm("Login", "Account", htmlAttributes: new { id = "loginLink" }, routeValues: null,
+               ajaxOptions: new AjaxOptions
+               {
+                   UpdateTargetId = "ContentBody",
+                   InsertionMode = InsertionMode.Replace,
+               }))
+        {
+            <div class="form-group">
+                @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
+                @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Log in" class="btn btn-default" />
+            </div>
+        }*@
         </div>
         <div class="col-md-1">
             @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })

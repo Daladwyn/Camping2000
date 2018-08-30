@@ -3,24 +3,29 @@
 <h2>No success!</h2>
 
 @ViewBag.Errormessage
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
 
-@using (Ajax.BeginForm("GoToStart", "Home",
-           ajaxOptions: new AjaxOptions
-           {
-               UpdateTargetId = "ContentBody",
-               InsertionMode = InsertionMode.Replace,
-           }))
-{
-
-    <input type="submit" value="Done" />
-}
-
-@using (Ajax.BeginForm("ModifyBooking", "Home",
-           ajaxOptions: new AjaxOptions
-           {
-               UpdateTargetId = "ContentBody",
-               InsertionMode = InsertionMode.Replace,
-           }))
-{
-    <input type="submit" value="Return to Bookings" />
-}
+            <input type="submit" value="Done" />
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("ModifyBooking", "Home",
+                   ajaxOptions: new AjaxOptions
+                   {
+                       UpdateTargetId = "ContentBody",
+                       InsertionMode = InsertionMode.Replace,
+                   }))
+        {
+            <input type="submit" value="Return to Bookings" />
+        }
+    </div>
+    <div class="col-md-8"></div>
+    </div>
