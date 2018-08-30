@@ -59,7 +59,6 @@ namespace Camping2000.Models
         }
 
         public DbSet<Camping> Camping { get; set; }
-        public DbSet<Guest> Guests { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Adress> Adresses { get; set; }
         public DbSet<Receptionist> Receptionists { get; set; }

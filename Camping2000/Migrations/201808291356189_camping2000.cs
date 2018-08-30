@@ -57,22 +57,7 @@ namespace Camping2000.Migrations
                     })
                 .PrimaryKey(t => t.ItemId);
             
-            CreateTable(
-                "dbo.Guests",
-                c => new
-                    {
-                        GuestId = c.String(nullable: false, maxLength: 128),
-                        GuestFirstName = c.String(nullable: false, maxLength: 80),
-                        GuestLastName = c.String(nullable: false, maxLength: 80),
-                        GuestNationality = c.String(nullable: false, maxLength: 40),
-                        GuestHasReserved = c.Boolean(nullable: false),
-                        GuestHasCheckedIn = c.Boolean(nullable: false),
-                        GuestHasToPay = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        GuestHasPaid = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        GuestPhoneNumber = c.String(maxLength: 20),
-                        GuestMobileNumber = c.String(maxLength: 20),
-                    })
-                .PrimaryKey(t => t.GuestId);
+           
             
             CreateTable(
                 "dbo.LinkBookings",
