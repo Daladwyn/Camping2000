@@ -1804,37 +1804,37 @@ namespace Camping2000.Controllers
             }
             return PartialView("_MissedCheckOuts", allFailedBookings);
         }
-        //End of bookinglist that turns up forgotten bookings
+        End of bookinglist that turns up forgotten bookings
 
-        //        [HttpPost]
-        //        public ActionResult ShowVacantFullsign()
-        //        {
-        //            return PartialView("ShowVacantFullSign");
-        //        }
-        //        [Authorize(Roles = "Administrators")]
-        //        public ActionResult ShowVacantSpots()
-        //        {
-        //            List<Camping> vacantSpots = new List<Camping>();
-        //            using (var context = new Camping2000Db())
-        //            {
-        //                foreach (var spot in context.Camping)
-        //                {
-        //                    if (spot.ItemIsOccupied == false)
-        //                    {
-        //                        vacantSpots.Add(spot);
-        //                    }
-        //                }
-        //            }
-        //            if (vacantSpots == null)
-        //            {
-        //                return PartialView("_NoAvailableSpotToChangeTo");
-        //            }
-        //            return PartialView("_ShowVacantSpots", vacantSpots);
-        //        }
-        //        public ActionResult Logoff()
-        //        {
-        //            return RedirectToAction("Logoff", "Account");
-        //        }
+                [HttpPost]
+                public ActionResult ShowVacantFullsign()
+        {
+            return PartialView("ShowVacantFullSign");
+        }
+        [Authorize(Roles = "Administrators")]
+        public ActionResult ShowVacantSpots()
+        {
+            List<Camping> vacantSpots = new List<Camping>();
+            using (var context = new Camping2000Db())
+            {
+                foreach (var spot in context.Camping)
+                {
+                    if (spot.ItemIsOccupied == false)
+                    {
+                        vacantSpots.Add(spot);
+                    }
+                }
+            }
+            if (vacantSpots == null)
+            {
+                return PartialView("_NoAvailableSpotToChangeTo");
+            }
+            return PartialView("_ShowVacantSpots", vacantSpots);
+        }
+        public ActionResult Logoff()
+        {
+            return RedirectToAction("Logoff", "Account");
+        }
 
         /// <summary>
         /// A function that checks if a valid sting have been fetched
