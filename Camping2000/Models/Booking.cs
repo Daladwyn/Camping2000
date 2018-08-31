@@ -30,5 +30,6 @@ namespace Camping2000.Models
         public bool GuestHasReserved { get; set; }
         [Required]
         public bool GuestHasCheckedIn { get; set; }
+        public bool BookingIsPaid { get; set; }
     }
 }

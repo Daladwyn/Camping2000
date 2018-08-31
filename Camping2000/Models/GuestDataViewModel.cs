@@ -11,6 +11,9 @@ namespace Camping2000.Models
         [Required]
         public string GuestId { get; set; } //needs to be string to match identitys format for userId
         [Required]
+        [EmailAddress]
+        public string EmailAddress { get; set; }
+        [Required]
         [MaxLength(80)]
         public string GuestFirstName { get; set; }
         [Required]

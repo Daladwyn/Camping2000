@@ -8,14 +8,14 @@ namespace Camping2000.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Camping2000Db>
+    internal sealed class Configuration : DbMigrationsConfiguration<Camping2000.Models.Camping2000Db>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(Camping2000Db context)
+        protected override void Seed(Camping2000.Models.Camping2000Db context)
         {
             //  This method will be called after migrating to the latest version.
 
@@ -42,6 +42,7 @@ namespace Camping2000.Migrations
                  new Camping { ItemName = "Trailer Spot5", ItemIsOccupied = false, ItemNumberOfPersons = 10, CampingSpot = "15", CampingPrice = 100, CampingElectricity = true });
             context.SaveChanges();
 
+            //var db = new ();
             var store = new RoleStore<IdentityRole>(context);
             var roleManager = new RoleManager<IdentityRole>(store);
 
@@ -55,15 +56,12 @@ namespace Camping2000.Migrations
 
             userManager.Create(user: new ApplicationUser()
             {
-                UserName = "admin@camping.com",
+                UserName = "Admin@camping.com",//Change emailadress before putting this bookingsystem into production
                 Email = "admin@camping.com",
-                GuestId = "admin",
-                GuestFirstName = "admin",
-                GuestLastName = "admin",
-                GuestNationality = "Swedish"
-            }, password: "Test!0");
+
+            }, password: "Test!0");//Change password before putting this bookingsystem into production
             context.SaveChanges();
-            ApplicationUser user = userManager.FindByName("admin@camping.com");
+            var user = userManager.FindByName("Admin@camping.com");
             userManager.AddToRole(user.Id, "Administrators");
             context.SaveChanges();
         }

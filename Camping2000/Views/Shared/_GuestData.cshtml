@@ -1,21 +1,20 @@
 ﻿@model Camping2000.Models.GuestDataViewModel
 
-<h2>Please complete the registration below:</h2>
+<h2>Please complete the registration for @Model.EmailAddress</h2>
 @ViewBag.Errormessage
 @if (Model != null)
 {
-
     using (Ajax.BeginForm("SaveGuestData", "Home",
-                ajaxOptions: new AjaxOptions
-                {
-                    UpdateTargetId = "ContentBody",
-                    InsertionMode = InsertionMode.Replace,
-                }))
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
     {
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("First Name")
+                    @Html.Label("First Name *")
                 </div>
                 <div class="col-md-10">
                     @Html.TextBox("GuestFirstName")
@@ -25,7 +24,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("Last Name")
+                    @Html.Label("Last Name *")
                 </div>
                 <div class="col-md-10">
                     @Html.TextBox("GuestLastName")
@@ -35,7 +34,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("Nationality")
+                    @Html.Label("Nationality *")
                 </div>
                 <div class="col-md-10">
                     @Html.TextBox("GuestNationality")
@@ -185,10 +184,11 @@
         </div>
         <div class="form-group">
             @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+            @Html.HiddenFor(m => m.EmailAddress, Model.EmailAddress)
         </div>
     }
 }
 else
 {
-        <p>Please try @Html.ActionLink("registering", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) again.</p>
+    <p>Please try @Html.ActionLink("registering", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) again.</p>
 }

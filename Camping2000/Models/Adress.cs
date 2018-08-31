@@ -26,7 +26,7 @@ namespace Camping2000.Models
         //[RegularExpression("^[<>.!@#%/]+$", ErrorMessage = "Living address zipcode is invalid.")]
         public int LivingAdressZipCode { get; set; }
         [MaxLength(100)]
-       // [RegularExpression("^[<>.!@#%/]+$", ErrorMessage = "Living address city is invalid.")]
+       // [RegularExpression(@"^[<>.!@#%/;:?()""\]+$", ErrorMessage = "Living address city is invalid.")]
         public string LivingAdressCity { get; set; }
         [MaxLength(100)]
        //[RegularExpression("^[<>.!@#%/]+$", ErrorMessage = "Post address is invalid.")]
