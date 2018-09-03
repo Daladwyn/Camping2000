@@ -1,0 +1,41 @@
+﻿@model Camping2000.Models.Booking
+
+<h2>Booking details for booking: @Model.BookingId</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+        @Html.Label("Arivaldate: ")@Model.BookingStartDate.ToShortDateString()
+    </div>
+    <div class="col-md-7"></div>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+        @Html.Label("Departuredate: ")@Model.BookingEndDate.ToShortDateString()
+    </div>
+    <div class="col-md-7"></div>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+        @Html.Label("PartySize: ")@Model.NumberOfGuests
+    </div>
+    <div class="col-md-7"></div>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+        @if (Model.BookingNeedsElectricity == true)
+        {
+            @Html.Label("Power outlet is included: ")<p>Yes</p>
+        }
+        else
+        {
+            @Html.Label("Power outlet is included: ")<p>No</p>
+        }
+    </div>
+    <div class="col-md-7"></div>
+</div>
+<div></div>

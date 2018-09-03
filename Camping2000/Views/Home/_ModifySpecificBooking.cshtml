@@ -15,7 +15,7 @@
         <div class="col-md-2">
             @Model.BookingStartDate.ToShortDateString()
         </div>
-        @if ((Model.BookingStartDate < DateTime.Now.Date) || (Model.GuestHasCheckedIn == true))
+        @if (Model.GuestHasCheckedIn == true)
         {
             <div class="col-md-8">
                 <p>Have already checked in</p>

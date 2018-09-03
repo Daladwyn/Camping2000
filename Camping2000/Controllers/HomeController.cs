@@ -197,9 +197,20 @@ namespace Camping2000.Controllers
             return PartialView("_ReservedConfirmation", acceptedBooking);
         }
         [HttpPost]
-        public ActionResult PrintReservation()
+        public ActionResult PrintReservation([Bind(Include = "BookingId")]Booking currentBooking)
         {
-            return PartialView("Index");
+            Camping2000Db Db = new Camping2000Db();
+            Booking bookingToPrint = new Booking();
+            try
+            {
+            bookingToPrint = Db.Bookings.SingleOrDefault(b => b.BookingId == currentBooking.BookingId);
+            }
+            catch (NullReferenceException)
+            {
+                ViewBag.Errormessage = "No booking was found.";
+            }
+
+            return PartialView("_PrintReservation",bookingToPrint);
         }
         //End of reservation flow
         //Start of Checkin flow
@@ -369,7 +380,7 @@ namespace Camping2000.Controllers
             }
             foreach (var booking in allBookings)
             {
-                if ((booking.BookingEndDate.ToShortDateString() == DateTime.Now.ToShortDateString()) && (booking.GuestHasCheckedIn == true))
+                if ((booking.BookingEndDate.ToShortDateString() == DateTime.Now.ToShortDateString()) && (booking.GuestHasCheckedIn == true) && (booking.BookingIsPaid == false))
                 {
                     departingGuestBookings.Add(booking);
                 }
@@ -444,6 +455,7 @@ namespace Camping2000.Controllers
                     departingGuest.GuestHasToPay = departingGuest.GuestHasToPay - departingBooking.BookingPrice;
                     departingBooking.GuestHasCheckedIn = false;
                     departingBooking.GuestHasReserved = false;
+                    departingBooking.BookingIsPaid = true;
                     departedGuestSpot.ItemIsOccupied = false;
                     if (Db.SaveChanges() != 3)
                     {
@@ -457,6 +469,7 @@ namespace Camping2000.Controllers
                     departingGuest.GuestHasToPay = departingGuest.GuestHasToPay - departingBooking.BookingPrice;
                     departingBooking.GuestHasCheckedIn = false;
                     departingBooking.GuestHasReserved = false;
+                    departingBooking.BookingIsPaid = true;
                     departedGuestSpot.ItemIsOccupied = false;
                 }
                 int numberOfSaves = Db.SaveChanges();
@@ -481,8 +494,8 @@ namespace Camping2000.Controllers
         }
         //End of checkout flow
         //Start of Arrival/departures daily flow
-                [Authorize(Roles = "Administrators, Receptionists")]
-                public ActionResult ArrivalsDepartures()
+        [Authorize(Roles = "Administrators, Receptionists")]
+        public ActionResult ArrivalsDepartures()
         {
             Camping2000Db Db = new Camping2000Db();
             List<ModifyBookingViewModel> arrivalsDepartures = new List<ModifyBookingViewModel>();
@@ -503,7 +516,7 @@ namespace Camping2000.Controllers
                     {
                         if ((booking.GuestId != null) && (booking.ItemId != 0))
                         {
-                            currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == booking.GuestId);
+                            currentGuest = Db.Users.SingleOrDefault(i => i.Id == booking.GuestId);
                             currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId);
                             arrivalsDepartures.Add(new ModifyBookingViewModel
                             {
@@ -550,6 +563,11 @@ namespace Camping2000.Controllers
             if ((firstName == "") && (lastName == ""))//If only empty spaces are supplied as search strings
             {
                 ViewBag.Errormessage = "Please specify the guests name before searching.";
+                return PartialView("_ShowFoundGuests", foundGuests);
+            }
+            if ((firstName == null) || (lastName == null))
+            {
+                ViewBag.Errormessage = "Please specify the guests name before searching(Null).";
                 return PartialView("_ShowFoundGuests", foundGuests);
             }
             foundGuests = SearchForPeople(firstName, lastName);
@@ -658,7 +676,7 @@ namespace Camping2000.Controllers
             }
             for (int i = 0; i < allBookings.Count; i++)
             {
-                if ((allBookings[i].GuestHasReserved == true) || (allBookings[i].GuestHasCheckedIn == true))
+                if (((allBookings[i].GuestHasReserved == true) || (allBookings[i].GuestHasCheckedIn == true)) && (allBookings[i].BookingIsPaid == false))
                 {
                     presentBookings.Add(allBookings[i]);
                 }
@@ -671,7 +689,7 @@ namespace Camping2000.Controllers
             }
             foreach (var booking in presentBookings)
             {
-                presentGuests.Add(Db.Users.SingleOrDefault(i => i.GuestId == booking.GuestId));
+                presentGuests.Add(Db.Users.SingleOrDefault(i => i.Id == booking.GuestId));
                 presentSpots.Add(Db.Camping.SingleOrDefault(i => i.ItemId == booking.ItemId));
             }
             if ((presentBookings.Count != presentGuests.Count) && (presentBookings.Count != presentGuests.Count))
@@ -1077,6 +1095,8 @@ namespace Camping2000.Controllers
                     {
                         ViewBag.Errormessage = "The change of poweroutlet is on the same day as checkin day.";
                         currentBooking.BookingPrice = 0;
+                        currentBooking.BookingIsPaid = true;
+                        Db.SaveChanges();
                         //may need to redirect to 
                     }
                     else
@@ -1101,6 +1121,7 @@ namespace Camping2000.Controllers
                     {
                         ViewBag.Errormessage = "The change of poweroutlet is on the same day as checkout day.";
                         newBooking.BookingPrice = 0;
+                        newBooking.BookingIsPaid = true;
                     }
                     else
                     {
@@ -1334,7 +1355,7 @@ namespace Camping2000.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
-        public ActionResult ChangeChooseCampingpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
+        public ActionResult ChangeChooseCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
             Camping2000Db Db = new Camping2000Db();
             ModifyBookingViewModel aBookingView = new ModifyBookingViewModel();
@@ -1363,7 +1384,7 @@ namespace Camping2000.Controllers
                 aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
                 aBookingView.ItemName = currentItem.ItemName;
 
-                return PartialView("_ChangeConfirmationCampingpot", aBookingView);
+                return PartialView("_ChangeConfirmationCampingSpot", aBookingView);
             }
             else
             {
@@ -1568,6 +1589,11 @@ namespace Camping2000.Controllers
                 ViewBag.Errormessage = "Please specify the guests name before searching.";
                 return PartialView("_ShowFoundGuests", foundGuests);
             }
+            if ((firstName == null) || (lastName == null))
+            {
+                ViewBag.Errormessage = "Please specify the guests name before searching(Null).";
+                return PartialView("_ShowFoundGuests", foundGuests);
+            }
             foundGuests = SearchForPeople(firstName, lastName);
             if ((firstName != "") && (foundGuests.Count < 1))
             {
@@ -1585,7 +1611,6 @@ namespace Camping2000.Controllers
         public ActionResult ModifyCoworkerToReceptionist(string GuestId)
         {
             Camping2000Db Db = new Camping2000Db();
-            //ApplicationDbContext ApplicationDb = new ApplicationDbContext();
             var userStore = new UserStore<ApplicationUser>(Db);
             var userManager = new UserManager<ApplicationUser>(userStore);
             Receptionist newCoWorker = new Receptionist//Create a new coworker and transfer guestId 
@@ -1903,42 +1928,42 @@ namespace Camping2000.Controllers
         // /// <returns></returns>
         static List<ApplicationUser> SearchForPeople(string firstName, string lastName)
         {
-             Camping2000Db Db = new Camping2000Db();
-        List<ApplicationUser> foundGuests = new List<ApplicationUser>();
-        firstName = firstName.ToLower();
-             lastName = lastName.ToLower();
-             if ((firstName != "") && (lastName == ""))
-             {
-                 foreach (var guest in Db.Users)
-                 {
-                     if (guest.GuestFirstName.ToLower() == firstName)
-                     {
-                         foundGuests.Add(guest);
-                     }
-}
-             }
-             else if ((firstName != "") && (lastName != ""))
-             {
-                 foreach (var guest in Db.Users)
-                 {
-                     if ((guest.GuestFirstName.ToLower() == firstName) && (guest.GuestLastName.ToLower() == lastName))
-                     {
-                         foundGuests.Add(guest);
-                     }
-                 }
-             }
-             else if ((firstName == "") && (lastName != ""))
-             {
-                 foreach (var guest in Db.Users)
-                 {
-                     if (guest.GuestLastName.ToLower() == lastName)
-                     {
-                         foundGuests.Add(guest);
-                     }
-                 }
-             }
-             return foundGuests;
-         }
+            Camping2000Db Db = new Camping2000Db();
+            List<ApplicationUser> foundGuests = new List<ApplicationUser>();
+            firstName = firstName.ToLower();
+            lastName = lastName.ToLower();
+            if ((firstName != "") && (lastName == ""))
+            {
+                foreach (var guest in Db.Users)
+                {
+                    if (guest.GuestFirstName.ToLower() == firstName)
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            else if ((firstName != "") && (lastName != ""))
+            {
+                foreach (var guest in Db.Users)
+                {
+                    if ((guest.GuestFirstName.ToLower() == firstName) && (guest.GuestLastName.ToLower() == lastName))
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            else if ((firstName == "") && (lastName != ""))
+            {
+                foreach (var guest in Db.Users)
+                {
+                    if (guest.GuestLastName.ToLower() == lastName)
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            return foundGuests;
+        }
         /// <summary>
         /// calculates a span of days. Take leapyears into consideration.
         /// Returns a interger value.

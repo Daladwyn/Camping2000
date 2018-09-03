@@ -33,6 +33,7 @@ namespace Camping2000.Models
         [MaxLength(100)]
         public string LivingAdressStreet3 { get; set; }
         [Range(0, 99999)]
+       // [RegularExpression(@"^(?!00000)[0-9]{5,5}$", ErrorMessage = "Specified livingadress zipcode is not valid. Try again.")]
         public int LivingAdressZipCode { get; set; }
         [MaxLength(100)]
         public string LivingAdressCity { get; set; }
@@ -43,6 +44,7 @@ namespace Camping2000.Models
         [MaxLength(100)]
         public string PostAdressStreet3 { get; set; }
         [Range(0, 99999)]
+        //[RegularExpression(@"^(?!00000)[0-9]{5,5}$", ErrorMessage = "Specified postadress zipcode is not valid. Try again.")]
         public int PostAdressZipCode { get; set; }
         [MaxLength(100)]
         public string PostAdressCity { get; set; }
