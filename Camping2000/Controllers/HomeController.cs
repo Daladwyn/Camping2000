@@ -200,17 +200,41 @@ namespace Camping2000.Controllers
         public ActionResult PrintReservation([Bind(Include = "BookingId")]Booking currentBooking)
         {
             Camping2000Db Db = new Camping2000Db();
-            Booking bookingToPrint = new Booking();
+            GuestBookingViewModel bookingToPrint = new GuestBookingViewModel();
+            ApplicationUser currentGuest = new ApplicationUser();
+            ViewBag.Errormessage = "";
             try
             {
-            bookingToPrint = Db.Bookings.SingleOrDefault(b => b.BookingId == currentBooking.BookingId);
+                currentBooking = Db.Bookings.SingleOrDefault(b => b.BookingId == currentBooking.BookingId);
             }
             catch (NullReferenceException)
             {
-                ViewBag.Errormessage = "No booking was found.";
+                ViewBag.Errormessage = "No booking was found. Please contact the campingstaff.";
+                return PartialView("_FailedToPrintReservation");
             }
-
-            return PartialView("_PrintReservation",bookingToPrint);
+            try
+            {
+                currentGuest = Db.Users.SingleOrDefault(i => i.Id == currentBooking.GuestId);
+            }
+            catch (NullReferenceException)
+            {
+                string errorMessage = "No guest was found in booking " + currentBooking.BookingId + ". Please contact the campingstaff.";
+                ViewBag.Errormessage = errorMessage;
+                return PartialView("_FailedToPrintReservation");
+            }
+            if (ViewBag.Errormessage == "")
+            {
+                bookingToPrint.BookingId = currentBooking.BookingId;
+                bookingToPrint.GuestFirstName = currentGuest.GuestFirstName;
+                bookingToPrint.GuestLastName = currentGuest.GuestLastName;
+                bookingToPrint.BookingStartDate = currentBooking.BookingStartDate;
+                bookingToPrint.BookingEndDate = currentBooking.BookingEndDate;
+                bookingToPrint.NumberOfGuests = currentBooking.NumberOfGuests;
+                bookingToPrint.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
+                bookingToPrint.BookingPrice = currentBooking.BookingPrice;
+                bookingToPrint.GuestId = currentGuest.Id;
+            }
+            return PartialView("_PrintReservation", bookingToPrint);
         }
         //End of reservation flow
         //Start of Checkin flow

@@ -1,7 +1,22 @@
-﻿@model Camping2000.Models.Booking
+﻿@model Camping2000.Models.GuestBookingViewModel
 
 <h2>Booking details for booking: @Model.BookingId</h2>
 
+<hr />
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+        @Html.Label("First Name: ")@Model.GuestFirstName
+    </div>
+    <div class="col-md-7"></div>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+        @Html.Label("Arivaldate: ")@Model.GuestLastName
+    </div>
+    <div class="col-md-7"></div>
+</div>
 <hr />
 <div class="row">
     <div class="col-md-1"></div>
@@ -17,6 +32,7 @@
     </div>
     <div class="col-md-7"></div>
 </div>
+<hr />
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-4">
@@ -26,16 +42,49 @@
 </div>
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-4">
+    <div class="col-md-5">
         @if (Model.BookingNeedsElectricity == true)
         {
-            @Html.Label("Power outlet is included: ")<p>Yes</p>
+            @Html.Label("Power outlet is included: ")<span>Yes</span>
         }
         else
         {
-            @Html.Label("Power outlet is included: ")<p>No</p>
+            @Html.Label("Power outlet is included: ")<span>No</span>
         }
+    </div>
+    <div class="col-md-6"></div>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+        @Html.Label("Booking Price(Sek): ")@Model.BookingPrice
     </div>
     <div class="col-md-7"></div>
 </div>
-<div></div>
+<hr />
+<div clas="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-3">
+        @using (Ajax.BeginForm("SendEMail","Home", new AjaxOptions
+        {UpdateTargetId="ContentBody",
+            InsertionMode=InsertionMode.Replace,
+        }))
+        {
+            <input type="Submit" value="Send confirmation to mail" />
+            @Html.HiddenFor(g=>g.GuestId,Model.GuestId)
+            @Html.HiddenFor(b=>b.BookingId,Model.BookingId)
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+                  ajaxOptions: new AjaxOptions
+                  {
+                      UpdateTargetId = "ContentBody",
+                      InsertionMode = InsertionMode.Replace,
+                  }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Done" />
+        }
+    </div>
+</div>

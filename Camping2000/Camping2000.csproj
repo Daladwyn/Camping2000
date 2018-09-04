@@ -425,6 +425,7 @@
     <Content Include="Views\Home\_MissedCheckouts.cshtml" />
     <Content Include="Views\Home\_AMissedCheckOut.cshtml" />
     <Content Include="Views\Home\_PrintReservation.cshtml" />
+    <Content Include="Views\Home\_FailedToPrintReservation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
