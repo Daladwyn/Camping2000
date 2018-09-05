@@ -245,7 +245,10 @@
     <Content Include="Models\camping2000ERD.cd" />
     <Content Include="ProjectFiles\Booking System for a Camping.docx" />
     <Content Include="ProjectFiles\Timeplan.xlsx" />
-    <None Include="Properties\PublishProfiles\Camping200020180830091651 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Camping2000 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Camping2000 - Web Deploy1.pubxml" />
+    <None Include="Properties\PublishProfiles\Camping2000 - Web Deploy2.pubxml" />
+    <None Include="Properties\PublishProfiles\Camping2000 - Web Deploy3.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

@@ -64,17 +64,17 @@ namespace Camping2000.Controllers
         //
         // GET: /Account/SpaceForTent
         [AllowAnonymous]
-        public ActionResult SpaceForTent()
+        public ActionResult SpaceForTent([Bind(Include = "BookingNeedsElectricity")]Booking newBooking)
         {
-            return RedirectToAction("SpaceForTent", "Home");
+            return RedirectToAction("SpaceForTent", "Home",newBooking);
         }
 
         //
         // GET: /Account/SpaceForCaravan
         [AllowAnonymous]
-        public ActionResult SpaceForCaravan()
+        public ActionResult SpaceForCaravan([Bind(Include = "BookingNeedsElectricity")]Booking newBooking)
         {
-            return RedirectToAction("SpaceForCaravan", "Home");
+            return RedirectToAction("SpaceForTent", "Home",newBooking);
         }
 
         //
