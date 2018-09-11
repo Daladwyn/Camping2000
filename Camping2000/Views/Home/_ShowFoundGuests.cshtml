@@ -5,12 +5,11 @@
 {
     foreach (var guest in Model)
     {
-        using (Ajax.BeginForm("ModifySpecificGuestDetails", "Home",
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "ContentBody",
-                InsertionMode = InsertionMode.Replace,
-            }))
+        using (Ajax.BeginForm("ModifySpecificGuestDetails", "Home", new AjaxOptions
+        {
+            UpdateTargetId = "ContentBody",
+            InsertionMode = InsertionMode.Replace,
+        }))
         {
             @Html.AntiForgeryToken()
             <div class="row">
@@ -33,7 +32,6 @@
             </div>
             <div>
                 @Html.Hidden("GuestId", guest.GuestId)
-                @*Html.HiddenFor(g => g.GuestId, guest.GuestId)*@
             </div>
         }
     }

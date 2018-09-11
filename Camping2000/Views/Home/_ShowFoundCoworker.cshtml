@@ -20,16 +20,15 @@
                 @guest.GuestLastName
             </div>
             <div class="col-md-1">
-                @using (Ajax.BeginForm("ModifyCoworkerToReceptionist", "Home",
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "ContentBody",
-                InsertionMode = InsertionMode.Replace,
-            }))
+                @using (Ajax.BeginForm("ModifyCoworkerToReceptionist", "Home", new AjaxOptions
                 {
+                    UpdateTargetId = "ContentBody",
+                    InsertionMode = InsertionMode.Replace,
+                }))
+                {
+                    @Html.AntiForgeryToken()
                     <div>
                         @Html.Hidden("GuestId", guest.GuestId)
-                        @*Html.HiddenFor(g => g.GuestId, guest.GuestId)*@
                     </div>
                     <input type="submit" value="Assign Rights" />
                 }
@@ -42,9 +41,9 @@
                     UpdateTargetId = "ContentBody"
                 }))
                 {
+                    @Html.AntiForgeryToken()
                     <div>
                         @Html.Hidden("GuestId", guest.GuestId)
-                        @*Html.HiddenFor(g => g.GuestId, guest.GuestId)*@
                     </div>
                     <input type="submit" value="Remove Rights" />
                 }

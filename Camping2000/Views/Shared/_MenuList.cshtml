@@ -7,52 +7,49 @@
     <li>
         @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
     </li>
-
     <li>
-        @Ajax.ActionLink("Space For Tents", "SpaceForTent", new { BookingNeedsElectricity = false },
-new AjaxOptions
-{
-UpdateTargetId = "ContentBody",
-InsertionMode = InsertionMode.Replace
-})
-        @*Html.RenderAction("ShowVacantFullSign");*@
+        @Ajax.ActionLink("Space For Tents", "SpaceForTent", new { BookingNeedsElectricity = false }, new AjaxOptions
+        {
+            UpdateTargetId = "ContentBody",
+            InsertionMode = InsertionMode.Replace,
+        })
     </li>
     <li>
         @Ajax.ActionLink("Space For caravan/trailer", "SpaceForTent", new { BookingNeedsElectricity = true }, new AjaxOptions
-    {
-       UpdateTargetId = "ContentBody",
-       InsertionMode = InsertionMode.Replace
-    })
+        {
+            UpdateTargetId = "ContentBody",
+            InsertionMode = InsertionMode.Replace,
+        })
     </li>
     @if (User.IsInRole("Receptionists"))
     {
         <li>
             @Ajax.ActionLink("Checking in", "CheckIn", new AjaxOptions
- {
- UpdateTargetId = "ContentBody",
- InsertionMode = InsertionMode.Replace
- })
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            })
         </li>
         <li>
             @Ajax.ActionLink("Checking out", "CheckOut", new AjaxOptions
- {
- UpdateTargetId = "ContentBody",
- InsertionMode = InsertionMode.Replace
- })
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            })
         </li>
         <li>
             @Ajax.ActionLink("Daily Arrivals/Departures", "ArrivalsDepartures", new AjaxOptions
- {
- UpdateTargetId = "ContentBody",
- InsertionMode = InsertionMode.Replace
- })
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            })
         </li>
         <li>
             @Ajax.ActionLink("Modify a Booking", "ModifyBooking", new AjaxOptions
- {
- UpdateTargetId = "ContentBody",
- InsertionMode = InsertionMode.Replace
- })
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            })
         </li>
     }
     @if (User.IsInRole("Administrators"))
@@ -60,48 +57,47 @@ InsertionMode = InsertionMode.Replace
         <li>
             @Ajax.ActionLink("Checking in", "CheckIn", new AjaxOptions
              {
-             UpdateTargetId = "ContentBody",
-             InsertionMode = InsertionMode.Replace
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
              })
         </li>
         <li>
             @Ajax.ActionLink("Checking out", "CheckOut", new AjaxOptions
              {
-             UpdateTargetId = "ContentBody",
-             InsertionMode = InsertionMode.Replace
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
              })
         </li>
         <li>
             @Ajax.ActionLink("Daily Arrivals/Departures", "ArrivalsDepartures", new AjaxOptions
              {
-             UpdateTargetId = "ContentBody",
-             InsertionMode = InsertionMode.Replace
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
              })
         </li>
         <li>
             @Ajax.ActionLink("Modify a Booking", "ModifyBooking", new AjaxOptions
              {
-             UpdateTargetId = "ContentBody",
-             InsertionMode = InsertionMode.Replace
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
              })
         </li>
         <li>
             @Ajax.ActionLink("Modify a Guests Details", "ModifyGuestDetails", new AjaxOptions
              {
-             UpdateTargetId = "ContentBody",
-             InsertionMode = InsertionMode.Replace
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
              })
         </li>
         <li>
             @Ajax.ActionLink("Receptionists", "ManageReceptionists", new AjaxOptions
              {
-             UpdateTargetId = "ContentBody",
-             InsertionMode = InsertionMode.Replace
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
              })
         </li>
     }
     <li>
-
         <div class="col-md-1"></div>
         <div class="col-md-11">
             @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))

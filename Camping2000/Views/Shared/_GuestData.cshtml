@@ -4,13 +4,13 @@
 @ViewBag.Errormessage
 @if (Model != null)
 {
-    using (Ajax.BeginForm("SaveGuestData", "Home",
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "ContentBody",
-                InsertionMode = InsertionMode.Replace,
-            }))
+    using (Ajax.BeginForm("SaveGuestData", "Home", new AjaxOptions
     {
+        UpdateTargetId = "ContentBody",
+        InsertionMode = InsertionMode.Replace,
+    }))
+    {
+        @Html.AntiForgeryToken()
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">

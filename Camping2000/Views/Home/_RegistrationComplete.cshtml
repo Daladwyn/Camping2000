@@ -15,23 +15,25 @@
                 UpdateTargetId = "ContentBody"
             }))
         {
+            @Html.AntiForgeryToken()
             <input type="submit" value="Back to Start" />
         }
     </div>
     @if (Model.BookingId != 0)
     {
-        <div class="col-md-2">
-            @using (Ajax.BeginForm("SpaceAdjustments", "Home", new AjaxOptions
-            {
-                InsertionMode = InsertionMode.Replace,
-                UpdateTargetId = "ContentBody"
-            }))
-            {
-                <input type="submit" value="Continue reservation" />
-                @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-                @Html.HiddenFor(g=>g.GuestId,User.Identity.GetUserId())
-            }
-        </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("SpaceAdjustments", "Home", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "ContentBody"
+        }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Continue reservation" />
+            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
+            @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
+        }
+    </div>
         <div class="col-md-8"></div>
     }
     else

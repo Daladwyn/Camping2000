@@ -10,6 +10,7 @@
             InsertionMode = InsertionMode.Replace,
         }))
 {
+    @Html.AntiForgeryToken()
     <div class="row">
         <div class="col-md-3">
             @Html.Label("Present FirstName:")
@@ -239,6 +240,7 @@
                        InsertionMode = InsertionMode.Replace,
                    }))
         {
+            @Html.AntiForgeryToken()
             <input type="submit" value="Cancel Changes" />
         }
     </div>
@@ -252,6 +254,7 @@
             InsertionMode = InsertionMode.Replace,
         }))
             {
+                @Html.AntiForgeryToken()
                 <input type="submit" value="Modify a Guest Details" />
             }
         </div>

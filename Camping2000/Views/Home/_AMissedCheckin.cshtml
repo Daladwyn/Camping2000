@@ -24,7 +24,7 @@
               InsertionMode = InsertionMode.Replace,
           }))
         {
-
+        @Html.AntiForgeryToken()
             @Html.HiddenFor(g => g.GuestId, Model.GuestId)
             @Html.HiddenFor(b => b.BookingId, Model.BookingId)
             @Html.HiddenFor(c => c.ItemId, Model.ItemId)

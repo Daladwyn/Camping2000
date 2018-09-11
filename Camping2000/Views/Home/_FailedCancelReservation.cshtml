@@ -3,16 +3,17 @@
 <h2>Failure to cancel the booking.</h2>
 <hr />
 <div>
-@ViewBag.Errormessage
+    @ViewBag.Errormessage
 </div>
 <hr />
 @using (Ajax.BeginForm("ModifyBooking", "Home",
-           ajaxOptions: new AjaxOptions
-           {
-               UpdateTargetId = "ContentBody",
-               InsertionMode = InsertionMode.Replace,
-           }))
+    ajaxOptions: new AjaxOptions
+    {
+        UpdateTargetId = "ContentBody",
+        InsertionMode = InsertionMode.Replace,
+    }))
 {
-        <input type="submit" value="Return to Bookings" />
+    @Html.AntiForgeryToken()
+    <input type="submit" value="Return to Bookings" />
 }
 

@@ -37,6 +37,7 @@
               InsertionMode = InsertionMode.Replace,
           }))
         {
+            @Html.AntiForgeryToken()
             @Html.HiddenFor(b => b.BookingId, Model.BookingId)
             <input type="submit" value="Checkout Guest" />
         }

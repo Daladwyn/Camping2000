@@ -4,21 +4,23 @@
 @ViewBag.Errormessage
 <hr />
 @using (Ajax.BeginForm("GoToStart", "Home",
-           ajaxOptions: new AjaxOptions
-           {
-               UpdateTargetId = "ContentBody",
-               InsertionMode = InsertionMode.Replace,
-           }))
+    ajaxOptions: new AjaxOptions
+    {
+        UpdateTargetId = "ContentBody",
+        InsertionMode = InsertionMode.Replace,
+    }))
 {
-        <input type="submit" value="Done" />
+    @Html.AntiForgeryToken()
+    <input type="submit" value="Done" />
 }
 
 @using (Ajax.BeginForm("ModifyBooking", "Home",
-           ajaxOptions: new AjaxOptions
-           {
-               UpdateTargetId = "ContentBody",
-               InsertionMode = InsertionMode.Replace,
-           }))
+    ajaxOptions: new AjaxOptions
+    {
+        UpdateTargetId = "ContentBody",
+        InsertionMode = InsertionMode.Replace,
+    }))
 {
+    @Html.AntiForgeryToken()
     <input type="submit" value="Return to Bookings" />
 }

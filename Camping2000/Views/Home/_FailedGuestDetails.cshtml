@@ -6,23 +6,25 @@
 <div class="row">
     <div class="col-md-2">
         @using (Ajax.BeginForm("GoToStart", "Home",
-                   ajaxOptions: new AjaxOptions
-                   {
-                       UpdateTargetId = "ContentBody",
-                       InsertionMode = InsertionMode.ReplaceWith,
-                   }))
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.ReplaceWith,
+            }))
         {
+            @Html.AntiForgeryToken()
             <input type="submit" value="Done" />
         }
     </div>
     <div class="col-md-2">
         @using (Ajax.BeginForm("Index", "Manage",
-                   ajaxOptions: new AjaxOptions
-                   {
-                       UpdateTargetId = "MainBody",
-                       InsertionMode = InsertionMode.Replace,
-                   }))
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "MainBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
         {
+            @Html.AntiForgeryToken()
             <input type="submit" value="Return to Details" />
         }
     </div>

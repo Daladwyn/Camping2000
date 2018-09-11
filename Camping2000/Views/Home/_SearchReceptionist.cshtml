@@ -1,9 +1,8 @@
-﻿@using (Ajax.BeginForm("SearchNewReceptionist", "Home",
-        ajaxOptions: new AjaxOptions
-        {
-            UpdateTargetId = "EndOfFoundCoworkers",
-            InsertionMode = InsertionMode.InsertBefore,
-        }))
+﻿@using (Ajax.BeginForm("SearchNewReceptionist", "Home", new AjaxOptions
+{
+    UpdateTargetId = "EndOfFoundCoworkers",
+    InsertionMode = InsertionMode.InsertBefore,
+}))
 {
     @Html.AntiForgeryToken()
     <div class="row">

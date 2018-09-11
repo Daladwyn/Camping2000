@@ -278,7 +278,8 @@
     InsertionMode = InsertionMode.Replace,
 }))
 {
+    @Html.AntiForgeryToken()
     <div>
-    <input type="submit" value="Done" />
+        <input type="submit" value="Done" />
     </div>
 }

@@ -19,12 +19,11 @@ else
     <div>Your booking have bookingid: @Model.BookingId</div>
 }
 @ViewBag.Errormessage
-@using (Ajax.BeginForm("RentSpaceForTent", "Home",
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "ContentBody",
-                InsertionMode = InsertionMode.Replace,
-            }))
+@using (Ajax.BeginForm("RentSpaceForTent", "Home", new AjaxOptions
+{
+    UpdateTargetId = "ContentBody",
+    InsertionMode = InsertionMode.Replace,
+}))
 {
     @Html.AntiForgeryToken()
     <div class="form-group">

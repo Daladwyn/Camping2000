@@ -1,11 +1,10 @@
 ﻿@model Camping2000.Models.BookingGuestViewModel
 
-@using (Ajax.BeginForm("CheckInConfirmation", "Home",
-            ajaxOptions: new AjaxOptions
-            {
-                UpdateTargetId = "ContentBody",
-                InsertionMode = InsertionMode.Replace,
-            }))
+@using (Ajax.BeginForm("CheckInConfirmation", "Home", new AjaxOptions
+{
+    UpdateTargetId = "ContentBody",
+    InsertionMode = InsertionMode.Replace,
+}))
 {
     @Html.AntiForgeryToken()
     <div>

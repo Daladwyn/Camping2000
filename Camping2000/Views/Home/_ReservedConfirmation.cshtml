@@ -7,15 +7,16 @@
         A mail will shortly be sent to you with details of your reservation.
         This mail can be used when you check in.
     </p>
-    
+
     @using (Ajax.BeginForm("PrintReservation", "Home",
     ajaxOptions: new AjaxOptions
     {
-        UpdateTargetId= "ContentBody",
-        InsertionMode=InsertionMode.Replace
+        UpdateTargetId = "ContentBody",
+        InsertionMode = InsertionMode.Replace
     }))
     {
-    @Html.HiddenFor(b=>b.BookingId,@Model.BookingId)
-    <input type="submit" value="Print out your reservation" />
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(b => b.BookingId, @Model.BookingId)
+        <input type="submit" value="Print out your reservation" />
     }
 </div>

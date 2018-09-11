@@ -30,6 +30,7 @@
             InsertionMode = InsertionMode.Replace,
         }))
         {
+            @Html.AntiForgeryToken()
             <input type="submit" value="Missed Checkins" />
         }
     </div>
@@ -40,6 +41,7 @@
             InsertionMode = InsertionMode.Replace,
         }))
         {
+            @Html.AntiForgeryToken()
             <input type="submit" value="Missed Checkouts" />
         }
     </div>

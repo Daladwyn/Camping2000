@@ -77,6 +77,7 @@
                        InsertionMode = InsertionMode.Replace,
                    }))
         {
+            @Html.AntiForgeryToken()
             <input type="submit" value="Done" />
         }
     </div>
@@ -88,6 +89,7 @@
                        InsertionMode = InsertionMode.Replace,
                    }))
         {
+            @Html.AntiForgeryToken()
             <input type="submit" value="Return to Bookings" />
         }
     </div>

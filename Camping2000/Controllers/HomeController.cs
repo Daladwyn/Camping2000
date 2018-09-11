@@ -12,6 +12,7 @@ namespace Camping2000.Controllers
 {
     public class HomeController : Controller
     {
+        [ValidateAntiForgeryToken]
         public ActionResult GoToStart()
         {
             return PartialView("Index");
@@ -50,6 +51,7 @@ namespace Camping2000.Controllers
             return PartialView("_SpaceForTent", newBooking);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult RentSpaceForTent([Bind(Include = "BookingStartDate,BookingEndDate,NumberOfGuests,BookingNeedsElectricity,BookingId,GuestId")]Booking newBooking)
         {
             if (ModelState.IsValid)
@@ -151,6 +153,7 @@ namespace Camping2000.Controllers
             }
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SpaceAdjustments([Bind(Include = "BookingId,GuestId")]Booking newBooking)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -182,6 +185,7 @@ namespace Camping2000.Controllers
             return PartialView("_SpaceForTent", currentBooking);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ConfirmSpace([Bind(Include = "BookingId,GuestId")]Booking acceptedBooking)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -197,6 +201,7 @@ namespace Camping2000.Controllers
             return PartialView("_ReservedConfirmation", acceptedBooking);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult PrintReservation([Bind(Include = "BookingId")]Booking currentBooking)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -239,6 +244,7 @@ namespace Camping2000.Controllers
         //End of reservation flow
         //Start of Checkin flow
         [Authorize(Roles = "Administrators,Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult CheckIn()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -301,6 +307,7 @@ namespace Camping2000.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult CheckInConfirmation(int BookingId, int NumberOfCheckInGuests)
         {
             if (ModelState.IsValid)
@@ -388,6 +395,7 @@ namespace Camping2000.Controllers
         //End of checkin flow
         //Start of checkout flow
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult CheckOut()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -442,6 +450,7 @@ namespace Camping2000.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult CheckOutConfirmation([Bind(Include = "BookingId,NumberOfGuests")]BookingGuestViewModel checkingOutGuest)
         {
             if (ModelState.IsValid)
@@ -580,6 +589,7 @@ namespace Camping2000.Controllers
             return PartialView("_ModifyGuestDetails");
         }
         [Authorize(Roles = "Administrators")]
+        [ValidateAntiForgeryToken]
         public ActionResult SearchForGuest(string firstName, string lastName)
         {
             List<ApplicationUser> foundGuests = new List<ApplicationUser>();
@@ -608,6 +618,7 @@ namespace Camping2000.Controllers
             return PartialView("_ShowFoundGuests", foundGuests);
         }
         [Authorize(Roles = "Administrators, Guests")]
+        [ValidateAntiForgeryToken]
         public ActionResult ModifySpecificGuestDetails([Bind(Include = "GuestId")]ApplicationUser searchedGuest)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -642,6 +653,7 @@ namespace Camping2000.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Administrators, Guests")]
+        [ValidateAntiForgeryToken]
         public ActionResult UpdatedGuestDetails([Bind(Include = "GuestFirstName,GuestLastName,GuestNationality,GuestPhoneNumber,GuestMobileNumber," +
                             "GuestId,LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity," +
                             "PostAdressStreet1,PostAdressStreet2,PostAdressStreet3,PostAdressZipCode,PostAdressCity")] GuestAdressViewModel newGuestData)
@@ -683,6 +695,7 @@ namespace Camping2000.Controllers
         //End of Editing GuestDeatils flow
         //Start of modifying Booking flow
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult ModifyBooking()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -744,6 +757,7 @@ namespace Camping2000.Controllers
             return PartialView("_PresentBooking", AGuestBooking);
         }
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult ModifySpecificBooking([Bind(Include = "BookingId,ItemId,GuestId")] ModifyBookingViewModel aBookingToModify)
         {
             if (ModelState.IsValid)
@@ -796,6 +810,7 @@ namespace Camping2000.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult ChangeStartDate([Bind(Include = "BookingId,GuestId,ItemId,BookingStartDate")] ModifyBookingViewModel bookingToModify)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -890,6 +905,7 @@ namespace Camping2000.Controllers
             }
         }
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult ChangeEndDate([Bind(Include = "BookingId,GuestId,ItemId,BookingEndDate")] ModifyBookingViewModel bookingToModify)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -976,6 +992,7 @@ namespace Camping2000.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult ChangePowerOutlet([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
             if (ModelState.IsValid)
@@ -1185,6 +1202,7 @@ namespace Camping2000.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult ChangePartySize([Bind(Include = "BookingId,GuestId,ItemId,NumberOfGuests")] ModifyBookingViewModel bookingToModify)
         {
             if (ModelState.IsValid)
@@ -1287,6 +1305,7 @@ namespace Camping2000.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult ChangeCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
             if (ModelState.IsValid)
@@ -1379,6 +1398,7 @@ namespace Camping2000.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult ChangeChooseCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -1417,6 +1437,7 @@ namespace Camping2000.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Administrators")]
+        [ValidateAntiForgeryToken]
         public ActionResult CancelReservation([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
             if (ModelState.IsValid)
@@ -1477,6 +1498,7 @@ namespace Camping2000.Controllers
             return PartialView("_GuestData", newGuest);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SaveGuestData([Bind(Include = "GuestFirstName,GuestLastName,GuestNationality,GuestPhoneNumber,GuestMobileNumber," +
                             "GuestId,EmailAddress,PostAdressStreet1,PostAdressStreet2,PostAdressStreet3,PostAdressZipCode,PostAdressCity," +
                             "LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity")]GuestDataViewModel newGuest)
@@ -1599,11 +1621,13 @@ namespace Camping2000.Controllers
         //End of modify guest data flow
         //Start of manage receptionist rights
         [Authorize(Roles = "Administrators")]
+        [ValidateAntiForgeryToken]
         public ActionResult ManageReceptionists()
         {
             return PartialView("_ManageReceptionists");
         }
         [Authorize(Roles = "Administrators")]
+        [ValidateAntiForgeryToken]
         public ActionResult SearchNewReceptionist(string firstName, string lastName)
         {
             List<ApplicationUser> foundGuests = new List<ApplicationUser>();
@@ -1632,6 +1656,7 @@ namespace Camping2000.Controllers
             return PartialView("_ShowFoundCoworker", foundGuests);
         }
         [Authorize(Roles = "Administrators")]
+        [ValidateAntiForgeryToken]
         public ActionResult ModifyCoworkerToReceptionist(string GuestId)
         {
             Camping2000Db Db = new Camping2000Db();
@@ -1670,6 +1695,7 @@ namespace Camping2000.Controllers
             return PartialView("_ConfirmReceptionistRights");
         }
         [Authorize(Roles = "Administrators")]
+        [ValidateAntiForgeryToken]
         public ActionResult ModifyCoWorkerToGuest(string GuestId)
         {
             Camping2000Db Db = new Camping2000Db(); //Save the removal of old coworkers ID in the receptionists table
@@ -1716,6 +1742,7 @@ namespace Camping2000.Controllers
             return PartialView("_ConfirmReceptionistRights");
         }
         [Authorize(Roles = "Administrators")]
+        [ValidateAntiForgeryToken]
         public ActionResult ListReceptionists() //Gather all Guests that is receptionists
         {
             Camping2000Db Db = new Camping2000Db();
@@ -1745,6 +1772,7 @@ namespace Camping2000.Controllers
         //Start of bookinglist that turns up forgotten bookings 
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult MissedCheckins()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -1784,6 +1812,7 @@ namespace Camping2000.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Administrators, Receptionists")]
+        [ValidateAntiForgeryToken]
         public ActionResult MissedCheckouts()
         {
             Camping2000Db Db = new Camping2000Db();

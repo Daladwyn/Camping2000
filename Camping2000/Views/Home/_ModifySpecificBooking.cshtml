@@ -189,11 +189,11 @@ else
 <div class="row">
     <div class="col-md-2">
         @using (Ajax.BeginForm("GoToStart", "Home",
-                   ajaxOptions: new AjaxOptions
-                   {
-                       UpdateTargetId = "ContentBody",
-                       InsertionMode = InsertionMode.Replace,
-                   }))
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
         {
             @Html.AntiForgeryToken()
             <input type="submit" value="Cancel Changes" />
@@ -201,25 +201,25 @@ else
     </div>
     <div class="col-md-2">
         @using (Ajax.BeginForm("ModifyBooking", "Home",
-                   ajaxOptions: new AjaxOptions
-                   {
-                       UpdateTargetId = "ContentBody",
-                       InsertionMode = InsertionMode.Replace,
-                   }))
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
         {
-
+            @Html.AntiForgeryToken()
             <input type="submit" value="Return to Bookings" />
         }
     </div>
     <div class="col-md-2">
         @using (Ajax.BeginForm("CancelReservation", "Home",
-                   ajaxOptions: new AjaxOptions
-                   {
-                       UpdateTargetId = "ContentBody",
-                       InsertionMode = InsertionMode.Replace,
-                   }))
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
         {
-
+            @Html.AntiForgeryToken()
             @Html.HiddenFor(g => g.GuestId, Model.GuestId)
             @Html.HiddenFor(b => b.BookingId, Model.BookingId)
             @Html.HiddenFor(c => c.ItemId, Model.ItemId)

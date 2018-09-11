@@ -12,20 +12,22 @@
             ajaxOptions: new AjaxOptions
             {
                 InsertionMode = InsertionMode.Replace,
-                UpdateTargetId = "ContentBody"
+                UpdateTargetId = "ContentBody",
             }))
         {
+            @Html.AntiForgeryToken()
             <input type="submit" value="Back to Start" />
         }
     </div>
     <div class="col-md-2">
         @using (Ajax.BeginForm("CheckOut", "Home",
-                   ajaxOptions: new AjaxOptions
-                   {
-                       InsertionMode = InsertionMode.Replace,
-                       UpdateTargetId = "ContentBody"
-                   }))
+            ajaxOptions: new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "ContentBody",
+            }))
         {
+            @Html.AntiForgeryToken()
             <input type="submit" value="Back to CheckOut" />
         }
     </div>

@@ -37,9 +37,9 @@
 }
 else
 {
-    if (ViewBag.Errormessage=="")
+    if (ViewBag.Errormessage == "")
     {
-    <p>All checked in guests have checked out. </p>
+        <p>All checked in guests have checked out. </p>
     }
     else
     {
@@ -49,13 +49,13 @@ else
 <div class="row">
     <div class="col-md-2">
         @using (Ajax.BeginForm("ModifyBooking", "Home",
-                  ajaxOptions: new AjaxOptions
-                  {
-                      UpdateTargetId = "ContentBody",
-                      InsertionMode = InsertionMode.Replace,
-                  }))
+            ajaxOptions: new AjaxOptions
+            {
+                UpdateTargetId = "ContentBody",
+                InsertionMode = InsertionMode.Replace,
+            }))
         {
-
+            @Html.AntiForgeryToken()
             <input type="submit" value="Return to Bookings" />
         }
     </div>
