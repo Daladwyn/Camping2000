@@ -244,7 +244,6 @@ namespace Camping2000.Controllers
         //End of reservation flow
         //Start of Checkin flow
         [Authorize(Roles = "Administrators,Receptionists")]
-        [ValidateAntiForgeryToken]
         public ActionResult CheckIn()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -395,7 +394,6 @@ namespace Camping2000.Controllers
         //End of checkin flow
         //Start of checkout flow
         [Authorize(Roles = "Administrators, Receptionists")]
-        [ValidateAntiForgeryToken]
         public ActionResult CheckOut()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -695,7 +693,6 @@ namespace Camping2000.Controllers
         //End of Editing GuestDeatils flow
         //Start of modifying Booking flow
         [Authorize(Roles = "Administrators, Receptionists")]
-        [ValidateAntiForgeryToken]
         public ActionResult ModifyBooking()
         {
             Camping2000Db Db = new Camping2000Db();
@@ -1621,7 +1618,6 @@ namespace Camping2000.Controllers
         //End of modify guest data flow
         //Start of manage receptionist rights
         [Authorize(Roles = "Administrators")]
-        [ValidateAntiForgeryToken]
         public ActionResult ManageReceptionists()
         {
             return PartialView("_ManageReceptionists");
