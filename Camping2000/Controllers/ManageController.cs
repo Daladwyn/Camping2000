@@ -32,9 +32,9 @@ namespace Camping2000.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -100,7 +100,12 @@ namespace Camping2000.Controllers
         {
             return RedirectToAction("ModifyGuestDetails", "Home");
         }
-
+        // GET: /Account/ManageReceptionists
+        [Authorize(Roles = "Administrators")]
+        public ActionResult ManageReceptionists()
+        {
+            return RedirectToAction("ManageReceptionists", "Home");
+        }
 
         //
         // GET: /Manage/Index
@@ -385,7 +390,7 @@ namespace Camping2000.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -436,6 +441,6 @@ namespace Camping2000.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

@@ -12,6 +12,13 @@ namespace Camping2000.Controllers
 {
     public class HomeController : Controller
     {
+        private Camping2000Db Db;
+
+        public HomeController()
+        {
+            Db = new Camping2000Db();
+        }
+
         [ValidateAntiForgeryToken]
         public ActionResult GoToStart()
         {
@@ -39,7 +46,6 @@ namespace Camping2000.Controllers
         //flow for making a reservation
         public ActionResult SpaceForTent([Bind(Include = "BookingNeedsElectricity")]Booking newBooking)
         {
-            Camping2000Db Db = new Camping2000Db();
             Camping currentSpot = Db.Camping.FirstOrDefault(i => i.CampingElectricity == newBooking.BookingNeedsElectricity);
             newBooking.BookingStartDate = DateTime.Now;
             newBooking.BookingEndDate = DateTime.Now.AddDays(1);
@@ -57,7 +63,7 @@ namespace Camping2000.Controllers
             if (ModelState.IsValid)
             {
                 int numberOfDays = 0;
-                Camping2000Db Db = new Camping2000Db();
+                //Camping2000Db Db = new Camping2000Db();
                 List<Booking> currentBookings = Db.Bookings.ToList();//Gather all present bookings in a list.
                 List<int> notEligibleSpots = new List<int>();//list of invalid spotnumbers
                 List<Camping> ListOfSpots = new List<Camping>();//list of valid spots
@@ -156,7 +162,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SpaceAdjustments([Bind(Include = "BookingId,GuestId")]Booking newBooking)
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == newBooking.BookingId);
             if (currentBooking == null)//check if fetched data is valid
             {
@@ -188,7 +194,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ConfirmSpace([Bind(Include = "BookingId,GuestId")]Booking acceptedBooking)
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == acceptedBooking.BookingId);
             if (currentBooking == null)//check if fetched data is valid
             {
@@ -204,7 +210,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PrintReservation([Bind(Include = "BookingId")]Booking currentBooking)
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             GuestBookingViewModel bookingToPrint = new GuestBookingViewModel();
             ApplicationUser currentGuest = new ApplicationUser();
             ViewBag.Errormessage = "";
@@ -246,7 +252,7 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators,Receptionists")]
         public ActionResult CheckIn()
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             List<Booking> allBookings = Db.Bookings.ToList();
             List<Booking> presentDayArrivals = new List<Booking>();
             List<ApplicationUser> presentDayGuests = new List<ApplicationUser>();
@@ -311,7 +317,7 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                Camping2000Db Db = new Camping2000Db();
+                //Camping2000Db Db = new Camping2000Db();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == BookingId);
                 Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
                 ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == currentBooking.GuestId);
@@ -368,7 +374,7 @@ namespace Camping2000.Controllers
             }
             else
             {
-                Camping2000Db Db = new Camping2000Db();
+                //Camping2000Db Db = new Camping2000Db();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == BookingId);
                 Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
                 ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == currentBooking.GuestId);
@@ -396,7 +402,7 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult CheckOut()
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             List<Booking> allBookings = Db.Bookings.ToList();
             List<Booking> departingGuestBookings = new List<Booking>();
             List<ApplicationUser> departingGuests = new List<ApplicationUser>();
@@ -453,7 +459,7 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                Camping2000Db Db = new Camping2000Db();
+                //Camping2000Db Db = new Camping2000Db();
                 List<Booking> allBookings = Db.Bookings.ToList();
                 Booking departingBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == checkingOutGuest.BookingId);
                 ApplicationUser departingGuest = Db.Users.SingleOrDefault(i => i.GuestId == departingBooking.GuestId);
@@ -528,7 +534,7 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ArrivalsDepartures()
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             List<ModifyBookingViewModel> arrivalsDepartures = new List<ModifyBookingViewModel>();
             List<Booking> allBookings = Db.Bookings.ToList();
             Booking currentBooking = new Booking();
@@ -619,7 +625,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ModifySpecificGuestDetails([Bind(Include = "GuestId")]ApplicationUser searchedGuest)
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             ApplicationUser foundGuest = Db.Users.SingleOrDefault(i => i.GuestId == searchedGuest.GuestId);
             Adress foundAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == searchedGuest.GuestId);
             if ((foundGuest == null) || (foundAdress == null)) //if no data was fetched, alert guest
@@ -658,7 +664,7 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                Camping2000Db Db = new Camping2000Db();
+                //Camping2000Db Db = new Camping2000Db();
                 ApplicationUser oldGuestData = Db.Users.SingleOrDefault(i => i.GuestId == newGuestData.GuestId);
                 Adress oldGuestAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == newGuestData.GuestId);
                 if ((oldGuestData == null) || (oldGuestAdress == null))
@@ -695,7 +701,7 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ModifyBooking()
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             List<Booking> allBookings = Db.Bookings.ToList();
             List<BookingGuestViewModel> presentGuestBookings = new List<BookingGuestViewModel>();
             List<Booking> presentBookings = new List<Booking>();
@@ -759,7 +765,7 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                Camping2000Db Db = new Camping2000Db();
+                //Camping2000Db Db = new Camping2000Db();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == aBookingToModify.BookingId);
                 ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == currentBooking.GuestId);
                 Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
@@ -810,7 +816,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeStartDate([Bind(Include = "BookingId,GuestId,ItemId,BookingStartDate")] ModifyBookingViewModel bookingToModify)
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             ModifyBookingViewModel currentBookingView = new ModifyBookingViewModel();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
             ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
@@ -905,7 +911,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeEndDate([Bind(Include = "BookingId,GuestId,ItemId,BookingEndDate")] ModifyBookingViewModel bookingToModify)
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
             ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
             Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
@@ -994,7 +1000,7 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                Camping2000Db Db = new Camping2000Db();
+                //Camping2000Db Db = new Camping2000Db();
                 List<ModifyBookingViewModel> currentBookingView = new List<ModifyBookingViewModel>();
                 ModifyBookingViewModel aBookingView = new ModifyBookingViewModel();
                 ModifyBookingViewModel anotherBookingView = new ModifyBookingViewModel();
@@ -1204,7 +1210,7 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                Camping2000Db Db = new Camping2000Db();
+                //Camping2000Db Db = new Camping2000Db();
                 List<ModifyBookingViewModel> currentBookingView = new List<ModifyBookingViewModel>();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
                 ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
@@ -1307,7 +1313,7 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                Camping2000Db Db = new Camping2000Db();
+                //Camping2000Db Db = new Camping2000Db();
                 ModifyBookingViewModel aBookingView = new ModifyBookingViewModel();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
                 ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
@@ -1398,7 +1404,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeChooseCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             ModifyBookingViewModel aBookingView = new ModifyBookingViewModel();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
             ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
@@ -1439,7 +1445,7 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                Camping2000Db Db = new Camping2000Db();
+                //Camping2000Db Db = new Camping2000Db();
                 ModifyBookingViewModel currentBookingView = new ModifyBookingViewModel();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
                 if (currentBooking == null)
@@ -1502,7 +1508,7 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                Camping2000Db Db = new Camping2000Db();
+                //Camping2000Db Db = new Camping2000Db();
                 var userStore = new UserStore<ApplicationUser>(Db);
                 var userManager = new UserManager<ApplicationUser>(userStore);
                 Booking guestBooking = new Booking();
@@ -1577,7 +1583,7 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators, Receptionists, Guests")]
         public ActionResult GuestDetails(string GuestId)
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             ApplicationUser foundGuest = Db.Users.SingleOrDefault(i => i.GuestId == GuestId);
             if (foundGuest == null)
             {
@@ -1655,7 +1661,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ModifyCoworkerToReceptionist(string GuestId)
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             var userStore = new UserStore<ApplicationUser>(Db);
             var userManager = new UserManager<ApplicationUser>(userStore);
             Receptionist newCoWorker = new Receptionist//Create a new coworker and transfer guestId 
@@ -1694,7 +1700,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ModifyCoWorkerToGuest(string GuestId)
         {
-            Camping2000Db Db = new Camping2000Db(); //Save the removal of old coworkers ID in the receptionists table
+            //Camping2000Db Db = new Camping2000Db(); //Save the removal of old coworkers ID in the receptionists table
             var userStore = new UserStore<ApplicationUser>(Db);
             var userManager = new UserManager<ApplicationUser>(userStore);
             List<Receptionist> allReceptionists = Db.Receptionists.ToList();//fetch all present receptionists
@@ -1741,7 +1747,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ListReceptionists() //Gather all Guests that is receptionists
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             List<Receptionist> currentReceptionists = Db.Receptionists.ToList();
             List<ApplicationUser> receptionistData = new List<ApplicationUser>();
             if (currentReceptionists == null)
@@ -1771,7 +1777,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MissedCheckins()
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             List<Booking> allBookings = Db.Bookings.ToList();
             List<Booking> failedCheckins = new List<Booking>();
             ApplicationUser guestThatFailedToCheckin = new ApplicationUser();
@@ -1811,7 +1817,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MissedCheckouts()
         {
-            Camping2000Db Db = new Camping2000Db();
+            //Camping2000Db Db = new Camping2000Db();
             List<Booking> allBookings = Db.Bookings.ToList();
             List<Booking> failedCheckouts = new List<Booking>();
             ApplicationUser guestThatFailedToCheckOut = new ApplicationUser();
