@@ -25,6 +25,7 @@
                         UpdateTargetId = "ContentBody"
                     }))
                     {
+                        @Html.AntiForgeryToken()
                         <input type="submit" value="Continue reservation" />
                         @Html.HiddenFor(b => b.BookingId, Model.BookingId)
                         <input type="hidden" name="GuestId" value="@User.Identity.GetUserId()" />

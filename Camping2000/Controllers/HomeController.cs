@@ -85,7 +85,7 @@ namespace Camping2000.Controllers
                         }
                     }
                 }
-                ListOfSpots = FetchCampingSpots(newBooking.BookingNeedsElectricity);
+                ListOfSpots = Booking.FetchCampingSpots(newBooking.BookingNeedsElectricity);
                 if (ListOfSpots[0].CampingSpot == "NoData")
                 {
                     ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
@@ -864,7 +864,7 @@ namespace Camping2000.Controllers
                     }
                 }
                 disAllowableBookings.Sort();
-                ListOfSpots = FetchCampingSpots(currentBooking.BookingNeedsElectricity);
+                ListOfSpots = Booking.FetchCampingSpots(currentBooking.BookingNeedsElectricity);
                 if (ListOfSpots[0].CampingSpot == "NoData")
                 {
                     ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
@@ -947,7 +947,7 @@ namespace Camping2000.Controllers
                     }
                 }
                 disAllowableBookings.Sort();
-                ListOfSpots = FetchCampingSpots(currentBooking.BookingNeedsElectricity);//Fetch Campingpots based on power needs
+                ListOfSpots = Booking.FetchCampingSpots(currentBooking.BookingNeedsElectricity);//Fetch Campingpots based on power needs
                 if (ListOfSpots[0].CampingSpot == "NoData")
                 {
                     ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
@@ -1013,7 +1013,7 @@ namespace Camping2000.Controllers
                         }
                     }
                     disAllowableBookings.Sort();
-                    ListOfSpots = FetchCampingSpots(currentBooking.BookingNeedsElectricity); //get all spots based on power needs
+                    ListOfSpots = Booking.FetchCampingSpots(currentBooking.BookingNeedsElectricity); //get all spots based on power needs
                     if (ListOfSpots[0].CampingSpot == "NoData")
                     {
                         ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
@@ -1094,7 +1094,7 @@ namespace Camping2000.Controllers
                         }
                     }
                     disAllowableBookings.Sort();
-                    ListOfSpots = FetchCampingSpots(bookingToModify.BookingNeedsElectricity); //fetch spots based on powerneeds
+                    ListOfSpots = Booking.FetchCampingSpots(bookingToModify.BookingNeedsElectricity); //fetch spots based on powerneeds
                     if (ListOfSpots[0].CampingSpot == "NoData")
                     {
                         ViewBag.Errormessage = "Fetching campingdata did not succeed. Please try again.";
@@ -1749,30 +1749,7 @@ namespace Camping2000.Controllers
             try { checkedPrice = Price; } catch (NullReferenceException) { checkedPrice = 0; }
             return checkedPrice;
         }
-        /// <summary>
-        /// Function that collects Camping spots based upon if power is required
-        /// </summary>
-        /// <param name="BookingNeedsElectricity"></param>
-        /// <returns></returns>
-        static List<Camping> FetchCampingSpots(bool BookingNeedsElectricity)
-        {
-            Camping2000Db Db = new Camping2000Db();
-            List<Camping> allSpots = Db.Camping.ToList();
-            if (allSpots == null)
-            {
-                allSpots[0].CampingSpot = "NoData";
-                return allSpots;
-            }
-            List<Camping> ListOfSpots = new List<Camping>();
-            foreach (var spot in allSpots)
-            {
-                if (spot.CampingElectricity == BookingNeedsElectricity)
-                {
-                    ListOfSpots.Add(spot);
-                }
-            }
-            return ListOfSpots;
-        }
+       
         /// <summary>
         /// This function compares a list of spots against a list of numbers and 
         /// removes matching items in the list of spots

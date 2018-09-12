@@ -5,6 +5,8 @@ using System.Web.Services.Protocols;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Camping2000.Models
 {
@@ -60,6 +62,30 @@ namespace Camping2000.Models
                 }
             }
             return numberOfDays;
+        }
+        /// <summary>
+        /// Function that collects Camping spots based upon if power is required
+        /// </summary>
+        /// <param name="BookingNeedsElectricity"></param>
+        /// <returns></returns>
+        public static List<Camping> FetchCampingSpots(bool BookingNeedsElectricity)
+        {
+            Camping2000Db Db = new Camping2000Db();
+            List<Camping> allSpots = Db.Camping.ToList();
+            if (allSpots == null)
+            {
+                allSpots[0].CampingSpot = "NoData";
+                return allSpots;
+            }
+            List<Camping> ListOfSpots = new List<Camping>();
+            foreach (var spot in allSpots)
+            {
+                if (spot.CampingElectricity == BookingNeedsElectricity)
+                {
+                    ListOfSpots.Add(spot);
+                }
+            }
+            return ListOfSpots;
         }
     }
 }
