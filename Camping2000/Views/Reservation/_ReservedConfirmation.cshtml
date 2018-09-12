@@ -8,7 +8,7 @@
         This mail can be used when you check in.
     </p>
 
-    @using (Ajax.BeginForm("PrintReservation", "Home",
+    @using (Ajax.BeginForm("PrintReservation", "Reservation",
     ajaxOptions: new AjaxOptions
     {
         UpdateTargetId = "ContentBody",
@@ -17,6 +17,6 @@
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(b => b.BookingId, @Model.BookingId)
-        <input type="submit" value="Print out your reservation" />
+        <input type="submit" value="Print out your reservation" class="btn btn-primary"/>
     }
 </div>

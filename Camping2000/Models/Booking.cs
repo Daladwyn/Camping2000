@@ -87,5 +87,41 @@ namespace Camping2000.Models
             }
             return ListOfSpots;
         }
+
+        /// <summary>
+        /// Function that checks a decimal type if it is null
+        /// </summary>
+        /// <param name="Price"></param>
+        /// <returns>A value that is not null but 0</returns>
+        public static decimal checkForNullReferenceException(decimal Price)
+        {
+            decimal checkedPrice;
+            try { checkedPrice = Price; } catch (NullReferenceException) { checkedPrice = 0; }
+            return checkedPrice;
+        }
+
+        /// <summary>
+        /// A function that checks a Int if it is null
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public static int checkForNullReferenceException(int Id)
+        {
+            int checkedId;
+            try { checkedId = Id; } catch (NullReferenceException) { checkedId = 0; }
+            return checkedId;
+        }
+
+        /// <summary>
+        /// A function that checks if a valid sting have been fetched
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns>Returns a valid string. If not valid "Invalidstring" will be returned.</returns>
+        public static string checkForGuestNullReferenceException(string Id)
+        {
+            string checkedId;
+            try { checkedId = Id; } catch (NullReferenceException) { checkedId = "Invalidstring"; }
+            return checkedId;
+        }
     }
 }

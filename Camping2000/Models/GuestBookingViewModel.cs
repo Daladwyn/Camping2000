@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Camping2000.Models
 {
-    public struct GuestBookingViewModel
+    public class GuestBookingViewModel
     {
         [Required]
         public string GuestId { get; set; } //needs to be string to match identitys format for userId

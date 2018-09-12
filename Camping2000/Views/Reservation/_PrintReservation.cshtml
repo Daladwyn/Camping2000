@@ -65,14 +65,14 @@
 <div clas="row">
     <div class="col-md-1"></div>
     <div class="col-md-3">
-        @using (Ajax.BeginForm("SendEMail", "Home", new AjaxOptions
+        @using (Ajax.BeginForm("SendEMail", "Reservation", new AjaxOptions
         {
             UpdateTargetId = "ContentBody",
             InsertionMode = InsertionMode.Replace,
         }))
         {
             @Html.AntiForgeryToken()
-            <input type="Submit" value="Send confirmation to mail" />
+            <input type="Submit" value="Send confirmation to mail" class="btn btn-primary"/>
             @Html.HiddenFor(g => g.GuestId, Model.GuestId)
             @Html.HiddenFor(b => b.BookingId, Model.BookingId)
         }
@@ -86,7 +86,9 @@
             }))
         {
             @Html.AntiForgeryToken()
-            <input type="submit" value="Done" />
+            <input type="submit" value="Done" class="btn btn-default" />
+            @Html.HiddenFor(g => g.GuestId, Model.GuestId)
+            @Html.HiddenFor(b => b.BookingId, Model.BookingId)
         }
     </div>
 </div>

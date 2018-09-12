@@ -195,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ReceptionistController.cs" />
+    <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Adress.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -381,9 +382,9 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_MenuList.cshtml" />
-    <Content Include="Views\Home\_SpaceForTent.cshtml" />
-    <Content Include="Views\Home\_ReservedConfirmation.cshtml" />
-    <Content Include="Views\Home\_ConfirmSpaceForTent.cshtml" />
+    <Content Include="Views\Reservation\_SpaceForTent.cshtml" />
+    <Content Include="Views\Reservation\_ReservedConfirmation.cshtml" />
+    <Content Include="Views\Reservation\_ConfirmSpaceForTent.cshtml" />
     <Content Include="Views\Home\_CheckIn.cshtml" />
     <Content Include="Views\Home\_CheckOut.cshtml" />
     <Content Include="Views\Home\_ArrivalsDepartures.cshtml" />
@@ -428,8 +429,9 @@
     <Content Include="Views\Home\_AMissedCheckin.cshtml" />
     <Content Include="Views\Home\_MissedCheckouts.cshtml" />
     <Content Include="Views\Home\_AMissedCheckOut.cshtml" />
-    <Content Include="Views\Home\_PrintReservation.cshtml" />
-    <Content Include="Views\Home\_FailedToPrintReservation.cshtml" />
+    <Content Include="Views\Reservation\_PrintReservation.cshtml" />
+    <Content Include="Views\Reservation\_FailedToPrintReservation.cshtml" />
+    <Content Include="Views\Reservation\_SentEMailConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -19,7 +19,7 @@ else
     <div>Your booking have bookingid: @Model.BookingId</div>
 }
 @ViewBag.Errormessage
-@using (Ajax.BeginForm("RentSpaceForTent", "Home", new AjaxOptions
+@using (Ajax.BeginForm("RentSpaceForTent", "Reservation", new AjaxOptions
 {
     UpdateTargetId = "ContentBody",
     InsertionMode = InsertionMode.Replace,
@@ -91,18 +91,7 @@ else
                 }
             </div>
             <div class="col-md-4">
-                @if (Model.BookingNeedsElectricity == true)
-                {
-                    <div>
-                        Space without electricity costs 50 kr/Night/Person.
-                    </div>
-                }
-                else
-                {
-                    <div>
-                        Space with electricity costs 100 Kr/Night/Person.
-                    </div>
-                }
+               @ViewBag.pricePerNight
             </div>
             <div class="col-md-4">
 
@@ -127,6 +116,6 @@ else
     <div class="form-group">
         @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
         @Html.HiddenFor(b => b.BookingId, Model.BookingId)
-        <input type="submit" value="Reserve" class="btn btn-default" />
+        <input type="submit" value="Reserve" class="btn btn-primary" />
     </div>
 }

@@ -20,14 +20,14 @@ else
         <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
         <li class="active">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
         <li>
-            @Ajax.ActionLink("Space For Tents","SpaceForTent", new { BookingNeedsElectricity = false }, new AjaxOptions
-   {
-       UpdateTargetId = "ContentBody",
-       InsertionMode = InsertionMode.Replace,
-   })
+            @Ajax.ActionLink("Space For Tents","SpaceForTent", "Reservation", new { BookingNeedsElectricity = false }, new AjaxOptions
+       {
+           UpdateTargetId = "ContentBody",
+           InsertionMode = InsertionMode.Replace,
+       })
         </li>
         <li>
-            @Ajax.ActionLink("Space For caravan/trailer", "SpaceForTent", new { BookingNeedsElectricity = true }, new AjaxOptions
+            @Ajax.ActionLink("Space For caravan/trailer", "SpaceForTent", "Reservation", new { BookingNeedsElectricity = true }, new AjaxOptions
        {
            UpdateTargetId = "ContentBody",
            InsertionMode = InsertionMode.Replace
