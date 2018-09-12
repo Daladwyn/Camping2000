@@ -20,7 +20,7 @@
                 @guest.GuestLastName
             </div>
             <div class="col-md-1">
-                @using (Ajax.BeginForm("ModifyCoworkerToReceptionist", "Home", new AjaxOptions
+                @using (Ajax.BeginForm("ModifyCoworkerToReceptionist", "Receptionist", new AjaxOptions
                 {
                     UpdateTargetId = "ContentBody",
                     InsertionMode = InsertionMode.Replace,
@@ -35,7 +35,7 @@
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-1">
-                @using (Ajax.BeginForm("ModifyCoWorkerToGuest", "Home", new AjaxOptions
+                @using (Ajax.BeginForm("ModifyCoWorkerToGuest", "Receptionist", new AjaxOptions
                 {
                     InsertionMode = InsertionMode.Replace,
                     UpdateTargetId = "ContentBody"

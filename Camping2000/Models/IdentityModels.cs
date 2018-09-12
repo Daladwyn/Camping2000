@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
@@ -64,5 +65,50 @@ namespace Camping2000.Models
         public DbSet<Adress> Adresses { get; set; }
         public DbSet<Receptionist> Receptionists { get; set; }
         public DbSet<LinkBooking> LinkBookings { get; set; }
+
+        // /// <summary>
+        // /// Function that accepts one or two strings and return a list of guests 
+        // /// </summary>
+        // /// <param name="firstName"></param>
+        // /// <param name="lastName"></param>
+        // /// <returns></returns>
+        public static List<ApplicationUser> SearchForPeople(string firstName, string lastName)
+        {
+            Camping2000Db Db = new Camping2000Db();
+            List<ApplicationUser> foundGuests = new List<ApplicationUser>();
+            firstName = firstName.ToLower();
+            lastName = lastName.ToLower();
+            if ((firstName != "") && (lastName == ""))
+            {
+                foreach (var guest in Db.Users)
+                {
+                    if (guest.GuestFirstName.ToLower() == firstName)
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            else if ((firstName != "") && (lastName != ""))
+            {
+                foreach (var guest in Db.Users)
+                {
+                    if ((guest.GuestFirstName.ToLower() == firstName) && (guest.GuestLastName.ToLower() == lastName))
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            else if ((firstName == "") && (lastName != ""))
+            {
+                foreach (var guest in Db.Users)
+                {
+                    if (guest.GuestLastName.ToLower() == lastName)
+                    {
+                        foundGuests.Add(guest);
+                    }
+                }
+            }
+            return foundGuests;
+        }
     }
 }

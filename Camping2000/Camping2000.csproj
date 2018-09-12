@@ -194,6 +194,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ReceptionistController.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Adress.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -395,7 +396,7 @@
     <Content Include="Views\Home\_PresentBooking.cshtml" />
     <Content Include="Views\Home\_ModifySpecificBooking.cshtml" />
     <Content Include="Views\Home\_UpdatedBooking.cshtml" />
-    <Content Include="Views\Home\_ShowFoundGuests.cshtml" />
+    <Content Include="Views\Shared\_ShowFoundGuests.cshtml" />
     <Content Include="Views\Home\_GuestDetails.cshtml" />
     <Content Include="Views\Home\_UpdatedGuestDetails.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
@@ -418,11 +419,11 @@
     <Content Include="Views\Home\_FailedGuestDetails.cshtml" />
     <Content Include="Views\Home\_ChangeCampingSpot.cshtml" />
     <Content Include="Views\Home\_ChangeConfirmationCampingSpot.cshtml" />
-    <Content Include="Views\Home\_ManageReceptionists.cshtml" />
-    <Content Include="Views\Home\_SearchReceptionist.cshtml" />
-    <Content Include="Views\Home\_ShowFoundCoworker.cshtml" />
-    <Content Include="Views\Home\_ConfirmReceptionistRights.cshtml" />
-    <Content Include="Views\Home\_ListReceptionist.cshtml" />
+    <Content Include="Views\Receptionist\_ManageReceptionists.cshtml" />
+    <Content Include="Views\Receptionist\_SearchReceptionist.cshtml" />
+    <Content Include="Views\Shared\_ShowFoundCoworker.cshtml" />
+    <Content Include="Views\Receptionist\_ConfirmReceptionistRights.cshtml" />
+    <Content Include="Views\Receptionist\_ListReceptionist.cshtml" />
     <Content Include="Views\Home\_MissedCheckins.cshtml" />
     <Content Include="Views\Home\_AMissedCheckin.cshtml" />
     <Content Include="Views\Home\_MissedCheckouts.cshtml" />

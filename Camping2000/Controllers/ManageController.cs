@@ -104,7 +104,7 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult ManageReceptionists()
         {
-            return RedirectToAction("ManageReceptionists", "Home");
+            return RedirectToAction("ManageReceptionists", "Receptionist");
         }
 
         //

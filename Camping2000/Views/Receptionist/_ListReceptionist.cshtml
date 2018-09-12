@@ -26,7 +26,7 @@
                 @receptionist.GuestLastName
             </div>
             <div class="col-md-8">
-                @using (Ajax.BeginForm("ModifyCoWorkerToGuest", "Home", new AjaxOptions
+                @using (Ajax.BeginForm("ModifyCoWorkerToGuest", "Receptionist", new AjaxOptions
                 {
                     InsertionMode = InsertionMode.Replace,
                     UpdateTargetId = "ContentBody"
@@ -48,7 +48,7 @@ else
         @ViewBag.NumberOfReceptionists
     </div>
 }
-@using (Ajax.BeginForm("ManageReceptionists", "Home", new AjaxOptions
+@using (Ajax.BeginForm("ManageReceptionists", "Receptionist", new AjaxOptions
 {
     UpdateTargetId = "ContentBody",
     InsertionMode = InsertionMode.Replace,
