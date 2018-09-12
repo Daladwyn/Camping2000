@@ -122,7 +122,7 @@ namespace Camping2000.Controllers
                     }
                     newBooking.ItemId = ListOfSpots[0].ItemId;
                 }
-                numberOfDays = CalculateNumberOfDays(newBooking.BookingStartDate, newBooking.BookingEndDate); //Calculate number of days
+                numberOfDays = Booking.CalculateNumberOfDays(newBooking.BookingStartDate, newBooking.BookingEndDate); //Calculate number of days
                 newBooking.BookingPrice = ListOfSpots[0].CampingPrice * numberOfDays * newBooking.NumberOfGuests;//Calculate the price for the guest
                 if (newBooking.BookingId == 0)//Save to database current info if a new reservation and not a readjusted reservation
                 {
@@ -207,7 +207,6 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PrintReservation([Bind(Include = "BookingId")]Booking currentBooking)
         {
-            //Camping2000Db Db = new Camping2000Db();
             GuestBookingViewModel bookingToPrint = new GuestBookingViewModel();
             ApplicationUser currentGuest = new ApplicationUser();
             ViewBag.Errormessage = "";
@@ -249,7 +248,6 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators,Receptionists")]
         public ActionResult CheckIn()
         {
-            //Camping2000Db Db = new Camping2000Db();
             List<Booking> allBookings = Db.Bookings.ToList();
             List<Booking> presentDayArrivals = new List<Booking>();
             List<ApplicationUser> presentDayGuests = new List<ApplicationUser>();
@@ -314,7 +312,6 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Camping2000Db Db = new Camping2000Db();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == BookingId);
                 Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
                 ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == currentBooking.GuestId);
@@ -338,7 +335,7 @@ namespace Camping2000.Controllers
                 if (currentBooking.NumberOfGuests != NumberOfCheckInGuests) //Check if PartySize differ from reservation
                 {
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
-                    numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
+                    numberOfDays = Booking.CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
                     currentBooking.BookingPrice = currentSpot.CampingPrice * NumberOfCheckInGuests * numberOfDays;
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
                     currentBooking.GuestHasCheckedIn = true;
@@ -371,7 +368,6 @@ namespace Camping2000.Controllers
             }
             else
             {
-                //Camping2000Db Db = new Camping2000Db();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == BookingId);
                 Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
                 ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == currentBooking.GuestId);
@@ -399,7 +395,6 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult CheckOut()
         {
-            //Camping2000Db Db = new Camping2000Db();
             List<Booking> allBookings = Db.Bookings.ToList();
             List<Booking> departingGuestBookings = new List<Booking>();
             List<ApplicationUser> departingGuests = new List<ApplicationUser>();
@@ -456,7 +451,6 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Camping2000Db Db = new Camping2000Db();
                 List<Booking> allBookings = Db.Bookings.ToList();
                 Booking departingBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == checkingOutGuest.BookingId);
                 ApplicationUser departingGuest = Db.Users.SingleOrDefault(i => i.GuestId == departingBooking.GuestId);
@@ -531,7 +525,6 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ArrivalsDepartures()
         {
-            //Camping2000Db Db = new Camping2000Db();
             List<ModifyBookingViewModel> arrivalsDepartures = new List<ModifyBookingViewModel>();
             List<Booking> allBookings = Db.Bookings.ToList();
             Booking currentBooking = new Booking();
@@ -622,7 +615,6 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ModifySpecificGuestDetails([Bind(Include = "GuestId")]ApplicationUser searchedGuest)
         {
-            //Camping2000Db Db = new Camping2000Db();
             ApplicationUser foundGuest = Db.Users.SingleOrDefault(i => i.GuestId == searchedGuest.GuestId);
             Adress foundAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == searchedGuest.GuestId);
             if ((foundGuest == null) || (foundAdress == null)) //if no data was fetched, alert guest
@@ -661,7 +653,6 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Camping2000Db Db = new Camping2000Db();
                 ApplicationUser oldGuestData = Db.Users.SingleOrDefault(i => i.GuestId == newGuestData.GuestId);
                 Adress oldGuestAdress = Db.Adresses.SingleOrDefault(i => i.GuestId == newGuestData.GuestId);
                 if ((oldGuestData == null) || (oldGuestAdress == null))
@@ -698,7 +689,6 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators, Receptionists")]
         public ActionResult ModifyBooking()
         {
-            //Camping2000Db Db = new Camping2000Db();
             List<Booking> allBookings = Db.Bookings.ToList();
             List<BookingGuestViewModel> presentGuestBookings = new List<BookingGuestViewModel>();
             List<Booking> presentBookings = new List<Booking>();
@@ -762,7 +752,6 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Camping2000Db Db = new Camping2000Db();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == aBookingToModify.BookingId);
                 ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == currentBooking.GuestId);
                 Camping currentSpot = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId);
@@ -813,7 +802,6 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeStartDate([Bind(Include = "BookingId,GuestId,ItemId,BookingStartDate")] ModifyBookingViewModel bookingToModify)
         {
-            //Camping2000Db Db = new Camping2000Db();
             ModifyBookingViewModel currentBookingView = new ModifyBookingViewModel();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
             ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
@@ -854,7 +842,7 @@ namespace Camping2000.Controllers
             {
                 currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
                 currentBooking.BookingStartDate = bookingToModify.BookingStartDate;
-                numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
+                numberOfDays = Booking.CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
                 currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;
                 currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
                 bookingToModify.BookingPrice = currentBooking.BookingPrice;
@@ -894,7 +882,7 @@ namespace Camping2000.Controllers
                 //Calculate the price for the guest
                 currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
                 currentBooking.BookingStartDate = bookingToModify.BookingStartDate;
-                numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
+                numberOfDays = Booking.CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
                 currentBooking.BookingPrice = currentItem.CampingPrice * numberOfDays * currentBooking.NumberOfGuests;
                 Db.SaveChanges();
                 bookingToModify.BookingStartDate = currentBooking.BookingStartDate;
@@ -908,7 +896,6 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeEndDate([Bind(Include = "BookingId,GuestId,ItemId,BookingEndDate")] ModifyBookingViewModel bookingToModify)
         {
-            //Camping2000Db Db = new Camping2000Db();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
             ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
             Camping currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == bookingToModify.ItemId);
@@ -939,7 +926,7 @@ namespace Camping2000.Controllers
             {
                 currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
                 currentBooking.BookingEndDate = bookingToModify.BookingEndDate;
-                numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
+                numberOfDays = Booking.CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
                 currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;
                 currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
                 Db.SaveChanges();
@@ -980,7 +967,7 @@ namespace Camping2000.Controllers
                 //Calculate the price for the guest
                 currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
                 currentBooking.BookingEndDate = bookingToModify.BookingEndDate;
-                numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
+                numberOfDays = Booking.CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
                 currentBooking.BookingPrice = currentItem.CampingPrice * numberOfDays * currentBooking.NumberOfGuests;
                 currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
                 Db.SaveChanges();
@@ -997,7 +984,6 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Camping2000Db Db = new Camping2000Db();
                 List<ModifyBookingViewModel> currentBookingView = new List<ModifyBookingViewModel>();
                 ModifyBookingViewModel aBookingView = new ModifyBookingViewModel();
                 ModifyBookingViewModel anotherBookingView = new ModifyBookingViewModel();
@@ -1036,7 +1022,7 @@ namespace Camping2000.Controllers
                     if (disAllowableBookings.Count < 1)//if no collision is detected and the guest is not checked in, change spot and calculate new cost
                     {
                         currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
-                        numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate); ;
+                        numberOfDays = Booking.CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate); ;
                         currentItem = ListOfSpots[0];
                         currentBooking.ItemId = currentItem.ItemId;
                         currentBooking.BookingPrice = numberOfDays * currentItem.CampingPrice * currentBooking.NumberOfGuests;
@@ -1054,7 +1040,7 @@ namespace Camping2000.Controllers
                         return PartialView("_FailedChangePowerOutlet");//, currentBooking
                     }
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice; //remove the present bookingprice
-                    numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
+                    numberOfDays = Booking.CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
                     currentItem.ItemIsOccupied = false; //release the "old" spot
                     currentBooking.ItemId = ListOfSpots[0].ItemId; //assign the new spot
                     currentItem = Db.Camping.SingleOrDefault(i => i.ItemId == currentBooking.ItemId); //fetch the new spots data
@@ -1131,7 +1117,7 @@ namespace Camping2000.Controllers
                     }
                     currentItem.ItemIsOccupied = true;
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
-                    numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
+                    numberOfDays = Booking.CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
                     if (numberOfDays == 0)
                     {
                         ViewBag.Errormessage = "The change of poweroutlet is on the same day as checkin day.";
@@ -1157,7 +1143,7 @@ namespace Camping2000.Controllers
                     aBookingView.NumberOfGuests = currentBooking.NumberOfGuests;
                     aBookingView.BookingNeedsElectricity = currentBooking.BookingNeedsElectricity;
                     currentBookingView.Add(aBookingView);
-                    numberOfDays = CalculateNumberOfDays(newBooking.BookingStartDate, newBooking.BookingEndDate);
+                    numberOfDays = Booking.CalculateNumberOfDays(newBooking.BookingStartDate, newBooking.BookingEndDate);
                     if (numberOfDays == 0)
                     {
                         ViewBag.Errormessage = "The change of poweroutlet is on the same day as checkout day.";
@@ -1207,7 +1193,6 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Camping2000Db Db = new Camping2000Db();
                 List<ModifyBookingViewModel> currentBookingView = new List<ModifyBookingViewModel>();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
                 ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
@@ -1224,7 +1209,7 @@ namespace Camping2000.Controllers
                 if (currentBooking.GuestHasCheckedIn == false)
                 {
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice;
-                    numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
+                    numberOfDays = Booking.CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate);
                     currentBooking.BookingPrice = numberOfDays * bookingToModify.NumberOfGuests * currentItem.CampingPrice;
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay + currentBooking.BookingPrice;
                     currentBooking.NumberOfGuests = bookingToModify.NumberOfGuests;
@@ -1253,7 +1238,7 @@ namespace Camping2000.Controllers
                     //add a controll of saved data
                     currentBooking.BookingEndDate = DateTime.Now;   //change end date for present booking
                     currentGuest.GuestHasToPay = currentGuest.GuestHasToPay - currentBooking.BookingPrice; //subtract the present bookingprice for the guest to pay 
-                    numberOfDays = CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate); //calculate number of days the present stay was
+                    numberOfDays = Booking.CalculateNumberOfDays(currentBooking.BookingStartDate, currentBooking.BookingEndDate); //calculate number of days the present stay was
                     if (numberOfDays == 0)
                     {
                         currentBooking.BookingPrice = 0; //if guest changes number of persons before first night but after checkin
@@ -1263,7 +1248,7 @@ namespace Camping2000.Controllers
                         currentBooking.BookingPrice = numberOfDays * currentBooking.NumberOfGuests * currentItem.CampingPrice; //calculate the present bookingprce
                     }
                     lb.Add(currentBooking);
-                    numberOfDays = CalculateNumberOfDays(newBooking.BookingStartDate, newBooking.BookingEndDate);  //calculate the days in the new booking
+                    numberOfDays = Booking.CalculateNumberOfDays(newBooking.BookingStartDate, newBooking.BookingEndDate);  //calculate the days in the new booking
                     if (numberOfDays != 0)
                     {
                         newBooking.BookingPrice = numberOfDays * newBooking.NumberOfGuests * currentItem.CampingPrice;   //calculate the new bookings price
@@ -1310,7 +1295,6 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Camping2000Db Db = new Camping2000Db();
                 ModifyBookingViewModel aBookingView = new ModifyBookingViewModel();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
                 ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
@@ -1401,7 +1385,6 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeChooseCampingSpot([Bind(Include = "BookingId,GuestId,ItemId")] ModifyBookingViewModel bookingToModify)
         {
-            //Camping2000Db Db = new Camping2000Db();
             ModifyBookingViewModel aBookingView = new ModifyBookingViewModel();
             Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
             ApplicationUser currentGuest = Db.Users.SingleOrDefault(i => i.GuestId == bookingToModify.GuestId);
@@ -1442,7 +1425,6 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Camping2000Db Db = new Camping2000Db();
                 ModifyBookingViewModel currentBookingView = new ModifyBookingViewModel();
                 Booking currentBooking = Db.Bookings.SingleOrDefault(i => i.BookingId == bookingToModify.BookingId);
                 if (currentBooking == null)
@@ -1505,7 +1487,6 @@ namespace Camping2000.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Camping2000Db Db = new Camping2000Db();
                 var userStore = new UserStore<ApplicationUser>(Db);
                 var userManager = new UserManager<ApplicationUser>(userStore);
                 Booking guestBooking = new Booking();
@@ -1580,7 +1561,6 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators, Receptionists, Guests")]
         public ActionResult GuestDetails(string GuestId)
         {
-            //Camping2000Db Db = new Camping2000Db();
             ApplicationUser foundGuest = Db.Users.SingleOrDefault(i => i.GuestId == GuestId);
             if (foundGuest == null)
             {
@@ -1626,7 +1606,6 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MissedCheckins()
         {
-            //Camping2000Db Db = new Camping2000Db();
             List<Booking> allBookings = Db.Bookings.ToList();
             List<Booking> failedCheckins = new List<Booking>();
             ApplicationUser guestThatFailedToCheckin = new ApplicationUser();
@@ -1666,7 +1645,6 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MissedCheckouts()
         {
-            //Camping2000Db Db = new Camping2000Db();
             List<Booking> allBookings = Db.Bookings.ToList();
             List<Booking> failedCheckouts = new List<Booking>();
             ApplicationUser guestThatFailedToCheckOut = new ApplicationUser();
@@ -1824,35 +1802,7 @@ namespace Camping2000.Controllers
             }
             return ListOfSpots;
         }
-        
-        /// <summary>
-        /// calculates a span of days. Take leapyears into consideration.
-        /// Returns a interger value.
-        /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
-        static int CalculateNumberOfDays(DateTime startDate, DateTime endDate)
-        {
-            int numberOfDays;
-            if (startDate.Year == endDate.Year)
-            {
-                numberOfDays = endDate.DayOfYear - startDate.DayOfYear;
-            }
-            else
-            {
-                if (DateTime.IsLeapYear(startDate.Year))
-                {
-                    numberOfDays = 366 - startDate.DayOfYear;
-                    numberOfDays = numberOfDays + endDate.DayOfYear;
-                }
-                else
-                {
-                    numberOfDays = 365 - startDate.DayOfYear;
-                    numberOfDays = numberOfDays + endDate.DayOfYear;
-                }
-            }
-            return numberOfDays;
-        }
+
+
     }
 }

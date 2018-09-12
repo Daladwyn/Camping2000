@@ -31,5 +31,35 @@ namespace Camping2000.Models
         [Required]
         public bool GuestHasCheckedIn { get; set; }
         public bool BookingIsPaid { get; set; }
+
+        /// <summary>
+        /// calculates a span of days. Take leapyears into consideration.
+        /// Returns a interger value.
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public static int CalculateNumberOfDays(DateTime startDate, DateTime endDate)
+        {
+            int numberOfDays;
+            if (startDate.Year == endDate.Year)
+            {
+                numberOfDays = endDate.DayOfYear - startDate.DayOfYear;
+            }
+            else
+            {
+                if (DateTime.IsLeapYear(startDate.Year))
+                {
+                    numberOfDays = 366 - startDate.DayOfYear;
+                    numberOfDays = numberOfDays + endDate.DayOfYear;
+                }
+                else
+                {
+                    numberOfDays = 365 - startDate.DayOfYear;
+                    numberOfDays = numberOfDays + endDate.DayOfYear;
+                }
+            }
+            return numberOfDays;
+        }
     }
 }
