@@ -15,11 +15,13 @@ namespace Camping2000.Models
         public string EmailAddress { get; set; }
         [Required]
         [MaxLength(80)]
+        [Display(Name ="Guest Firstname")]
         public string GuestFirstName { get; set; }
         [Required]
         [MaxLength(40)]
         public string GuestNationality { get; set; }
         [MaxLength(80)]
+        [Display(Name = "Guest Lastname")]
         public string GuestLastName { get; set; }
         [Phone]
         public string GuestPhoneNumber { get; set; }

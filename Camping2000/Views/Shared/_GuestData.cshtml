@@ -14,50 +14,50 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("First Name *")
+                    @Html.LabelFor(n=>n.GuestFirstName)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("GuestFirstName")
+                    @Html.TextBoxFor(n=>n.GuestFirstName)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("Last Name *")
+                    @Html.LabelFor(n=>n.GuestLastName)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("GuestLastName")
+                    @Html.TextBoxFor(n => n.GuestLastName)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("Nationality *")
+                    @Html.LabelFor(n=>n.GuestNationality)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("GuestNationality")
+                    @Html.TextBoxFor(n => n.GuestNationality)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("Phone Number")
+                    @Html.LabelFor(p=>p.GuestPhoneNumber)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("GuestPhoneNumber")
+                    @Html.TextBoxFor(p => p.GuestPhoneNumber)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("Mobile Number")
+                    @Html.LabelFor(m=>m.GuestMobileNumber)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("GuestMobileNumber")
+                    @Html.TextBoxFor(m => m.GuestMobileNumber)
                 </div>
             </div>
         </div>
@@ -65,50 +65,50 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("PostAdress Street")
+                    @Html.LabelFor(p=>p.PostAdressStreet1)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("PostAdressStreet1")
+                    @Html.TextBoxFor(p => p.PostAdressStreet1)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("PostAdress Street")
+                    @Html.LabelFor(p => p.PostAdressStreet2)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("PostAdressStreet2")
+                    @Html.TextBoxFor(p => p.PostAdressStreet2)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("PostAdress Street")
+                    @Html.LabelFor(p => p.PostAdressStreet3)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("PostAdressStreet3")
+                    @Html.TextBoxFor(p => p.PostAdressStreet3)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("PostAdress ZipCode")
+                    @Html.LabelFor(z=>z.PostAdressZipCode)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("PostAdressZipCode")
+                    @Html.TextBoxFor(z => z.PostAdressZipCode)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("PostAdress City")
+                    @Html.LabelFor(c=>c.PostAdressCity)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("PostAdressCity")
+                    @Html.TextBoxFor(c => c.PostAdressCity)
                 </div>
             </div>
         </div>
@@ -125,50 +125,50 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("LivingAdress Street")
+                    @Html.LabelFor(l=>l.LivingAdressStreet1)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("LivingAdressStreet1")
+                    @Html.TextBoxFor(l => l.LivingAdressStreet1)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("LivingAdress Street")
+                    @Html.LabelFor(l => l.LivingAdressStreet2)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("LivingAdressStreet2")
+                    @Html.TextBoxFor(l => l.LivingAdressStreet2)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("LivingAdress Street")
+                    @Html.LabelFor(l => l.LivingAdressStreet3)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("LivingAdressStreet3")
+                    @Html.TextBoxFor(l => l.LivingAdressStreet3)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("LivingAdress ZipCode")
+                    @Html.LabelFor(z=>z.LivingAdressZipCode)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("LivingAdressZipCode")
+                    @Html.TextBoxFor(z => z.LivingAdressZipCode)
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.Label("LivingAdress City")
+                    @Html.LabelFor(c=>c.LivingAdressCity)
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBox("LivingAdressCity")
+                    @Html.TextBoxFor(c => c.LivingAdressCity)
                 </div>
             </div>
         </div>
@@ -178,7 +178,7 @@
             </div>
             <div class="col-md-10">
                 <div class="form-group">
-                    <input type="submit" value="Complete Registration" class="btn btn-default" />
+                    <input type="submit" value="Complete Registration" class="btn btn-primary" />
                 </div>
             </div>
         </div>
