@@ -1,0 +1,31 @@
+﻿
+<h2>The Check in did not succed.</h2>
+<hr />
+@ViewBag.Errormessage
+
+<div class="row">
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("GoToStart", "Home",
+            ajaxOptions: new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "ContentBody",
+            }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Back to Start" />
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Ajax.BeginForm("CheckIn", "CheckInCheckOut",
+            ajaxOptions: new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "ContentBody",
+            }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Back to CheckIn" />
+        }
+    </div>
+</div>

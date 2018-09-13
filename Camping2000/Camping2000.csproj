@@ -194,6 +194,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CheckInCheckOutController.cs" />
     <Compile Include="Controllers\ReceptionistController.cs" />
     <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -385,13 +386,13 @@
     <Content Include="Views\Reservation\_SpaceForTent.cshtml" />
     <Content Include="Views\Reservation\_ReservedConfirmation.cshtml" />
     <Content Include="Views\Reservation\_ConfirmSpaceForTent.cshtml" />
-    <Content Include="Views\Home\_CheckIn.cshtml" />
-    <Content Include="Views\Home\_CheckOut.cshtml" />
-    <Content Include="Views\Home\_ArrivalsDepartures.cshtml" />
-    <Content Include="Views\Home\_CheckInConfirmation.cshtml" />
-    <Content Include="Views\Home\_CheckOutConfirmation.cshtml" />
-    <Content Include="Views\Home\_ShowGuestArrivals.cshtml" />
-    <Content Include="Views\Home\_ShowGuestDepartures.cshtml" />
+    <Content Include="Views\CheckInCheckOut\_CheckIn.cshtml" />
+    <Content Include="Views\CheckInCheckOut\_CheckOut.cshtml" />
+    <Content Include="Views\CheckInCheckOut\_ArrivalsDepartures.cshtml" />
+    <Content Include="Views\CheckInCheckOut\_CheckInConfirmation.cshtml" />
+    <Content Include="Views\CheckInCheckOut\_CheckOutConfirmation.cshtml" />
+    <Content Include="Views\CheckInCheckOut\_ShowGuestArrivals.cshtml" />
+    <Content Include="Views\CheckInCheckOut\_ShowGuestDepartures.cshtml" />
     <Content Include="Views\Home\_ModifyBooking.cshtml" />
     <Content Include="Views\Home\_ModifyGuestDetails.cshtml" />
     <Content Include="Views\Home\_PresentBooking.cshtml" />
@@ -432,6 +433,8 @@
     <Content Include="Views\Reservation\_PrintReservation.cshtml" />
     <Content Include="Views\Reservation\_FailedToPrintReservation.cshtml" />
     <Content Include="Views\Reservation\_SentEMailConfirmation.cshtml" />
+    <Content Include="Views\CheckInCheckOut\_FailedCheckIn.cshtml" />
+    <Content Include="Views\CheckInCheckOut\_FailedCheckout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

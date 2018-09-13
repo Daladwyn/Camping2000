@@ -70,21 +70,21 @@ namespace Camping2000.Controllers
         [Authorize(Roles = "Administrators,Receptionist")]
         public ActionResult Checkin()
         {
-            return RedirectToAction("Checkin", "Home");
+            return RedirectToAction("Checkin", "CheckInCheckOut");
         }
         //
         // GET: /Account/CheckOut
         [Authorize(Roles = "Administrators,Receptionist")]
         public ActionResult CheckOut()
         {
-            return RedirectToAction("CheckOut", "Home");
+            return RedirectToAction("CheckOut", "CheckInCheckOut");
         }
         //
         // GET: /Account/ArrivalsDepartures
         [Authorize(Roles = "Administrators,Receptionist")]
         public ActionResult ArrivalsDepartures()
         {
-            return RedirectToAction("ArrivalsDepartures", "Home");
+            return RedirectToAction("ArrivalsDepartures", "CheckInCheckOut");
         }
         //
         // GET: /Account/ModifyBooking

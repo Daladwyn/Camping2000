@@ -1,6 +1,6 @@
 ﻿@model Camping2000.Models.BookingGuestViewModel
 
-@using (Ajax.BeginForm("CheckOutConfirmation", "Home",
+@using (Ajax.BeginForm("CheckOutConfirmation", "CheckInCheckOut",
             ajaxOptions: new AjaxOptions
             {
                 UpdateTargetId = "ContentBody",
@@ -22,7 +22,10 @@
             <div class="col-md-2">
                 @Model.ItemName
             </div>
-            <div class="col-md-5">
+            <div class="col-md-2">
+                @Model.BookingPrice
+            </div>
+            <div class="col-md-3">
                 <div class="form-group">
                     <input type="submit" name="CheckOut" value="Check Out" />
                 </div>
