@@ -29,7 +29,7 @@ else
     <div class="form-group">
         <div class="row">
             <div class="col-md-2">
-                @Html.Label("Arrival date: ")
+                @Html.Label("Arrival date: ", new { @class="pull-right" })
             </div>
             <div class="col-md-3">
                 <input type="date" id="BookingStartDate" name="BookingStartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingStartDate)" min="@string.Format("{0:yyyy-MM-dd}", DateTime.Now)" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingStartDate.AddDays(365))" />
@@ -41,7 +41,7 @@ else
     <div class="form-group">
         <div class="row">
             <div class="col-md-2">
-                @Html.Label("Departure date: ")
+                @Html.Label("Departure date: ", new { @class = "pull-right" })
             </div>
             <div class="col-md-3">
                 <input type="date" id="BookingEndDate" name="BookingEndDate" value="@string.Format("{0:yyyy-MM-dd}", Model.BookingEndDate)" min="@string.Format("{0:yyyy-MM-dd}", DateTime.Now.AddDays(1))" max="@string.Format("{0:yyyy-MM-dd}",Model.BookingEndDate.AddDays(365))" />
@@ -53,7 +53,7 @@ else
     <div class="form-group">
         <div class="row">
             <div class="col-md-2">
-                @Html.Label("Number of guests: ")
+                @Html.Label("Number of guests: ", new { @class = "pull-right" })
             </div>
             <div class="col-md-3">
                 @if ((Model.NumberOfGuests >= 1) && (Model.NumberOfGuests <= 10))
@@ -72,7 +72,7 @@ else
     <div class="form-group">
         <div class="row">
             <div class="col-md-2">
-                @Html.Label("Do you need electricity: ")
+                @Html.Label("Do you need electricity: ", new { @class = "pull-right" })
             </div>
             <div class="col-md-2">
                 @if (Model.BookingNeedsElectricity == true)
@@ -101,10 +101,10 @@ else
     <div class="form-group">
         <div class="row">
             <div class="col-md-3">
-                @Html.Label("Price per night per person: ")
+                @Html.Label("Price per night per person: ") @Model.BookingPrice
             </div>
             <div class="col-md-1">
-                @Model.BookingPrice
+               
                 @Html.HiddenFor(b => b.BookingPrice, Model.BookingPrice)
             </div>
             <div class="col-md-2">
