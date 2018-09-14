@@ -1025,7 +1025,7 @@ namespace Camping2000.Controllers
             }
             else
             {
-                ViewBag.Errormessage = "Some of your submitted values were not correct. Please try again.";
+                //ViewBag.Errormessage = "Some of your submitted values were not correct. Please try again.";
                 return PartialView("_GuestData", newGuest);
             }
         }

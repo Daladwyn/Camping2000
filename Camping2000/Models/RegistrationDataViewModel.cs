@@ -15,18 +15,18 @@ namespace Camping2000.Models
         [EmailAddress]
         public string EmailAddress { get; set; }
 
-        [Display(Name = "Your Firstname")]
-        [Required(ErrorMessage = "{0} is required.")]
+        [Display(Name = "Your Firstname *")]
+        [Required(ErrorMessage = "Your firstname is required.")]
         [MaxLength(80)]
         public string GuestFirstName { get; set; }
 
-        [Display(Name ="Your Country")]
-        [Required(ErrorMessage = "{0} is required.")]
+        [Display(Name ="Your Country *")]
+        [Required(ErrorMessage = "Your country is required.")]
         [MaxLength(40)]
         public string GuestNationality { get; set; }
 
-        [Display(Name = "Your Lastname")]
-        [Required(ErrorMessage = "{0} is required.")]
+        [Display(Name = "Your Lastname *")]
+        [Required(ErrorMessage = "Your lastname is required.")]
         [MaxLength(80)]
         public string GuestLastName { get; set; }
 
@@ -35,7 +35,8 @@ namespace Camping2000.Models
         public string GuestPhoneNumber { get; set; }
 
         [Phone]
-        [Display(Name = "Your Mobilenumber")]
+        [Display(Name = "Your Mobilenumber *")]
+        [Required(ErrorMessage = "Your mobilenumber is required.")]
         public string GuestMobileNumber { get; set; }
 
         public int AdressId { get; set; }
@@ -52,8 +53,8 @@ namespace Camping2000.Models
         [Display(Name = "Your Homeadress")]
         public string LivingAdressStreet3 { get; set; }
 
-        [Range(0, 99999)]
-        // [RegularExpression(@"^(?!00000)[0-9]{5,5}$", ErrorMessage = "Specified livingadress zipcode is not valid. Try again.")]
+        [Range(0, 99999, ErrorMessage = "Only exactly 5 digits is allowed in this field.")]
+        //[RegularExpression(@"^(?!00000)[0-9]{5,5}$", ErrorMessage = "Specified livingadress zipcode is not valid. Try again.")]
         [Display(Name = "Your ZipCode")]
         public int LivingAdressZipCode { get; set; }
 
@@ -73,7 +74,7 @@ namespace Camping2000.Models
         [Display(Name = "Your Postadress")]
         public string PostAdressStreet3 { get; set; }
 
-        [Range(0, 99999)]
+        [Range(0, 99999,ErrorMessage ="Only exactly 5 digits is allowed in this field.")]
         //[RegularExpression(@"^(?!00000)[0-9]{5,5}$", ErrorMessage = "Specified postadress zipcode is not valid. Try again.")]
         [Display(Name = "Your Postzipcode")]
         public int PostAdressZipCode { get; set; }
