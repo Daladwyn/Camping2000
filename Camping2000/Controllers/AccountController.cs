@@ -187,7 +187,7 @@ namespace Camping2000.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return PartialView("Register",model);
         }
 
         //

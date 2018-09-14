@@ -215,7 +215,7 @@
     </Compile>
     <Compile Include="Models\GuestAdressViewModel.cs" />
     <Compile Include="Models\GuestBookingViewModel.cs" />
-    <Compile Include="Models\GuestDataViewModel.cs" />
+    <Compile Include="Models\RegistrationDataViewModel.cs" />
     <Compile Include="Models\ItemToRent.cs" />
     <Compile Include="Models\LargeCabin.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

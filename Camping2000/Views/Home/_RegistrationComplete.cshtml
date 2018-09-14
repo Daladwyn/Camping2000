@@ -22,14 +22,14 @@
     @if (Model.BookingId != 0)
     {
     <div class="col-md-2">
-        @using (Ajax.BeginForm("SpaceAdjustments", "Home", new AjaxOptions
+        @using (Ajax.BeginForm("SpaceAdjustments", "Reservation", new AjaxOptions
         {
             InsertionMode = InsertionMode.Replace,
             UpdateTargetId = "ContentBody"
         }))
         {
             @Html.AntiForgeryToken()
-            <input type="submit" value="Continue reservation" />
+            <input type="submit" value="Continue reservation" class="btn btn-primary" />
             @Html.HiddenFor(b => b.BookingId, Model.BookingId)
             @Html.HiddenFor(g => g.GuestId, User.Identity.GetUserId())
         }

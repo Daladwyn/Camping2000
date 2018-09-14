@@ -945,7 +945,7 @@ namespace Camping2000.Controllers
         [AllowAnonymous]
         public ActionResult GuestData(ApplicationUser user)
         {
-            GuestDataViewModel newGuest = new GuestDataViewModel()
+            RegistrationDataViewModel newGuest = new RegistrationDataViewModel()
             {
                 GuestId = user.Id,
                 EmailAddress = user.Email
@@ -956,7 +956,7 @@ namespace Camping2000.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SaveGuestData([Bind(Include = "GuestFirstName,GuestLastName,GuestNationality,GuestPhoneNumber,GuestMobileNumber," +
                             "GuestId,EmailAddress,PostAdressStreet1,PostAdressStreet2,PostAdressStreet3,PostAdressZipCode,PostAdressCity," +
-                            "LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity")]GuestDataViewModel newGuest)
+                            "LivingAdressStreet1,LivingAdressStreet2,LivingAdressStreet3,LivingAdressZipCode,LivingAdressCity")]RegistrationDataViewModel newGuest)
         {
             if (ModelState.IsValid)
             {
