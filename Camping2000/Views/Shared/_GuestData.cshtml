@@ -15,10 +15,10 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.LabelFor(n=>n.GuestFirstName , new { @class="pull-right" })
+                    @Html.LabelFor(n => n.GuestFirstName, new { @class = "pull-right" })
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBoxFor(n=>n.GuestFirstName)
+                    @Html.TextBoxFor(n => n.GuestFirstName)
                     @Html.ValidationMessageFor(n => n.GuestFirstName)
                 </div>
             </div>
@@ -26,7 +26,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.LabelFor(n=>n.GuestLastName, new { @class = "pull-right" })
+                    @Html.LabelFor(n => n.GuestLastName, new { @class = "pull-right" })
                 </div>
                 <div class="col-md-10">
                     @Html.TextBoxFor(n => n.GuestLastName)
@@ -37,7 +37,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.LabelFor(n=>n.GuestNationality, new { @class = "pull-right" })
+                    @Html.LabelFor(n => n.GuestNationality, new { @class = "pull-right" })
                 </div>
                 <div class="col-md-10">
                     @Html.TextBoxFor(n => n.GuestNationality)
@@ -48,7 +48,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.LabelFor(p=>p.GuestPhoneNumber, new { @class = "pull-right" })
+                    @Html.LabelFor(p => p.GuestPhoneNumber, new { @class = "pull-right" })
                 </div>
                 <div class="col-md-10">
                     @Html.TextBoxFor(p => p.GuestPhoneNumber)
@@ -59,7 +59,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.LabelFor(m=>m.GuestMobileNumber, new { @class = "pull-right" })
+                    @Html.LabelFor(m => m.GuestMobileNumber, new { @class = "pull-right" })
                 </div>
                 <div class="col-md-10">
                     @Html.TextBoxFor(m => m.GuestMobileNumber)
@@ -71,7 +71,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.LabelFor(p=>p.PostAdressStreet1, new { @class = "pull-right" })
+                    @Html.LabelFor(p => p.PostAdressStreet1, new { @class = "pull-right" })
                 </div>
                 <div class="col-md-10">
                     @Html.TextBoxFor(p => p.PostAdressStreet1, new { @id = "Js-PostAdressStreet1" })
@@ -85,7 +85,7 @@
                     @Html.LabelFor(p => p.PostAdressStreet2, new { @class = "pull-right" })
                 </div>
                 <div class="col-md-10">
-                    @Html.TextBoxFor(p => p.PostAdressStreet2, new { @id="Js-PostAdressStreet2"})
+                    @Html.TextBoxFor(p => p.PostAdressStreet2, new { @id = "Js-PostAdressStreet2" })
                     @Html.ValidationMessageFor(p => p.PostAdressStreet2)
                 </div>
             </div>
@@ -104,7 +104,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.LabelFor(z=>z.PostAdressZipCode, new { @class = "pull-right" })
+                    @Html.LabelFor(z => z.PostAdressZipCode, new { @class = "pull-right" })
                 </div>
                 <div class="col-md-10">
                     @Html.TextBoxFor(z => z.PostAdressZipCode, new { @id = "Js-PostAdressZipCode" })
@@ -115,7 +115,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.LabelFor(c=>c.PostAdressCity, new { @class = "pull-right" })
+                    @Html.LabelFor(c => c.PostAdressCity, new { @class = "pull-right" })
                 </div>
                 <div class="col-md-10">
                     @Html.TextBoxFor(c => c.PostAdressCity, new { @id = "Js-PostAdressCity" })
@@ -129,16 +129,16 @@
                 <div class="col-md-2">
                 </div>
                 <div class="col-md-10">
-                    <input type="button" onclick="JsCopyAdress" value="Copy Livingadress to Postadress" class="btn btn-default" />
+                    <input type="button" onclick="JsCopyAdress()" value="Copy Livingadress to Postadress" class="btn btn-default" />
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.LabelFor(l=>l.LivingAdressStreet1, new { @class = "pull-right" })
+                    @Html.LabelFor(l => l.LivingAdressStreet1, new { @class = "pull-right" })
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-10" id="LAS1">
                     @Html.TextBoxFor(l => l.LivingAdressStreet1, new { @id = "Js-LivingAdressStreet1" })
                     @Html.ValidationMessageFor(l => l.LivingAdressStreet1)
                 </div>
@@ -149,7 +149,7 @@
                 <div class="col-md-2">
                     @Html.LabelFor(l => l.LivingAdressStreet2, new { @class = "pull-right" })
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-10" id="LAS2">
                     @Html.TextBoxFor(l => l.LivingAdressStreet2, new { @id = "Js-LivingAdressStreet2" })
                     @Html.ValidationMessageFor(l => l.LivingAdressStreet2)
                 </div>
@@ -160,7 +160,7 @@
                 <div class="col-md-2">
                     @Html.LabelFor(l => l.LivingAdressStreet3, new { @class = "pull-right" })
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-10" id="LAS#">
                     @Html.TextBoxFor(l => l.LivingAdressStreet3, new { @id = "Js-LivingAdressStreet3" })
                     @Html.ValidationMessageFor(l => l.LivingAdressStreet3)
                 </div>
@@ -169,9 +169,9 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.LabelFor(z=>z.LivingAdressZipCode, new { @class = "pull-right" })
+                    @Html.LabelFor(z => z.LivingAdressZipCode, new { @class = "pull-right" })
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-10" id="LAZC">
                     @Html.TextBoxFor(z => z.LivingAdressZipCode, new { @id = "Js-LivingAdressZipCode" })
                     @Html.ValidationMessageFor(z => z.LivingAdressZipCode)
                 </div>
@@ -180,9 +180,9 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.LabelFor(c=>c.LivingAdressCity, new { @class = "pull-right" })
+                    @Html.LabelFor(c => c.LivingAdressCity, new { @class = "pull-right" })
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-10" id="LAC">
                     @Html.TextBoxFor(c => c.LivingAdressCity, new { @id = "Js-LivingAdressCity" })
                     @Html.ValidationMessageFor(c => c.LivingAdressCity)
                 </div>
@@ -208,4 +208,11 @@ else
 {
     <p>Please try @Html.ActionLink("registering", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) again.</p>
 }
-    <script src="scripts/main.js" type="text/javascript"></script>
+ <script src="~/Scripts/main.js" type="text/javascript"></script>
+
+@*<script type="text/javascript" language="javascript">
+        function JsCopyAdress() {
+            console.log("function is reached");
+            alert("Button is clicked");
+        }
+    </script>*@
