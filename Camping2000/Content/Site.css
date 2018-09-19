@@ -36,3 +36,7 @@ textarea {
 span.field-validation-error {
     color: red;
 }
+
+#buttonToAdjust{
+margin-bottom: 15px;
+}

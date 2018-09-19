@@ -1,69 +1,83 @@
 ﻿function JsCopyAdress() {
-    console.log("function is reached");
-    alert("Button is clicked");
-    var LivingAdressStreet1 = document.getElementById('Js-PostAdressStreet1').value;
-    var LivingAdressStreet2 = document.getElementById('Js-PostAdressStreet2').value;
-    var LivingAdressStreet3 = document.getElementById('Js-PostAdressStreet3').value;
-    var LivingAdressZipCode = document.getElementById('Js-PostAdressZipCode').value;
-    var LivingAdressCity = document.getElementById('Js-PostAdressCity').value;
-  
-    
 
-    //for (i = 1; i <= 3; i++) {
-    //    var output = document.createElement("input");
-    //    output.setAttribute("id", "Js-LivingAdressStreet" + i);
-    //    output.setAttribute("type", "text");
-    //    var string = "LivingAdressStreet" + i;
-    //    console.log(string);
-    //    output.setAttribute("value", string);
-    //    var itemToBeRemoved = document.getElementById("Js-LivingAdressStreet" + i);
-    //    //document.replaceChild(output, itemToBeRemoved);
-    //}
+    var elementInDataNames = ["Js-PostAdressStreet1", "Js-PostAdressStreet2", "Js-PostAdressStreet3", "Js-PostAdressZipCode", "Js-PostAdressCity"];
+    var elementOutDataNames = ["Js-LivingAdressStreet1", "Js-LivingAdressStreet2", "Js-LivingAdressStreet3", "Js-LivingAdressZipCode", "Js-LivingAdressCity"];
+    var elementParents = ["LAS1", "LAS2", "LAS3", "LAZC", "LAC"]
+    var elementValues = [];
+    var elementsForUser = ["Your Postadress line 1", "Your Postadress line 2", "Your Postadress line 3", "Your Postzipcode", "Your Posttown"];
+    var checkedmessage = "";
+    printErrorMessage("");
+    for (var i = 0; i <= 4; i++) {
+        elementValues.push(document.getElementById(elementInDataNames[i]).value)
+    }
+    var validData = validateData(elementValues);
+    checkedmessage = errorMessage(validData, elementsForUser);
+    if (checkedmessage !== "") {
+        return;
+    }
 
-    var output = document.createElement("input");
-    output.setAttribute("type", "text");
-    output.setAttribute("id", "Js-LivingAdressStreet1");
-    output.setAttribute("name", "Js-LivingAdressStreet1");
-    output.setAttribute("value", LivingAdressStreet1);
-    console.log(output);
-    var itemToBeRemoved = document.getElementById("Js-LivingAdressStreet1");
-    document.div(LAS1).replaceChild(output, itemToBeRemoved);
+    for (i = 0; i <= 4; i++) {
+        var output = document.createElement("input");
+        output.setAttribute("type", "text");
+        output.setAttribute("id", elementOutDataNames[i]);
+        output.setAttribute("name", elementOutDataNames[i]);
+        output.setAttribute("value", elementValues[i]);
+        var itemToBeRemoved = document.getElementById(elementOutDataNames[i]);
+        var parentItem = document.getElementById(elementParents[i]);
+        parentItem.replaceChild(output, itemToBeRemoved);
+    }
+}
 
-    output = document.createElement("input");
-    output.setAttribute("type", "text");
-    output.setAttribute("id", "Js-LivingAdressStreet2");
-    output.setAttribute("name", "Js-LivingAdressStreet2");
-    output.setAttribute("value", LivingAdressStreet1);
-    console.log(output);
-    itemToBeRemoved = document.getElementById("Js-LivingAdressStreet2");
-    document.div.replaceChild(output, itemToBeRemoved);
+function isArray(x) {
+    return x.constructor.toString().indexOf("Array") > -1;
+}
 
-    output = document.createElement("input");
-    output.setAttribute("type", "text");
-    output.setAttribute("id", "Js-LivingAdressStreet3");
-    output.setAttribute("name", "Js-LivingAdressStreet3");
-    output.setAttribute("value", LivingAdressStreet1);
-    console.log(output);
-    itemToBeRemoved = document.getElementById("Js-LivingAdressStreet3");
-    document.div.replaceChild(output, itemToBeRemoved);
+function validateData(values) {
+    var validData = [];
+    if (isArray(values)) {
+        for (var i = 0; i <= 4; i++) {
+            if ((i !== 3) && (values[i].length >= 100)) {
+                validData.push("Too many letters/numbers is given");
+            } else if ((i !== 3) && (values[i].length === 0)) {
+                validData.push("Too few letters/numbers is given");
+            } else if ((i === 3) && (values[i].length < 5) || (values[i].length > 5)) {
+                validData.push("Incorrect zipcode");
+            } else {
+                validData.push("Correct Data.");
+            }
+        }
+    } else {
+        validData.push("No values was read")
+    }
+    return validData;
+}
 
-    output = document.createElement("input");
-    output.setAttribute("type", "text");
-    output.setAttribute("id", "Js-LivingAdressZipCode");
-    output.setAttribute("name", "Js-LivingAdressZipCode");
-    output.setAttribute("value", LivingAdressStreet1);
-    console.log(output);
-    itemToBeRemoved = document.getElementById("Js-LivingAdressZipCode");
-    document.div.replaceChild(output, itemToBeRemoved);
+function printErrorMessage(errorMessage) {
+    var output = document.createElement("span");
+    output.setAttribute("id", "validationMessage");
+    output.innerText = errorMessage;
+    var itemToBeRemoved = document.getElementById("validationMessage");
+    var parentItem = document.getElementById("validationMessageParent");
+    parentItem.replaceChild(output, itemToBeRemoved);
+}
 
-    output = document.createElement("input");
-    output.setAttribute("type", "text");
-    output.setAttribute("id", "Js-LivingAdressCity");
-    output.setAttribute("name", "Js-LivingAdressCity");
-    output.setAttribute("value", LivingAdressStreet1);
-    console.log(output);
-    itemToBeRemoved = document.getElementById("Js-LivingAdressCity");
-    document.div.replaceChild(output, itemToBeRemoved);
+function errorMessage(validData, elementsForUser) {
+    var errorProperties = "";
+    for (var i = 0; i <= 4; i++) {
+        if (validData[i] === "Too many letters/numbers is given") {
+            errorProperties = errorProperties + validData[i] + " in " + elementsForUser[i] + ". \n";
+        } else if (validData[i] === "Too few letters/numbers is given") {
+            errorProperties = errorProperties + validData[i] + " in " + elementsForUser[i] + ". \n";
+        } else if (validData[i] === "Incorrect zipcode") {
+            errorProperties = errorProperties + validData[i] + " in " + elementsForUser[i] + ". \n";
+        } else if (validData[i] === "No values was read") {
+            errorProperties = errorProperties + validData[i] + " from the form, please try again. \n";
+        }
+    }
 
-    
+    if (errorProperties !== "") {
+        printErrorMessage(errorProperties);
+        return errorProperties;
+    }
+    return errorProperties;
 }
