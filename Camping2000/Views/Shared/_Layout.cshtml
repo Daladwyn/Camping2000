@@ -8,6 +8,9 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body id="MainBody">
+    <noscript>
+        You have to activate Javascript in your browser. 
+    </noscript>
     <div class="table">
         <div class="col-md-3" id="leftMenu">
             @if (Request.IsAuthenticated)
