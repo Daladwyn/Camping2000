@@ -37,6 +37,10 @@ span.field-validation-error {
     color: red;
 }
 
-#buttonToAdjust{
-margin-bottom: 15px;
+#buttonToAdjust {
+    margin-bottom: 15px;
+}
+
+#validationMessage {
+    color: red;
 }
