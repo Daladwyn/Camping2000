@@ -38,12 +38,18 @@ function validateData(values) {
         for (var i = 0; i <= 4; i++) {
             if (i !== 3 && values[i].length >= 100) {
                 validData.push("Too many letters/numbers is given");
-            } else if (i !== 3 && values[i].length === 0) {
+            } else if (i === 0 && values[i].length === 0) {
+                validData.push("Too few letters/numbers is given");
+            } else if (i === 1 && values[i].length === 0 && values[0].length === 0) {
+                validData.push("Too few letters/numbers is given");
+            } else if (i === 2 && values[i].length === 0 && values[0].length === 0) {
                 validData.push("Too few letters/numbers is given");
             } else if (i === 3 && isNaN(values[3])) {
                 validData.push("Your must type numbers");
-            } else if (i === 3 && (values[3].length < 5 || values[3].length > 5)) {
+            } else if ((i === 3 && values[i].length < 5) || values[i].length > 5) {
                 validData.push("You have too few or too many numbers");
+            } else if (i === 4 && values[i].length === 0) {
+                validData.push("Too few letters/numbers is given");
             } else {
                 validData.push("Correct Data.");
             }
